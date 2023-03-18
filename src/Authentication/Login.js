@@ -19,8 +19,7 @@ function Login({ navigation }) {
 
   const storeData = async value => {
     try {
-      await AsyncStorage.setItem('stdem', value);
-      console.log('Gmail recieved in AynscStorage', value);
+      await AsyncStorage.setItem('std_email', value);
     } catch (e) {
       console.log(e);
     }
@@ -32,20 +31,20 @@ function Login({ navigation }) {
     //     `http://192.168.43.231/HouseOfTutors/api/student/StudentLogin?e=${userEmail}&p=${userPswd}`,
     //   );
     //   const data = await response.json();
-    //   console.log(data);
+    //   console.log('Result from Login API: ', data);
     //   if (data !== 'No User Found!') {
     //     storeData(userEmail);
-    //     navigation.navigate('Std_Screens');
+    //     navigation.navigate('S_Bottom_Navigator');
     //   } else {
     //     Alert.alert('Wrong username or Password!');
     //   }
     // } catch (error) {
     //   console.log(error);
-    //}
-    navigation.navigate('Std_Screens');
+    // }
+    navigation.navigate('S_Bottom_Navigator');
   };
 
-  const imagebg = require('./Images/12.png');
+  const imagebg = require('../Images/12.png');
 
   return (
     <View style={Styles.container1}>
@@ -75,15 +74,16 @@ function Login({ navigation }) {
         </View>
         <Pressable
           onPress={() => {
-            Verifylogin();
             console.log('Login is pressed');
+            storeData(userEmail);
+            Verifylogin();
           }}>
           <Text style={Styles.button}>Login</Text>
         </Pressable>
         <Text style={Styles.font}>Don't have an account ?</Text>
         <Pressable
           onPress={() => {
-            navigation.navigate('Personal');
+            navigation.navigate('Signup');
           }}>
           <Text style={Styles.signup}>Register</Text>
         </Pressable>

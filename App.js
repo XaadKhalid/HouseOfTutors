@@ -1,7 +1,7 @@
 import React from 'react';
 import {Provider as PaperProvider} from 'react-native-paper';
-import Screen_Control from './src/Screen_Control';
 import {StatusBar} from 'react-native';
+import Stack_Navigator from './src/Navigations/Stack_Navigator';
 
 export default function App() {
   return (
@@ -12,7 +12,7 @@ export default function App() {
         backgroundColor="#6618E7"
         translucent={true}
       />
-      <Screen_Control />
+      <Stack_Navigator />
     </PaperProvider>
   );
 }

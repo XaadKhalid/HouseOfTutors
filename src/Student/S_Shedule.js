@@ -123,15 +123,21 @@ export default function S_Shedule() {
   const [selectedslot, setselectedslot] = useState(Slots);
   const [stdemail, setStdEmail] = useState('');
 
-  const getData = async () => {
+  const getgmail = async () => {
     try {
-      const value = await AsyncStorage.getItem('stdem');
-      if (value !== null) {
-        setStdEmail(value);
+      const jsonValue = await AsyncStorage.getItem('std_email');
+      const Result = JSON.parse(jsonValue);
+      if (Result != null) {
+        setStdEmail(Result);
+      }
+      else {
+        console.log('No gmail found in Asyncstorage');
       }
     } catch (e) {
       console.log(e);
     }
+
+    console.log('Done.');
   };
 
   const Set_schedule = async (details, email) => {
@@ -150,7 +156,7 @@ export default function S_Shedule() {
     }
   };
   return (
-    <View style={{backgroundColor: '#ffffff'}}>
+    <View style={{ backgroundColor: '#ffffff' }}>
       <View style={[styles.row, styles.row2]}>
         <View style={styles.time_header}>
           <Text style={styles.header_txt}>Time Slots</Text>
@@ -1165,10 +1171,7 @@ export default function S_Shedule() {
                 str1 = str1 + '0';
               }
             }
-            getData();
-            // console.log('Data to be sent in API');
-            // console.log('Details => ', str1);
-            // console.log('Email => ', stdemail);
+            getgmail();
             Set_schedule(str1, stdemail);
           }}>
           <Text style={styles.button}>Update Scedule</Text>

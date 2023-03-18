@@ -2,18 +2,18 @@
 /* eslint-disable prettier/prettier */
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
-import S_Profile from './S_Profile';
-import S_Courses from './S_Courses';
-import S_Fee from './S_Fee';
-import S_Learning from './S_Learning';
-import S_Shedule from './S_Shedule';
-import S_TodayClass from './S_TodayClass';
+import S_Profile from '../Student/S_Profile';
+import S_Courses from '../Student/S_Courses';
+import S_Fee from '../Student/S_Fee';
+import S_Learning from '../Student/S_Learning';
+import S_Shedule from '../Student/S_Shedule';
+import S_TodayClass from '../Student/S_TodayClass';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/Feather';
 import Icon2 from 'react-native-vector-icons/Foundation';
 import Icon3 from 'react-native-vector-icons/FontAwesome5';
 
-export default function Std_Screens({ }) {
+export default function S_Bottom_Navigator({ }) {
   const Tab = createBottomTabNavigator();
   return (
     <Tab.Navigator
@@ -28,7 +28,7 @@ export default function Std_Screens({ }) {
         tabBarActiveBackgroundColor: '#000000',
       }}>
       <Tab.Screen
-        name="S_Shedule"
+        name="Schedule"
         component={S_Shedule}
         options={{
           tabBarShowLabel: false,
