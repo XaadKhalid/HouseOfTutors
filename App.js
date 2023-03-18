@@ -9,7 +9,7 @@ export default function App() {
       <StatusBar
         barStyle="light-content"
         hidden={false}
-        backgroundColor="#5304D4"
+        backgroundColor="#6618E7"
         translucent={true}
       />
       <Screen_Control />

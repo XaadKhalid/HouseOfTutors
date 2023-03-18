@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -9,15 +9,15 @@ import {
   Image,
   Alert,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon2 from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function Login({navigation}) {
+function Login({ navigation }) {
   const [userEmail, setUseremail] = useState('');
   const [userPswd, setUserpswd] = useState('');
 
-  const storeData = async (value) => {
+  const storeData = async value => {
     try {
       await AsyncStorage.setItem('stdem', value);
       console.log('Gmail recieved in AynscStorage', value);
@@ -27,82 +27,100 @@ function Login({navigation}) {
   };
 
   const Verifylogin = async () => {
-    try {
-      const response = await fetch(`http://192.168.43.90/HouseOfTutorsAPI_2/api/student/StudentLogin?e=${userEmail}&p=${userPswd}`);
-      const data = await response.json();
-      //const str = data.toString();
-      console.log(data);
-      if (data !== 'No User Found!') {
-        storeData(userEmail);
-        navigation.navigate('Std_Screens');
-      } else {
-        Alert.alert('Wrong username or Password!');
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    //navigation.navigate('Std_Screens');
+    // try {
+    //   const response = await fetch(
+    //     `http://192.168.43.231/HouseOfTutors/api/student/StudentLogin?e=${userEmail}&p=${userPswd}`,
+    //   );
+    //   const data = await response.json();
+    //   console.log(data);
+    //   if (data !== 'No User Found!') {
+    //     storeData(userEmail);
+    //     navigation.navigate('Std_Screens');
+    //   } else {
+    //     Alert.alert('Wrong username or Password!');
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    //}
+    navigation.navigate('Std_Screens');
   };
 
   const imagebg = require('./Images/12.png');
 
   return (
-    <View style={Styles.container}>
+    <View style={Styles.container1}>
       <Image source={imagebg} resizeMode="center" style={Styles.img} />
-      <View style={Styles.input_box}>
-        <Icon name="email" size={30} color="#FFB22F" style={Styles.ip_icon} />
-        <TextInput
-          style={Styles.ip_txt}
-          placeholder="ali@gmail.com"
-          onChangeText={value => {
-            setUseremail(value);
-          }}
-        />
+      <Text style={Styles.heading}>HOUSE OF TUTORS</Text>
+      <View style={Styles.container2}>
+        <View style={Styles.input_box}>
+          <MaterialCommunityIcons name="email" size={30} color="#FFB22F" style={Styles.ip_icon} />
+          <TextInput
+            style={Styles.ip_txt}
+            placeholder="ali@gmail.com"
+            onChangeText={value => {
+              setUseremail(value);
+            }}
+          />
+        </View>
+        <View style={Styles.input_box}>
+          <MaterialIcons name="lock" size={30} color="#FFB22F" style={Styles.ip_icon} />
+          <TextInput
+            style={Styles.ip_txt}
+            placeholder="Password"
+            secureTextEntry={true}
+            onChangeText={value => {
+              setUserpswd(value);
+            }}
+          />
+        </View>
+        <Pressable
+          onPress={() => {
+            Verifylogin();
+            console.log('Login is pressed');
+          }}>
+          <Text style={Styles.button}>Login</Text>
+        </Pressable>
+        <Text style={Styles.font}>Don't have an account ?</Text>
+        <Pressable
+          onPress={() => {
+            navigation.navigate('Personal');
+          }}>
+          <Text style={Styles.signup}>Register</Text>
+        </Pressable>
       </View>
-      <View style={Styles.input_box}>
-        <Icon2 name="lock" size={30} color="#FFB22F" style={Styles.ip_icon} />
-        <TextInput
-          style={Styles.ip_txt}
-          placeholder="Password"
-          secureTextEntry={true}
-          onChangeText={value => {
-            setUserpswd(value);
-          }}
-        />
-      </View>
-      <Pressable
-        onPress={() => {
-          Verifylogin();
-        }}>
-        <Text style={Styles.button}>Login</Text>
-      </Pressable>
-      <Text style={Styles.font}>Don't have an account ?</Text>
-      <Pressable
-        onPress={() => {
-          navigation.navigate('Personal');
-        }}>
-        <Text style={Styles.signup}>Register</Text>
-      </Pressable>
     </View>
   );
 }
 export default Login;
 
 const Styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container1: {
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 80,
+  },
+  container2: {
+    alignItems: 'center',
     backgroundColor: '#FFFFFF',
+    width: '100%',
+    borderTopRightRadius: 50,
+    borderTopLeftRadius: 50,
+    paddingVertical: 55,
+    elevation: 10,
   },
   img: {
     width: 200,
     height: 200,
   },
+  heading: {
+    fontSize: 25,
+    margin: 10,
+    color: '#5304D4',
+    fontWeight: 'bold',
+  },
   input_box: {
     flexDirection: 'row',
-    borderWidth: 1,
-    borderColor: '#5304D4',
+    borderRadius: 5,
     backgroundColor: '#FFFFFF',
     marginTop: 15,
     elevation: 10,
@@ -116,10 +134,10 @@ const Styles = StyleSheet.create({
   },
   ip_icon: {
     marginTop: 9,
-    paddingHorizontal: 5,
+    paddingHorizontal: 12,
   },
   button: {
-    backgroundColor: '#5304D4',
+    backgroundColor: '#6618E7',
     paddingVertical: 15,
     paddingHorizontal: 70,
     borderRadius: 12,
@@ -128,10 +146,14 @@ const Styles = StyleSheet.create({
     elevation: 5,
   },
   font: {
-    fontStyle: 'italic',
+    fontSize: 20,
   },
   signup: {
     color: '#6618E7',
-    fontSize: 20,
+    fontSize: 30,
   },
 });
+
+//primary color: 6618E7
+//secondary color: 5304D4
+//foreground: FFB22F

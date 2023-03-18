@@ -1,76 +1,153 @@
-/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
-import React from 'react';
-import {View, Text, StyleSheet, Pressable, Alert} from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Alert,
+  Modal,
+  FlatList,
+  Button,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+const Disp_selectedcourse = ({ selectedCourse }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [tutors, setTutors] = useState([]);
+
+  const get_tutors = async id => {
+    try {
+      let gmail = 'sohaib@gmail.com';
+      const response = await fetch(
+        `http://192.168.43.90/HouseOfTutorsAPI_2/api/student/FindTutor?semail=${gmail}&cid=${id}`,
+      );
+      const data = await response.json();
+      console.log('Data from API =>', data);
+      console.log(id);
+      if (data === 'No Teacher Found!') {
+        Alert.alert('No Teacher Found!');
+      } else {
+        setTutors(data);
+        setIsVisible(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <View>
+      <FlatList
+        data={selectedCourse}
+        renderItem={({ item }) => (
+          <View style={styles.modal}>
+            <Text style={styles.text}>Course ID: {item.cid}</Text>
+            <Text style={styles.text}>Name: {item.cname}</Text>
+            <View>
+              <Button
+                title="Find Tutor"
+                onPress={() => {
+                  get_tutors(item.cid);
+                  console.log('Find tutor for course', item.cid);
+                }}
+              />
+            </View>
+          </View>
+        )}
+      />
+      <Modal
+        animationType={'slide'}
+        transparent={false}
+        visible={isVisible}
+        onRequestClose={() => {
+          console.log('Modal has been closed.');
+        }}>
+        <FlatList
+          data={tutors}
+          renderItem={({ item1 }) => (
+            <View style={styles.modal}>
+              <Text style={styles.text}>Teacher ID: {item1}</Text>
+              {/* <Text style={styles.text}>Name: {item1.temail}</Text> */}
+              <View>
+                <Button
+                  title="Send Request"
+                  onPress={() => {
+                    setIsVisible(!isVisible);
+                    console.log('Data to be send in send request', item1);
+                  }}
+                />
+              </View>
+            </View>
+          )}
+        />
+      </Modal>
+    </View>
+  );
+};
+
 export default function S_Courses() {
+  const [isVisible, setIsVisible] = useState(false);
+  const [myCourses, setMyCourses] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState([]);
+
+  const getcourses = async () => {
+    try {
+      const response = await fetch(
+        'http://192.168.43.231/HouseOfTutors/api/Student/GetCourses',
+      );
+      const data = await response.json();
+      console.log('Data from API =>', data);
+      if (data !== null) {
+        setMyCourses(data);
+      } else {
+        Alert.alert('No Course Found!');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <View style={styles.main_container}>
       <View>
         <Pressable
           style={styles.add_Course_btn}
           onPress={() => {
-            Alert.alert('Couses will be fetch from API and will display here!');
+            setIsVisible(true);
+            getcourses();
           }}>
           <Icon name="add-outline" size={45} color="#ffffff" />
         </Pressable>
       </View>
-      <View style={styles.course_container}>
-        <View style={{flex: 1}}>
-          <Text>CS-5347</Text>
-          <Text>PF</Text>
-        </View>
-        <View style={{flex: 1}}>
-          <Pressable style={styles.Tutor_btn} onPress={() => {Alert.alert('Tutor match request will be sent to API');}}>
-            <Text style={styles.Tutor_btn_txt}>Find Tutor</Text>
-          </Pressable>
-        </View>
-      </View>
-      <View style={styles.course_container}>
-        <View style={{flex: 1}}>
-          <Text>CS-8765</Text>
-          <Text>DSA</Text>
-        </View>
-        <View style={{flex: 1}}>
-          <Pressable style={styles.Tutor_btn} onPress={() => {Alert.alert('Tutor match request will be sent to API');}}>
-            <Text style={styles.Tutor_btn_txt}>Find Tutor</Text>
-          </Pressable>
-        </View>
-      </View>
-      <View style={styles.course_container}>
-        <View style={{flex: 1}}>
-          <Text>CS-8764</Text>
-          <Text>OOP</Text>
-        </View>
-        <View style={{flex: 1}}>
-          <Pressable style={styles.Tutor_btn} onPress={() => {Alert.alert('Tutor match request will be sent to API');}}>
-            <Text style={styles.Tutor_btn_txt}>Find Tutor</Text>
-          </Pressable>
-        </View>
-      </View>
-      <View style={styles.course_container}>
-        <View style={{flex: 1}}>
-          <Text>CS-8764</Text>
-          <Text>OOP</Text>
-        </View>
-        <View style={{flex: 1}}>
-          <Pressable style={styles.Tutor_btn} onPress={() => {Alert.alert('Tutor match request will be sent to API');}}>
-            <Text style={styles.Tutor_btn_txt}>Find Tutor</Text>
-          </Pressable>
-        </View>
-      </View>
-      <View style={styles.course_container}>
-        <View style={{flex: 1}}>
-          <Text>CS-8764</Text>
-          <Text>OOP</Text>
-        </View>
-        <View style={{flex: 1}}>
-          <Pressable style={styles.Tutor_btn} onPress={() => {Alert.alert('Tutor match request will be sent to API');}}>
-            <Text style={styles.Tutor_btn_txt}>Find Tutor</Text>
-          </Pressable>
-        </View>
-      </View>
+      <Modal
+        animationType={'slide'}
+        transparent={false}
+        visible={isVisible}
+        onRequestClose={() => {
+          console.log('Modal has been closed.');
+        }}>
+        <FlatList
+          data={myCourses}
+          renderItem={({ item }) => (
+            <View style={styles.modal}>
+              <Text style={styles.text}>Course ID: {item.cid}</Text>
+              <Text style={styles.text}>Name: {item.cname}</Text>
+              <View>
+                <Button
+                  title="Add Course"
+                  onPress={() => {
+                    setIsVisible(!isVisible);
+                    console.log('item to be passed in array', item);
+                    setSelectedCourse([...selectedCourse, item]);
+                  }}
+                />
+              </View>
+            </View>
+          )}
+        />
+      </Modal>
+      <Disp_selectedcourse selectedCourse={selectedCourse} />
     </View>
   );
 }
@@ -78,19 +155,11 @@ export default function S_Courses() {
 const styles = StyleSheet.create({
   main_container: {
     padding: 10,
-    backgroundColor: '#497174',
-    height: '100%',
-  },
-  course_container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 15,
-    borderRadius: 10,
-    padding: 10,
-    backgroundColor: '#EFF5F5',
+    // backgroundColor: '#497174',
+    // height: '100%',
   },
   add_Course_btn: {
-    backgroundColor: '#EB6440',
+    backgroundColor: '#792AFB',
     borderRadius: 50 / 2,
     height: 50,
     width: 50,
@@ -99,14 +168,20 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     elevation: 10,
   },
-  Tutor_btn: {
-    marginLeft: 'auto',
-    elevation: 10,
+  modal: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#792AFB',
+    height: 100,
+    width: '70%',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#fff',
+    marginTop: 10,
+    marginLeft: 60,
+    elevation: 5,
   },
-  Tutor_btn_txt: {
-    backgroundColor: '#EB6440',
+  text: {
     color: '#ffffff',
-    padding: 9,
-    borderRadius: 8,
   },
 });
