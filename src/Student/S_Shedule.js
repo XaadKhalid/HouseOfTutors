@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Pressable, Alert } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -122,13 +122,18 @@ export default function S_Shedule() {
   };
   const [selectedslot, setselectedslot] = useState(Slots);
   const [stdemail, setStdEmail] = useState('');
+  const [schedulearray, setSchedulearray] = useState([]);
+
+  useEffect(() => {
+    getgmail();
+    get_Schedule(stdemail);
+  }, []);
 
   const getgmail = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('std_email');
-      const Result = JSON.parse(jsonValue);
-      if (Result != null) {
-        setStdEmail(Result);
+      if (jsonValue != null) {
+        setStdEmail(jsonValue);
       }
       else {
         console.log('No gmail found in Asyncstorage');
@@ -136,14 +141,48 @@ export default function S_Shedule() {
     } catch (e) {
       console.log(e);
     }
+  };
 
-    console.log('Done.');
+  const set_pre_check = () => {
+    let kyesofslot = Object.keys(Slots);
+    console.log('keys of the main slot', kyesofslot.length);
+    console.log('1 and 0 to be match', schedulearray.length);
+    for (let i = 0; i < schedulearray.length; i++) {
+      let v = kyesofslot[i];
+      if (schedulearray[i] === '1') {
+        Slots[v] = true;
+      }
+    }
+    setselectedslot(Slots);
+    console.log('slots to be marked yes', Slots);
+  };
+
+  const get_Schedule = async (email) => {
+    console.log('result to be fethed for ', email);
+    try {
+      const response = await fetch(
+        `http://192.168.43.231/HouseOfTutors/api/Student/StudentSchedule?email=${email}`,
+      );
+      const data = await response.json();
+      console.log('Result from getschedule API: ', data);
+      if (data !== null) {
+        const scheduleData = data.split(''); // create an array of characters from the string
+        setSchedulearray(scheduleData);
+        console.log('converted api string to array', scheduleData);
+        set_pre_check();
+      } else {
+        Alert.alert('No Schedule Found!');
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const Set_schedule = async (details, email) => {
-    console.log('set schedule is called => ', details, email);
+    console.log('set schedule is called => ', details);
+    console.log('email is  => ', email);
     try {
-      const response = await fetch(`http://192.168.43.231/HouseOfTutorsAPI_2/api/student/StudentSchedule?details=${details}&email=${email}`, {
+      const response = await fetch(`http://192.168.43.231/HouseOfTutors/api/student/StudentSchedule?details=${details}&email=${email}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -155,6 +194,7 @@ export default function S_Shedule() {
       console.log(error);
     }
   };
+
   return (
     <View style={{ backgroundColor: '#ffffff' }}>
       <View style={[styles.row, styles.row2]}>
@@ -1171,8 +1211,8 @@ export default function S_Shedule() {
                 str1 = str1 + '0';
               }
             }
-            getgmail();
             Set_schedule(str1, stdemail);
+            //get_Schedule(stdemail);
           }}>
           <Text style={styles.button}>Update Scedule</Text>
         </Pressable>

@@ -26,22 +26,22 @@ function Login({ navigation }) {
   };
 
   const Verifylogin = async () => {
-    // try {
-    //   const response = await fetch(
-    //     `http://192.168.43.231/HouseOfTutors/api/student/StudentLogin?e=${userEmail}&p=${userPswd}`,
-    //   );
-    //   const data = await response.json();
-    //   console.log('Result from Login API: ', data);
-    //   if (data !== 'No User Found!') {
-    //     storeData(userEmail);
-    //     navigation.navigate('S_Bottom_Navigator');
-    //   } else {
-    //     Alert.alert('Wrong username or Password!');
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    navigation.navigate('S_Bottom_Navigator');
+    try {
+      const response = await fetch(
+        `http://192.168.43.231/HouseOfTutors/api/student/StudentLogin?e=${userEmail}&p=${userPswd}`,
+      );
+      const data = await response.json();
+      console.log('Result from Login API: ', data);
+      if (data !== 'No User Found!') {
+        storeData(userEmail);
+        navigation.navigate('S_Bottom_Navigator');
+      } else {
+        Alert.alert('Wrong username or Password!');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    //navigation.navigate('S_Bottom_Navigator');
   };
 
   const imagebg = require('../Images/12.png');

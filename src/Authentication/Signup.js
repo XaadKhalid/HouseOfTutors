@@ -10,7 +10,7 @@ export default function Signup({ navigation }) {
   const [name, setname] = useState('');
   const [email, setemail] = useState('');
   const [password, setpassword] = useState('');
-  const [semeter, setsemester] = useState('0');
+  const [semeter, setsemester] = useState('1');
   const [cgpa, setcgpa] = useState('');
   const [gender, setgender] = useState('Male');
   const [contact, setContact] = useState('');
