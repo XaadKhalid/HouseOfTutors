@@ -76,7 +76,7 @@ const Disp_selectedcourse = ({ selectedCourse, stdEmail }) => {
               <Text style={styles.text}>Name: {item.cname}</Text>
               <View>
                 <Button
-                  title="Find Tutor"
+                  title="Send Request"
                   onPress={() => {
                     console.log('Find tutor for course', item.cid);
                     //<Modal_NumofSlot item={item} visible={true} get_tutors={get_tutors} setIsVisible={setIsVisible} isVisible={isVisible} />;

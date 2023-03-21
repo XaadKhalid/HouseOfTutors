@@ -7,13 +7,13 @@ export default function S_Learning() {
     <View style={styles.main_container}>
       <View style={styles.header}>
         <View>
-          <Text style={styles.header_txt}>Tutor</Text>
+          <Text style={styles.header_txt}>Student</Text>
         </View>
         <View>
           <Text style={styles.header_txt}>Course</Text>
         </View>
         <View>
-          <Text style={styles.header_txt}>Rate</Text>
+          <Text style={styles.header_txt}>Status</Text>
         </View>
       </View>
       <View style={styles.course_continer}>
@@ -29,16 +29,16 @@ export default function S_Learning() {
             onPress={() => {
               Alert.alert('Tutor match request will be sent to API');
             }}>
-            <Text style={styles.Rate_btn_txt}>Rate</Text>
+            <Text style={styles.Rate_btn_txt}>InProgress</Text>
           </Pressable>
         </View>
       </View>
       <View style={styles.course_continer}>
         <View>
-          <Text style={styles.course_txt}>Umer</Text>
+          <Text style={styles.course_txt}>Azhar</Text>
         </View>
         <View>
-          <Text style={styles.course_txt}>PDC</Text>
+          <Text style={styles.course_txt}>OOP</Text>
         </View>
         <View>
           <Pressable
@@ -46,16 +46,16 @@ export default function S_Learning() {
             onPress={() => {
               Alert.alert('Tutor match request will be sent to API');
             }}>
-            <Text style={styles.Rate_btn_txt}>Rate</Text>
+            <Text style={styles.Rate_btn_txt}>Completed</Text>
           </Pressable>
         </View>
       </View>
       <View style={styles.course_continer}>
         <View>
-          <Text style={styles.course_txt}>Aftab</Text>
+          <Text style={styles.course_txt}>Azhar</Text>
         </View>
         <View>
-          <Text style={styles.course_txt}>MAP</Text>
+          <Text style={styles.course_txt}>OOP</Text>
         </View>
         <View>
           <Pressable
@@ -63,7 +63,7 @@ export default function S_Learning() {
             onPress={() => {
               Alert.alert('Tutor match request will be sent to API');
             }}>
-            <Text style={styles.Rate_btn_txt}>Rate</Text>
+            <Text style={styles.Rate_btn_txt}>Completed</Text>
           </Pressable>
         </View>
       </View>

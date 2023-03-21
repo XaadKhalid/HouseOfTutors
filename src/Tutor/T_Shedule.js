@@ -161,7 +161,7 @@ export default function S_Shedule() {
     console.log('result to be fethed for ', email);
     try {
       const response = await fetch(
-        `http://192.168.43.231/HouseOfTutors/api/Student/StudentSchedule?email=${email}`,
+        `http://192.168.43.231/HouseOfTutors/api/Tutor/GetTutorSchedule?email=${email}`,
       );
       const data = await response.json();
       console.log('Result from getschedule API: ', data);
@@ -182,7 +182,7 @@ export default function S_Shedule() {
     console.log('set schedule is called => ', details);
     console.log('email is  => ', email);
     try {
-      const response = await fetch(`http://192.168.43.231/HouseOfTutors/api/student/StudentSchedule?details=${details}&email=${email}`, {
+      const response = await fetch(`http://192.168.43.231/HouseOfTutors/api/Tutor/TutorSchedule?details=${details}&email=${email}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       });

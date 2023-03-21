@@ -222,7 +222,7 @@ const style = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     borderColor: 'gray',
-    backgroundColor: '#F0ECCF',
+    backgroundColor: '#eeefff',
   },
   imgepic: {
     flexDirection: 'row',

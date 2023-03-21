@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 export default function S_Fee() {
   return (
@@ -30,7 +30,7 @@ export default function S_Fee() {
           <Text style={styles.details_txt}>15</Text>
         </View>
         <View>
-          <Text style={styles.details_txt}>3000</Text>
+          <Text style={styles.details_txt}>200</Text>
         </View>
       </View>
       <View style={styles.details_continer}>
@@ -44,7 +44,7 @@ export default function S_Fee() {
           <Text style={styles.details_txt}>15</Text>
         </View>
         <View>
-          <Text style={styles.details_txt}>3000</Text>
+          <Text style={styles.details_txt}>200</Text>
         </View>
       </View>
       <View style={styles.details_continer}>
@@ -58,7 +58,7 @@ export default function S_Fee() {
           <Text style={styles.details_txt}>15</Text>
         </View>
         <View>
-          <Text style={styles.details_txt}>3000</Text>
+          <Text style={styles.details_txt}>200</Text>
         </View>
       </View>
     </View>
@@ -68,26 +68,28 @@ export default function S_Fee() {
 const styles = StyleSheet.create({
   main_container: {
     padding: 10,
-    backgroundColor: '#497174',
+    backgroundColor: '#ffffff',
     height: '100%',
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#EFF5F5',
-    padding: 15,
+    backgroundColor: 'rgba(102,24,231,0.9)',
+    padding: 22,
     borderRadius: 10,
   },
   header_txt: {
-    color: '#EB6440',
+    color: '#ffffff',
+    fontWeight: 'bold',
   },
   details_txt: {
-    color: '#000000',
+    color: '#ffffff',
+    fontWeight: 'bold',
   },
   details_continer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#EFF5F5',
+    backgroundColor: 'rgba(102,24,231,0.8)',
     padding: 18,
     borderRadius: 10,
     marginTop: 15,

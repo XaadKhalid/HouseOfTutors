@@ -13,7 +13,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import Icon2 from 'react-native-vector-icons/Foundation';
 import Icon3 from 'react-native-vector-icons/FontAwesome5';
 
-export default function S_Bottom_Navigator({ }) {
+export default function S_Bottom_Navigator() {
   const Tab = createBottomTabNavigator();
   return (
     <Tab.Navigator
@@ -25,10 +25,10 @@ export default function S_Bottom_Navigator({ }) {
           backgroundColor: '#FFB22F',
         },
         tabBarInactiveBackgroundColor: '#6618E7',
-        tabBarActiveBackgroundColor: '#000000',
+        tabBarActiveBackgroundColor: '#1A2421',
       }}>
       <Tab.Screen
-        name="Schedule"
+        name="Set/Update Schedule"
         component={S_Shedule}
         options={{
           tabBarShowLabel: false,
@@ -38,7 +38,7 @@ export default function S_Bottom_Navigator({ }) {
         }}
       />
       <Tab.Screen
-        name="Courses"
+        name="Enlisted Courses"
         component={S_Courses}
         options={{
           tabBarShowLabel: false,
@@ -48,7 +48,7 @@ export default function S_Bottom_Navigator({ }) {
         }}
       />
       <Tab.Screen
-        name="Learning"
+        name="Courses Learning"
         component={S_Learning}
         options={{
           tabBarShowLabel: false,
@@ -58,7 +58,7 @@ export default function S_Bottom_Navigator({ }) {
         }}
       />
       <Tab.Screen
-        name="Fee"
+        name="Courses Fee"
         component={S_Fee}
         options={{
           tabBarShowLabel: false,
@@ -68,7 +68,7 @@ export default function S_Bottom_Navigator({ }) {
         }}
       />
       <Tab.Screen
-        name="Today"
+        name="Today Classes"
         component={S_TodayClass}
         options={{
           tabBarShowLabel: false,

@@ -1,51 +1,64 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
-export default function S_TodayClass() {
+export default function S_Fee() {
   return (
     <View style={styles.main_container}>
       <View style={styles.header}>
         <View>
-          <Text style={styles.header_txt}>Tutor</Text>
+          <Text style={styles.header_txt}>Student</Text>
         </View>
         <View>
           <Text style={styles.header_txt}>Course</Text>
         </View>
         <View>
-          <Text style={styles.header_txt}>Class Time</Text>
+          <Text style={styles.header_txt}>No of Lectures</Text>
+        </View>
+        <View>
+          <Text style={styles.header_txt}>Fee</Text>
         </View>
       </View>
       <View style={styles.details_continer}>
         <View>
-          <Text style={styles.details_txt}>Aftab</Text>
+          <Text style={styles.details_txt}>Ahmer</Text>
         </View>
         <View>
           <Text style={styles.details_txt}>OOP</Text>
         </View>
         <View>
-          <Text style={styles.details_txt}>08:30-09:30 AM</Text>
+          <Text style={styles.details_txt}>15</Text>
+        </View>
+        <View>
+          <Text style={styles.details_txt}>200</Text>
         </View>
       </View>
       <View style={styles.details_continer}>
         <View>
-          <Text style={styles.details_txt}>Umer</Text>
+          <Text style={styles.details_txt}>Alia</Text>
         </View>
         <View>
           <Text style={styles.details_txt}>DSA</Text>
         </View>
         <View>
-          <Text style={styles.details_txt}>11:30-12:30 PM</Text>
+          <Text style={styles.details_txt}>15</Text>
+        </View>
+        <View>
+          <Text style={styles.details_txt}>200</Text>
         </View>
       </View>
       <View style={styles.details_continer}>
         <View>
-          <Text style={styles.details_txt}>Amir</Text>
+          <Text style={styles.details_txt}>Bilal</Text>
         </View>
         <View>
           <Text style={styles.details_txt}>DAM</Text>
         </View>
         <View>
-          <Text style={styles.details_txt}>03:30-04:30 PM</Text>
+          <Text style={styles.details_txt}>15</Text>
+        </View>
+        <View>
+          <Text style={styles.details_txt}>200</Text>
         </View>
       </View>
     </View>

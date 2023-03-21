@@ -1,27 +1,26 @@
-/* eslint-disable prettier/prettier */
 import React from 'react';
 import { View, Text, StyleSheet, Pressable, Alert } from 'react-native';
 
-export default function S_Learning() {
+export default function S_TodayClass() {
   return (
     <View style={styles.main_container}>
       <View style={styles.header}>
         <View>
-          <Text style={styles.header_txt}>Tutor</Text>
+          <Text style={styles.header_txt}>Student</Text>
         </View>
         <View>
-          <Text style={styles.header_txt}>Course</Text>
+          <Text style={styles.header_txt}>Class Time</Text>
         </View>
         <View>
-          <Text style={styles.header_txt}>Rate</Text>
+          <Text style={styles.header_txt}>Status</Text>
         </View>
       </View>
-      <View style={styles.course_continer}>
+      <View style={styles.details_continer}>
         <View>
-          <Text style={styles.course_txt}>Azhar</Text>
+          <Text style={styles.details_txt}>Aftab</Text>
         </View>
         <View>
-          <Text style={styles.course_txt}>OOP</Text>
+          <Text style={styles.details_txt}>08:30-09:30 AM</Text>
         </View>
         <View>
           <Pressable
@@ -29,16 +28,25 @@ export default function S_Learning() {
             onPress={() => {
               Alert.alert('Tutor match request will be sent to API');
             }}>
-            <Text style={styles.Rate_btn_txt}>Rate</Text>
+            <Text style={styles.Rate_btn_txt}>Take</Text>
+          </Pressable>
+        </View>
+        <View>
+          <Pressable
+            style={styles.Rate_btn}
+            onPress={() => {
+              Alert.alert('Tutor match request will be sent to API');
+            }}>
+            <Text style={styles.Rate_btn_txt}>ReSchedule</Text>
           </Pressable>
         </View>
       </View>
-      <View style={styles.course_continer}>
+      <View style={styles.details_continer}>
         <View>
-          <Text style={styles.course_txt}>Umer</Text>
+          <Text style={styles.details_txt}>Aftab</Text>
         </View>
         <View>
-          <Text style={styles.course_txt}>PDC</Text>
+          <Text style={styles.details_txt}>08:30-09:30 AM</Text>
         </View>
         <View>
           <Pressable
@@ -46,16 +54,25 @@ export default function S_Learning() {
             onPress={() => {
               Alert.alert('Tutor match request will be sent to API');
             }}>
-            <Text style={styles.Rate_btn_txt}>Rate</Text>
+            <Text style={styles.Rate_btn_txt}>Take</Text>
+          </Pressable>
+        </View>
+        <View>
+          <Pressable
+            style={styles.Rate_btn}
+            onPress={() => {
+              Alert.alert('Tutor match request will be sent to API');
+            }}>
+            <Text style={styles.Rate_btn_txt}>ReSchedule</Text>
           </Pressable>
         </View>
       </View>
-      <View style={styles.course_continer}>
+      <View style={styles.details_continer}>
         <View>
-          <Text style={styles.course_txt}>Aftab</Text>
+          <Text style={styles.details_txt}>Aftab</Text>
         </View>
         <View>
-          <Text style={styles.course_txt}>MAP</Text>
+          <Text style={styles.details_txt}>08:30-09:30 AM</Text>
         </View>
         <View>
           <Pressable
@@ -63,7 +80,16 @@ export default function S_Learning() {
             onPress={() => {
               Alert.alert('Tutor match request will be sent to API');
             }}>
-            <Text style={styles.Rate_btn_txt}>Rate</Text>
+            <Text style={styles.Rate_btn_txt}>Take</Text>
+          </Pressable>
+        </View>
+        <View>
+          <Pressable
+            style={styles.Rate_btn}
+            onPress={() => {
+              Alert.alert('Tutor match request will be sent to API');
+            }}>
+            <Text style={styles.Rate_btn_txt}>ReSchedule</Text>
           </Pressable>
         </View>
       </View>
@@ -88,11 +114,11 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontWeight: 'bold',
   },
-  course_txt: {
+  details_txt: {
     color: '#ffffff',
     fontWeight: 'bold',
   },
-  course_continer: {
+  details_continer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: 'rgba(102,24,231,0.8)',

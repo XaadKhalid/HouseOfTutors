@@ -28,13 +28,17 @@ function Login({ navigation }) {
   const Verifylogin = async () => {
     try {
       const response = await fetch(
-        `http://192.168.43.231/HouseOfTutors/api/student/StudentLogin?e=${userEmail}&p=${userPswd}`,
+        `http://192.168.43.231/HouseOfTutors/api/Login/LoginUser?email=${userEmail}&password=${userPswd}`,
       );
       const data = await response.json();
       console.log('Result from Login API: ', data);
-      if (data !== 'No User Found!') {
+      if (data !== 'User Not Found') {
         storeData(userEmail);
-        navigation.navigate('S_Bottom_Navigator');
+        if (data.Role === 'Student') {
+          navigation.navigate('S_Bottom_Navigator');
+        } else if (data.Role === 'Tutor') {
+          navigation.navigate('T_Bottom_Navigator');
+        }
       } else {
         Alert.alert('Wrong username or Password!');
       }
