@@ -22,6 +22,7 @@ function Login({ navigation }) {
       await AsyncStorage.setItem('std_email', value);
     } catch (e) {
       console.log(e);
+      console.log('----------------------------------------------------------------------------');
     }
   };
 
@@ -32,6 +33,7 @@ function Login({ navigation }) {
       );
       const data = await response.json();
       console.log('Result from Login API: ', data);
+      console.log('----------------------------------------------------------------------------');
       if (data !== 'User Not Found') {
         storeData(userEmail);
         if (data.Role === 'Student') {
@@ -44,6 +46,7 @@ function Login({ navigation }) {
       }
     } catch (error) {
       console.log(error);
+      console.log('----------------------------------------------------------------------------');
     }
     //navigation.navigate('S_Bottom_Navigator');
   };
@@ -79,6 +82,7 @@ function Login({ navigation }) {
         <Pressable
           onPress={() => {
             console.log('Login is pressed');
+            console.log('----------------------------------------------------------------------------');
             storeData(userEmail);
             Verifylogin();
           }}>

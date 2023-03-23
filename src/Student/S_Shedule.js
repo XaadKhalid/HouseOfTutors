@@ -137,6 +137,7 @@ export default function S_Shedule() {
       }
       else {
         console.log('No gmail found in Asyncstorage');
+        console.log('----------------------------------------------------------------------------');
       }
     } catch (e) {
       console.log(e);
@@ -146,7 +147,9 @@ export default function S_Shedule() {
   const set_pre_check = () => {
     let kyesofslot = Object.keys(Slots);
     console.log('keys of the main slot', kyesofslot.length);
+    console.log('----------------------------------------------------------------------------');
     console.log('1 and 0 to be match', schedulearray.length);
+    console.log('----------------------------------------------------------------------------');
     for (let i = 0; i < schedulearray.length; i++) {
       let v = kyesofslot[i];
       if (schedulearray[i] === '1') {
@@ -155,32 +158,39 @@ export default function S_Shedule() {
     }
     setselectedslot(Slots);
     console.log('slots to be marked yes', Slots);
+    console.log('----------------------------------------------------------------------------');
   };
 
   const get_Schedule = async (email) => {
     console.log('result to be fethed for ', email);
+    console.log('----------------------------------------------------------------------------');
     try {
       const response = await fetch(
         `http://192.168.43.231/HouseOfTutors/api/Student/StudentSchedule?email=${email}`,
       );
       const data = await response.json();
       console.log('Result from getschedule API: ', data);
+      console.log('----------------------------------------------------------------------------');
       if (data !== null) {
         const scheduleData = data.split(''); // create an array of characters from the string
         setSchedulearray(scheduleData);
         console.log('converted api string to array', scheduleData);
+        console.log('----------------------------------------------------------------------------');
         set_pre_check();
       } else {
         Alert.alert('No Schedule Found!');
       }
     } catch (error) {
       console.log(error);
+      console.log('----------------------------------------------------------------------------');
     }
   };
 
   const Set_schedule = async (details, email) => {
     console.log('set schedule is called => ', details);
+    console.log('----------------------------------------------------------------------------');
     console.log('email is  => ', email);
+    console.log('----------------------------------------------------------------------------');
     try {
       const response = await fetch(`http://192.168.43.231/HouseOfTutors/api/student/StudentSchedule?details=${details}&email=${email}`, {
         method: 'POST',
@@ -188,10 +198,12 @@ export default function S_Shedule() {
       });
       const data = await response.json();
       console.log(data);
+      console.log('----------------------------------------------------------------------------');
       Alert.alert(data);
     }
     catch (error) {
       console.log(error);
+      console.log('----------------------------------------------------------------------------');
     }
   };
 
