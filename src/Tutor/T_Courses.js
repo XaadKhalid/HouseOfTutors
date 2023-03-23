@@ -1,174 +1,33 @@
-/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
+/* eslint-disable react-native/no-inline-styles */
+import { View, Text, StyleSheet, FlatList, Pressable, Alert } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  Alert,
-  Modal,
-  FlatList,
-  Button,
-  TextInput,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Dialog from 'react-native-dialog';
+import DialogInput from 'react-native-dialog/lib/Input';
 
-const Disp_selectedcourse = ({ selectedCourse, stdEmail }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [tutors, setTutors] = useState([]);
-  const [courseId, setCourseId] = useState('');
-  const [tEmail, setTeMail] = useState('');
-
-  // useEffect(() => {
-  //   get_tutors();
-  // }, [courseId]);
-
-  const get_tutors = async () => {
-    try {
-      const response = await fetch(
-        `http://192.168.43.231/HouseOfTutors/api/student/FindTutor?semail=${stdEmail}&cid=${courseId}`,
-      );
-      const data = await response.json();
-      console.log('Data from API =>', data);
-      if (data === 'No tutor available') {
-        Alert.alert('No tutor available!');
-      } else {
-        setTutors(data);
-        setIsVisible(!isVisible);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const send_tutor_request = async () => {
-    //console.log('Cid against which ttuor will be searched', courseId);
-    //console.log('email against which ttuor will be searched', stdEmail);
-    try {
-      const response = await fetch(
-        `http://192.168.43.231/HouseOfTutors/api/Student/SendTutorRequest?semail=${stdEmail}&temail=${tEmail}&cid=${courseId}`, {
-        method: 'POST',
-      }
-      );
-      const data = await response.json();
-      console.log('Data from API =>', data);
-      if (data === 'Already Requested') {
-        Alert.alert('Already Requested!');
-      } else {
-        Alert.alert(data);
-        setIsVisible(!isVisible);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  return (
-    <View style={styles.crse_bm}>
-      <FlatList
-        data={selectedCourse}
-        renderItem={({ item }) => {
-          return (
-            <View style={styles.modal}>
-              <Text style={styles.text}>Course ID: {item.cid}</Text>
-              <Text style={styles.text}>Name: {item.cname}</Text>
-              <View>
-                <Button
-                  title="Send Request"
-                  onPress={() => {
-                    console.log('Find tutor for course', item.cid);
-                    //<Modal_NumofSlot item={item} visible={true} get_tutors={get_tutors} setIsVisible={setIsVisible} isVisible={isVisible} />;
-                    //setSelectedCourse([item]);
-                    setCourseId(item.cid);
-                    get_tutors();
-                  }} />
-              </View>
-            </View>
-          );
-        }}
-      />
-      <Modal
-        animationType={'slide'}
-        transparent={false}
-        visible={isVisible}
-        onRequestClose={() => {
-          setIsVisible(!isVisible);
-          console.log('Modal has been closed.');
-        }}>
-        <FlatList
-          data={tutors}
-          renderItem={({ item }) => (
-            <View style={styles.modal}>
-              <Text style={styles.text}>Teacher ID: {item.tname}</Text>
-              <View>
-                <Button
-                  title="Send Request"
-                  onPress={() => {
-                    setTeMail(item.temail);
-                    send_tutor_request();
-                    //setIsVisible(!isVisible);
-                    console.log('Data to be send in send request', item);
-                  }}
-                />
-              </View>
-            </View>
-          )}
-        />
-      </Modal>
-    </View>
-  );
-};
-
-const Modal_NumofSlot = ({ item, visible, get_tutors, setIsVisible, isVisible }) => {
-  const [numofSlots, setNumOfSlots] = useState(1);
-  const [modalVisible, setModalVisible] = useState(visible);
-
-  return (
-    <Modal
-      visible={modalVisible}
-      animationType="slide"
-      transparent={true}
-      onRequestClose={() => setModalVisible(!modalVisible)}>
-      <View style={styles.modalContainer}>
-        <View style={styles.modalContent}>
-          <TextInput
-            onChangeText={text => setNumOfSlots(text)}
-            value={numofSlots}
-            placeholder="Enter number of slots"
-            style={styles.inputField}
-          />
-          <Button
-            onPress={() => {
-              get_tutors(item);
-              setIsVisible(!isVisible);
-              setModalVisible(!modalVisible);
-            }}
-            title="Submit"
-          />
-        </View>
-      </View>
-    </Modal>
-  );
-};
-
-export default function S_Courses() {
-  const [isVisible, setIsVisible] = useState(false);
-  const [myCourses, setMyCourses] = useState([]);
+export default function T_Profile() {
+  const [courseList, setCourseList] = useState(false);
+  const [enlistedCourse, setEnlistedCourse] = useState(false);
+  const [completeCourseList, setCompleteCourseList] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState([]);
-  const [stdEmail, setStdEmail] = useState('');
+  const [visible, setVisible] = useState(false);
+  const [courseGrade, setcourseGrade] = useState('');
+  const [courseId, setCourseId] = useState('');
+  const [tEmail, setTEmail] = useState('');
 
   useEffect(() => {
     getgmail();
     getEnlistedCourses();
-  }, [selectedCourse, stdEmail]);
+  }, [tEmail, courseList]);
 
   const getgmail = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('std_email');
       if (jsonValue != null) {
-        setStdEmail(jsonValue);
+        setTEmail(jsonValue);
+        console.log('Getting the email address of student from Asyncstorage => ', tEmail);
       } else {
         console.log('No gmail found in Asyncstorage');
       }
@@ -183,34 +42,11 @@ export default function S_Courses() {
         'http://192.168.43.231/HouseOfTutors/api/Student/GetCourses',
       );
       const data = await response.json();
-      console.log('Data from API =>', data);
+      console.log('Result from Getcourses API => ', data);
       if (data !== null) {
-        setMyCourses(data);
+        setCompleteCourseList(data);
       } else {
         Alert.alert('No Course Found!');
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const CourseEnlist = async item => {
-    try {
-      const response = await fetch(
-        `http://192.168.43.231/HouseOfTutors/api/student/StudentCourseEnlist?semail=${stdEmail}&cid=${item.cid}`,
-        {
-          method: 'POST',
-        },
-      );
-      const data = await response.json();
-      console.log('Response from Student CourseEnlist API =>', data);
-      if (data === 'Course Already Enlisted') {
-        Alert.alert('Course Already Enlisted!');
-      } else {
-        Alert.alert(data);
-        setIsVisible(!isVisible);
-        console.log('item to be passed in selectcourse_array is=>', item);
-        setSelectedCourse([...selectedCourse, item]);
       }
     } catch (error) {
       console.log(error);
@@ -220,18 +56,63 @@ export default function S_Courses() {
   const getEnlistedCourses = async () => {
     try {
       const response = await fetch(
-        `http://192.168.43.231/HouseOfTutors/api/student/GetStudentEnlist?semail=${stdEmail}`,
+        `http://192.168.43.231/HouseOfTutors/api/Tutor/GetTutorEnlist?semail=${tEmail}`,
       );
       const data = await response.json();
-      console.log('Data from getEnlistedCourses API =>', data);
-      if (data !== []) {
+      console.log('Result from getEnlistedCourses API =>', data);
+      if (data !== 'No courses yet') {
         setSelectedCourse(data);
+        setEnlistedCourse(!enlistedCourse);
       } else {
-        Alert.alert('No courses Enlisted pleae Press Add to Enlist Course');
+        Alert.alert('No courses Enlisted Press Add to Enlist Course');
+        console.log('No courses yet');
       }
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handle_Course_toggler = () => {
+    // if (courseList === true) {
+    //   getcourses();
+    // }
+    getcourses();
+  };
+
+  const CourseEnlist = async () => {
+    try {
+      const response = await fetch(
+        `http://192.168.43.231/HouseOfTutors/api/Tutor/TutorCourseEnlist?temail=${tEmail}&cid=${courseId}&grade=${courseGrade}`,
+        {
+          method: 'POST',
+        },
+      );
+      const data = await response.json();
+      console.log('Response from Student CourseEnlist API => ', data);
+      if (data === 'Course Already Enlisted') {
+        Alert.alert('Course Already Enlisted!');
+      } else {
+        Alert.alert(data);
+        //setSelectedCourse([...selectedCourse, item]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handle_Course_enlist = () => {
+    setVisible(false);
+    console.log('course id to be added in wishlist is ', courseId);
+    console.log('Grade for that course is ', courseGrade);
+    CourseEnlist();
+  };
+
+  const showDialog = () => {
+    setVisible(true);
+  };
+
+  const handleCancel = () => {
+    setVisible(false);
   };
 
   return (
@@ -240,53 +121,80 @@ export default function S_Courses() {
         <Pressable
           style={styles.add_Course_btn}
           onPress={() => {
-            setIsVisible(true);
-            getcourses();
+            setCourseList(!courseList);
+            handle_Course_toggler();
           }}>
-          <Icon name="add-outline" size={45} color="#ffffff" />
+          <Ionicons name="add-outline" size={45} color="#ffffff" />
         </Pressable>
       </View>
-      <Modal
-        animationType={'slide'}
-        transparent={false}
-        visible={isVisible}
-        onRequestClose={() => {
-          console.log('Modal has been closed.');
-          setIsVisible(!isVisible);
-        }}>
-        <View style={{ paddingVertical: 25 }}>
-          <Text style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 23 }}>EnList Courses</Text>
-          <FlatList
-            data={myCourses}
-            renderItem={({ item }) => (
-              <View style={styles.modal}>
-                <Text style={styles.text}>C-Code: {item.ccode}</Text>
-                <Text style={styles.text}>Name: {item.cname}</Text>
-                <View>
-                  <Button
-                    title="Add Course"
-                    onPress={() => {
-                      console.log('item passed to CourseEnlist API', item);
-                      CourseEnlist(item);
-                    }}
-                  />
-                </View>
-              </View>
-            )}
-          />
-        </View>
-      </Modal>
-      <Disp_selectedcourse
-        selectedCourse={selectedCourse}
-        stdEmail={stdEmail}
-      />
+      <View>
+        {courseList && (
+          <>
+            <View>
+              <Text
+                style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 23 }}>
+                Select Courses to Wishlist
+              </Text>
+            </View>
+            <View style={styles.FList_BM}>
+              <FlatList
+                data={completeCourseList}
+                renderItem={({ item }) => (
+                  <View style={styles.modal}>
+                    <Text style={styles.text}>Name: {item.cname}</Text>
+                    <Text style={styles.text}>C-Code: {item.ccode}</Text>
+                    <View>
+                      <Pressable
+                        style={styles.btn}
+                        onPress={() => {
+                          showDialog();
+                          setCourseId(item.cid);
+                        }}>
+                        <Text style={styles.btn_text}>Add Course</Text>
+                      </Pressable>
+                    </View>
+                    <View>
+                      <Dialog.Container visible={visible}>
+                        <Dialog.Title>Grade Confirmation</Dialog.Title>
+                        <DialogInput label="Enter your grade" onChangeText={value => setcourseGrade(value)} keyboardType="default" />
+                        <Dialog.Button label="Cancel" onPress={handleCancel} />
+                        <Dialog.Button label="Confirm" onPress={handle_Course_enlist} />
+                      </Dialog.Container>
+                    </View>
+                  </View>
+                )}
+              />
+            </View>
+          </>
+        )}
+        {enlistedCourse && (
+          <>
+            <Text
+              style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 23 }}>
+              Courses Wishlist
+            </Text>
+            <View style={styles.FList_BM}>
+              <FlatList
+                data={selectedCourse}
+                renderItem={({ item }) => (
+                  <View style={styles.modal}>
+                    <Text style={styles.text}>Grade: {item.grade}</Text>
+                    <Text style={styles.text}>Name: {item.cname}</Text>
+                    <Text style={styles.text}>Course ID: {item.cid}</Text>
+                  </View>
+                )}
+              />
+            </View>
+          </>
+        )}
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   main_container: {
-    padding: 10,
+    padding: 15,
   },
   add_Course_btn: {
     backgroundColor: '#792AFB',
@@ -301,17 +209,17 @@ const styles = StyleSheet.create({
   modal: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(102,24,231,0.9)',
-    marginHorizontal: 80,
-    paddingVertical: 12,
+    backgroundColor: 'rgba(102,24,231,0.8)',
+    marginHorizontal: 60,
+    paddingVertical: 15,
     borderRadius: 10,
     marginTop: 10,
-    elevation: 5,
   },
   text: {
     color: '#ffffff',
     fontWeight: 'bold',
     marginBottom: 5,
+    textAlign: 'center',
   },
   crse_bm: {
     marginBottom: 100,
@@ -332,5 +240,19 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     marginBottom: 10,
+  },
+  btn: {
+    backgroundColor: '#FFB22F',
+    elevation: 10,
+    paddingHorizontal: 30,
+    paddingVertical: 10,
+    borderRadius: 5,
+  },
+  btn_text: {
+    color: '#000000',
+    fontWeight: '600',
+  },
+  FList_BM: {
+    marginBottom: 200,
   },
 });
