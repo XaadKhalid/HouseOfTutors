@@ -15,6 +15,7 @@ export default function Signup({ navigation }) {
   const [gender, setgender] = useState('Male');
   const [contact, setContact] = useState('');
   const [nic, setNic] = useState('');
+  const [role, setrole] = useState('Student');
 
   const options = {
     method: 'POST',
@@ -39,6 +40,7 @@ export default function Signup({ navigation }) {
       );
       const data = await response.json();
       console.log('Response from Student Signup API =>', data);
+      console.log('----------------------------------------------------------------------------');
       if (data === 'Student Already Registered!') {
         Alert.alert('Student Already Registered!');
       } else {
@@ -46,6 +48,7 @@ export default function Signup({ navigation }) {
       }
     } catch (error) {
       console.log(error);
+      console.log('----------------------------------------------------------------------------');
     }
   };
 
@@ -157,6 +160,22 @@ export default function Signup({ navigation }) {
             />
           </TouchableOpacity>
         </View>
+        <View style={[style.pker, style.mb]} >
+          <RadioButton.Group
+            onValueChange={newValue => setrole(newValue)}
+            value={role}>
+            <View style={style.gnd}>
+              <View>
+                <Text>Student</Text>
+                <RadioButton value="Student" />
+              </View>
+              <View>
+                <Text>Tutor</Text>
+                <RadioButton value="Tutor" />
+              </View>
+            </View>
+          </RadioButton.Group>
+        </View>
         <TouchableOpacity style={style.button} onPress={() => {
           if (name !== '') {
             if (email !== '') {
@@ -165,6 +184,7 @@ export default function Signup({ navigation }) {
                   if (contact !== '') {
                     if (nic !== '') {
                       console.log('Submit Button is pressed and studnetsingup api is called!');
+                      console.log('----------------------------------------------------------------------------');
                       Register();
                     }
                     else {
@@ -230,6 +250,9 @@ const style = StyleSheet.create({
     paddingVertical: 8,
   },
   ipdistance: {
+    marginTop: 8,
+  },
+  mb: {
     marginTop: 8,
   },
   gnd: {
