@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -11,11 +12,19 @@ const Stack = createNativeStackNavigator();
 function Stack_Navigator() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+      <Stack.Navigator
+        initialRouteName="Login"
+        screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Signup" component={Signup} />
-        <Stack.Screen name="S_Bottom_Navigator" component={S_Bottom_Navigator} />
-        <Stack.Screen name="T_Bottom_Navigator" component={T_Bottom_Navigator} />
+        <Stack.Screen
+          name="S_Bottom_Navigator"
+          component={S_Bottom_Navigator}
+        />
+        <Stack.Screen
+          name="T_Bottom_Navigator"
+          component={T_Bottom_Navigator}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

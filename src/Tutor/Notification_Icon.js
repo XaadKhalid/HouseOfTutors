@@ -1,18 +1,22 @@
-/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
-import { View, Text, StyleSheet } from 'react-native';
-import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-export default function Notification_Icon() {
+export default function Notification_Icon({ navigation }) {
+    const [counter, setCounter] = useState(2);
     return (
         <View>
             <View style={style.main_container}>
-                <Ionicons name="notifications" size={30} color="black" />
-                <View style={style.bage_container}>
-                    <Text style={style.txt}>3</Text>
-                </View>
-            </ View>
+                <TouchableOpacity onPress={() => navigation.navigate('Notification_Details')}>
+                    <Ionicons name="notifications" size={30} color="black" />
+                </TouchableOpacity>
+                {counter > 0 && (
+                    <View style={style.bage_container}>
+                        <Text style={style.txt}>{counter}</Text>
+                    </View>
+                )}
+            </View>
         </View>
     );
 }
@@ -27,13 +31,13 @@ const style = StyleSheet.create({
         borderRadius: 50,
         marginBottom: 25,
         marginRight: 2,
-        height: 25,
-        width: 25,
+        height: 20,
+        width: 20,
         alignItems: 'center',
         justifyContent: 'center',
     },
     txt: {
         color: 'white',
-        fontSize: 16,
+        fontSize: 13,
     },
 });
