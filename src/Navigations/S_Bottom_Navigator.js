@@ -3,7 +3,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import S_Profile from '../Student/S_Profile';
-import S_Courses from '../Student/S_Courses';
 import S_Fee from '../Student/S_Fee';
 import S_Learning from '../Student/S_Learning';
 import S_Shedule from '../Student/S_Shedule';
@@ -12,6 +11,7 @@ import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/Feather';
 import Icon2 from 'react-native-vector-icons/Foundation';
 import Icon3 from 'react-native-vector-icons/FontAwesome5';
+import S_NestsedStack from './S_NestsedStack';
 
 export default function S_Bottom_Navigator() {
   const Tab = createBottomTabNavigator();
@@ -38,8 +38,8 @@ export default function S_Bottom_Navigator() {
         }}
       />
       <Tab.Screen
-        name="Enlisted Courses"
-        component={S_Courses}
+        name="Add Courses/Find Tutor"
+        component={S_NestsedStack}
         options={{
           tabBarShowLabel: false,
           tabBarIcon: () => {

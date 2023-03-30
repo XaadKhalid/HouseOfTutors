@@ -6,7 +6,7 @@ import { TextInput as TextIp, RadioButton } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-export default function Signup({ navigation }) {
+export default function Signup() {
   const [name, setname] = useState('');
   const [email, setemail] = useState('');
   const [password, setpassword] = useState('');

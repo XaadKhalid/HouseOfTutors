@@ -1,13 +1,14 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import { View, Text, StyleSheet, FlatList, Pressable, Alert } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import {View, Text, StyleSheet, FlatList, Pressable, Alert} from 'react-native';
+import React, {useState, useEffect} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Dialog from 'react-native-dialog';
 import DialogInput from 'react-native-dialog/lib/Input';
+import CheckBox from '@react-native-community/checkbox';
 
-export default function T_Profile() {
+export default function S_Courses({navigation}) {
   const [courseList, setCourseList] = useState(false);
   const [enlistedCourse, setEnlistedCourse] = useState(false);
   const [completeCourseList, setCompleteCourseList] = useState([]);
@@ -19,26 +20,43 @@ export default function T_Profile() {
   const [tutorsList_Visibility, setTutorsList_Visibility] = useState(false);
   const [tutorsList, setTutorsList] = useState([]);
   const [tEmail, setTEmail] = useState('');
+  const [isChecked, setIsChecked] = useState(false);
+  const [selecedtslot, setSelectedSlot] = useState([]);
+
+  useEffect(() => {
+    if (stdEmail !== '') {
+      console.log('updated email address is ', stdEmail);
+      getEnlistedCourses();
+    }
+  }, [stdEmail]);
 
   useEffect(() => {
     getgmail();
-    getEnlistedCourses();
-  }, [stdEmail]);
+  }, []);
 
   const getgmail = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('std_email');
       if (jsonValue != null) {
         setStdEmail(jsonValue);
-        console.log('Getting the email address of student from Asyncstorage => ', stdEmail);
-        console.log('----------------------------------------------------------------------------');
+        console.log(
+          'Getting the email address of student from Asyncstorage => ',
+          jsonValue,
+        );
+        console.log(
+          '----------------------------------------------------------------------------',
+        );
       } else {
         console.log('No gmail found in Asyncstorage');
-        console.log('----------------------------------------------------------------------------');
+        console.log(
+          '----------------------------------------------------------------------------',
+        );
       }
     } catch (e) {
       console.log(e);
-      console.log('----------------------------------------------------------------------------');
+      console.log(
+        '----------------------------------------------------------------------------',
+      );
     }
   };
 
@@ -49,6 +67,9 @@ export default function T_Profile() {
       );
       const data = await response.json();
       console.log('Result from Getcourses API => ', data);
+      console.log(
+        '----------------------------------------------------------------------------',
+      );
       if (data !== null) {
         setCompleteCourseList(data);
       } else {
@@ -66,16 +87,24 @@ export default function T_Profile() {
       );
       const data = await response.json();
       console.log('Result from getEnlistedCourses API =>', data);
-      console.log('----------------------------------------------------------------------------');
-      if (data !== 'No course enlisted') {
+      console.log(
+        '----------------------------------------------------------------------------',
+      );
+      if (data.length > 0) {
         setSelectedCourse(data);
-        console.log('I ma in the if condition of getenlisted course if api is yes');
-        console.log('----------------------------------------------------------------------------');
+        console.log(
+          'I ma in the if condition of getenlisted course if api is yes',
+        );
+        console.log(
+          '----------------------------------------------------------------------------',
+        );
         setEnlistedCourse(!enlistedCourse);
       } else {
         Alert.alert('No courses Enlisted pleae Press Add to Enlist Course');
         console.log('No courses added yet');
-        console.log('----------------------------------------------------------------------------');
+        console.log(
+          '----------------------------------------------------------------------------',
+        );
       }
     } catch (error) {
       console.log(error);
@@ -83,9 +112,6 @@ export default function T_Profile() {
   };
 
   const handle_Course_toggler = () => {
-    // if (courseList === true) {
-    //   getcourses();
-    // }
     getcourses();
   };
 
@@ -153,9 +179,10 @@ export default function T_Profile() {
   const send_tutor_request = async () => {
     try {
       const response = await fetch(
-        `http://192.168.43.231/HouseOfTutors/api/Student/SendTutorRequest?semail=${stdEmail}&temail=${tEmail}&cid=${courseId}`, {
-        method: 'POST',
-      }
+        `http://192.168.43.231/HouseOfTutors/api/Student/SendTutorRequest?semail=${stdEmail}&temail=${tEmail}&cid=${courseId}`,
+        {
+          method: 'POST',
+        },
       );
       const data = await response.json();
       console.log('Result from send_tutor_request API => ', data);
@@ -194,14 +221,14 @@ export default function T_Profile() {
           <>
             <View>
               <Text
-                style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 23 }}>
+                style={{fontWeight: 'bold', textAlign: 'center', fontSize: 23}}>
                 Select Courses to Wishlist
               </Text>
             </View>
             <View style={styles.FList_BM}>
               <FlatList
                 data={completeCourseList}
-                renderItem={({ item }) => (
+                renderItem={({item}) => (
                   <View style={styles.modal}>
                     {/* <Text style={styles.text}>CID: {item.cid}</Text> */}
                     <Text style={styles.text}>Name: {item.cname}</Text>
@@ -224,30 +251,40 @@ export default function T_Profile() {
         {enlistedCourse && (
           <>
             <Text
-              style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 23 }}>
+              style={{fontWeight: 'bold', textAlign: 'center', fontSize: 23}}>
               Courses Wishlist
             </Text>
             <View style={styles.FList_BM}>
               <FlatList
                 data={selectedCourse}
-                renderItem={({ item }) => (
+                renderItem={({item}) => (
                   <View style={styles.modal}>
                     <Text style={styles.text}>Course ID: {item.cid}</Text>
                     <Text style={styles.text}>Name: {item.cname}</Text>
                     <View>
-                      <Pressable style={styles.btn} onPress={() => {
-                        setCourseId(item.cid);
-                        showDialog();
-                      }}>
+                      <Pressable
+                        style={styles.btn}
+                        onPress={() => {
+                          setCourseId(item.cid);
+                          //showDialog();
+                          navigation.navigate('Finding_Tutor');
+                        }}>
                         <Text style={styles.btn_text}>Find Tutor</Text>
                       </Pressable>
                     </View>
                     <View>
                       <Dialog.Container visible={visible}>
                         <Dialog.Title>Slots Confirmation</Dialog.Title>
-                        <DialogInput label="Enter no of slots" onChangeText={value => setNumOfSlots(value)} keyboardType="number-pad" />
+                        <DialogInput
+                          label="Enter no of slots"
+                          onChangeText={value => setNumOfSlots(value)}
+                          keyboardType="number-pad"
+                        />
                         <Dialog.Button label="Cancel" onPress={handleCancel} />
-                        <Dialog.Button label="Confirm" onPress={handle_Find_tutor} />
+                        <Dialog.Button
+                          label="Confirm"
+                          onPress={handle_Find_tutor}
+                        />
                       </Dialog.Container>
                     </View>
                   </View>
@@ -260,18 +297,39 @@ export default function T_Profile() {
           <>
             <View>
               <Text
-                style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 23 }}>
+                style={{fontWeight: 'bold', textAlign: 'center', fontSize: 23}}>
                 Our Best Teachers
               </Text>
             </View>
             <View style={styles.FList_BM}>
               <FlatList
                 data={tutorsList}
-                renderItem={({ item }) => (
+                renderItem={({item}) => (
                   <View style={styles.modal}>
-                    {/* <Text style={styles.text}>CID: {item.cid}</Text> */}
-                    <Text style={styles.text}>Name: {item.tname}</Text>
-                    {/* <Text style={styles.text}>C-Code: {item.ccode}</Text> */}
+                    <View>
+                      <Text style={styles.text}>Name: {item.name}</Text>
+                      <Text style={styles.text}>
+                        Rating/Grade: {item.rating}/{item.grade}
+                      </Text>
+                    </View>
+                    <View>
+                      <Text style={styles.text}>Available Slots:</Text>
+                      {item.slots.slice(0, numOfSlots).map((slot, index) => (
+                        <View>
+                          <CheckBox
+                            value={slot}
+                            onValueChange={value => {
+                              setSelectedSlot([...selecedtslot, value]);
+                              setIsChecked(!isChecked);
+                            }}
+                            tintColors={{true: 'gold', false: 'white'}}
+                          />
+                          <Text key={index} style={styles.text}>
+                            {slot}
+                          </Text>
+                        </View>
+                      ))}
+                    </View>
                     <View>
                       <Pressable
                         style={styles.btn}
@@ -316,6 +374,10 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 10,
     marginTop: 10,
+  },
+  modal2: {
+    flexDirection: 'row',
+    //justifyContent: 'space-between',
   },
   text: {
     color: '#ffffff',

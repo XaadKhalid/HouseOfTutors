@@ -5,7 +5,7 @@ import { View, Text, StyleSheet, Pressable, Alert } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function S_Shedule() {
+export default function T_Shedule() {
   const Slots = {
     Mon1: false,
     Mon2: false,
@@ -121,32 +121,49 @@ export default function S_Shedule() {
     Sun16: false,
   };
   const [selectedslot, setselectedslot] = useState(Slots);
-  const [stdemail, setStdEmail] = useState('');
+  const [tutEmail, settutEmail] = useState('');
   const [schedulearray, setSchedulearray] = useState([]);
 
   useEffect(() => {
+    if (tutEmail !== '') {
+      get_Schedule(tutEmail);
+    }
+  }, [tutEmail]);
+
+  useEffect(() => {
+    if (schedulearray !== []) {
+      set_pre_check();
+    }
+  }, [schedulearray]);
+
+  useEffect(() => {
     getgmail();
-    get_Schedule(stdemail);
-  }, [stdemail]);
+  }, []);
 
   const getgmail = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('std_email');
+      console.log('----------------------------------------------------------------------------');
       if (jsonValue != null) {
-        setStdEmail(jsonValue);
+        settutEmail(jsonValue);
+        console.log('gamil found in Asyncstorage is ', jsonValue);
       }
       else {
         console.log('No gmail found in Asyncstorage');
+        console.log('----------------------------------------------------------------------------');
       }
     } catch (e) {
       console.log(e);
+      console.log('----------------------------------------------------------------------------');
     }
   };
 
   const set_pre_check = () => {
     let kyesofslot = Object.keys(Slots);
     console.log('keys of the main slot', kyesofslot.length);
+    console.log('----------------------------------------------------------------------------');
     console.log('1 and 0 to be match', schedulearray.length);
+    console.log('----------------------------------------------------------------------------');
     for (let i = 0; i < schedulearray.length; i++) {
       let v = kyesofslot[i];
       if (schedulearray[i] === '1') {
@@ -155,26 +172,31 @@ export default function S_Shedule() {
     }
     setselectedslot(Slots);
     console.log('slots to be marked yes', Slots);
+    console.log('----------------------------------------------------------------------------');
   };
 
   const get_Schedule = async (email) => {
     console.log('result to be fethed for ', email);
+    console.log('----------------------------------------------------------------------------');
     try {
       const response = await fetch(
         `http://192.168.43.231/HouseOfTutors/api/Tutor/GetTutorSchedule?email=${email}`,
       );
       const data = await response.json();
       console.log('Result from getschedule API: ', data);
+      console.log('----------------------------------------------------------------------------');
       if (data !== null) {
         const scheduleData = data.split(''); // create an array of characters from the string
         setSchedulearray(scheduleData);
         console.log('converted api string to array', scheduleData);
-        set_pre_check();
+        console.log('----------------------------------------------------------------------------');
+        //set_pre_check();
       } else {
         Alert.alert('No Schedule Found!');
       }
     } catch (error) {
       console.log(error);
+      console.log('----------------------------------------------------------------------------');
     }
   };
 
@@ -188,10 +210,12 @@ export default function S_Shedule() {
       });
       const data = await response.json();
       console.log(data);
+      console.log('----------------------------------------------------------------------------');
       Alert.alert(data);
     }
     catch (error) {
       console.log(error);
+      console.log('----------------------------------------------------------------------------');
     }
   };
 
@@ -1211,8 +1235,8 @@ export default function S_Shedule() {
                 str1 = str1 + '0';
               }
             }
-            Set_schedule(str1, stdemail);
-            //get_Schedule(stdemail);
+            Set_schedule(str1, tutEmail);
+            //get_Schedule(tutEmail);
           }}>
           <Text style={styles.button}>Update Scedule</Text>
         </Pressable>

@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Dialog from 'react-native-dialog';
 import DialogInput from 'react-native-dialog/lib/Input';
 
-export default function T_Profile() {
+export default function T_Courses() {
   const [courseList, setCourseList] = useState(false);
   const [enlistedCourse, setEnlistedCourse] = useState(false);
   const [completeCourseList, setCompleteCourseList] = useState([]);
@@ -16,23 +16,33 @@ export default function T_Profile() {
   const [courseGrade, setcourseGrade] = useState('');
   const [courseId, setCourseId] = useState('');
   const [tEmail, setTEmail] = useState('');
+  const [mount, setmount] = useState(false);
+
+  useEffect(() => {
+    if (tEmail !== '') {
+      getEnlistedCourses();
+    }
+  }, [tEmail, courseList]);
 
   useEffect(() => {
     getgmail();
-    getEnlistedCourses();
-  }, [tEmail, courseList]);
+    setmount(true);
+  }, []);
 
   const getgmail = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('std_email');
       if (jsonValue != null) {
         setTEmail(jsonValue);
-        console.log('Getting the email address of student from Asyncstorage => ', tEmail);
+        console.log('Getting the email address of student from Asyncstorage => ', jsonValue);
+        console.log('----------------------------------------------------------------------------');
       } else {
         console.log('No gmail found in Asyncstorage');
+        console.log('----------------------------------------------------------------------------');
       }
     } catch (e) {
       console.log(e);
+      console.log('----------------------------------------------------------------------------');
     }
   };
 
@@ -43,6 +53,7 @@ export default function T_Profile() {
       );
       const data = await response.json();
       console.log('Result from Getcourses API => ', data);
+      console.log('----------------------------------------------------------------------------');
       if (data !== null) {
         setCompleteCourseList(data);
       } else {
@@ -50,6 +61,7 @@ export default function T_Profile() {
       }
     } catch (error) {
       console.log(error);
+      console.log('----------------------------------------------------------------------------');
     }
   };
 
@@ -60,15 +72,18 @@ export default function T_Profile() {
       );
       const data = await response.json();
       console.log('Result from getEnlistedCourses API =>', data);
-      if (data !== 'No courses yet') {
+      console.log('----------------------------------------------------------------------------');
+      if (data.length > 0) {
         setSelectedCourse(data);
         setEnlistedCourse(!enlistedCourse);
       } else {
         Alert.alert('No courses Enlisted Press Add to Enlist Course');
         console.log('No courses yet');
+        console.log('----------------------------------------------------------------------------');
       }
     } catch (error) {
       console.log(error);
+      console.log('----------------------------------------------------------------------------');
     }
   };
 
@@ -89,6 +104,7 @@ export default function T_Profile() {
       );
       const data = await response.json();
       console.log('Response from Student CourseEnlist API => ', data);
+      console.log('----------------------------------------------------------------------------');
       if (data === 'Course Already Enlisted') {
         Alert.alert('Course Already Enlisted!');
       } else {
@@ -97,13 +113,16 @@ export default function T_Profile() {
       }
     } catch (error) {
       console.log(error);
+      console.log('----------------------------------------------------------------------------');
     }
   };
 
   const handle_Course_enlist = () => {
     setVisible(false);
     console.log('course id to be added in wishlist is ', courseId);
+    console.log('----------------------------------------------------------------------------');
     console.log('Grade for that course is ', courseGrade);
+    console.log('----------------------------------------------------------------------------');
     CourseEnlist();
   };
 

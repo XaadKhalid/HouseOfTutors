@@ -125,9 +125,20 @@ export default function S_Shedule() {
   const [schedulearray, setSchedulearray] = useState([]);
 
   useEffect(() => {
-    getgmail();
-    get_Schedule(stdemail);
+    if (stdemail !== '') {
+      get_Schedule(stdemail);
+    }
   }, [stdemail]);
+
+  useEffect(() => {
+    if (schedulearray !== []) {
+      set_pre_check();
+    }
+  }, [schedulearray]);
+
+  useEffect(() => {
+    getgmail();
+  }, []);
 
   const getgmail = async () => {
     try {
@@ -176,7 +187,7 @@ export default function S_Shedule() {
         setSchedulearray(scheduleData);
         console.log('converted api string to array', scheduleData);
         console.log('----------------------------------------------------------------------------');
-        set_pre_check();
+        //set_pre_check();
       } else {
         Alert.alert('No Schedule Found!');
       }

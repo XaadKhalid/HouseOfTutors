@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable prettier/prettier */
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -12,8 +13,9 @@ import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/Feather';
 import Icon2 from 'react-native-vector-icons/Foundation';
 import Icon3 from 'react-native-vector-icons/FontAwesome5';
+import Notification_Icon from '../Tutor/Notification_Icon';
 
-export default function T_Bottom_Navigator({}) {
+export default function T_Bottom_Navigator({ }) {
     const Tab = createBottomTabNavigator();
     return (
         <Tab.Navigator
@@ -21,6 +23,7 @@ export default function T_Bottom_Navigator({}) {
                 headerShown: true,
                 tabBarShowLabel: false,
                 headerTitleAlign: 'center',
+                headerRight: () => <Notification_Icon />,
                 headerStyle: {
                     backgroundColor: '#FFB22F',
                 },
