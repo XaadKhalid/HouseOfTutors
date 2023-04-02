@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Pressable, Alert } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function S_Shedule() {
   const Slots = {
@@ -123,12 +124,13 @@ export default function S_Shedule() {
   const [selectedslot, setselectedslot] = useState(Slots);
   const [stdemail, setStdEmail] = useState('');
   const [schedulearray, setSchedulearray] = useState([]);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
-    if (stdemail !== '') {
+    if (stdemail !== '' && isFocused) {
       get_Schedule(stdemail);
     }
-  }, [stdemail]);
+  }, [stdemail, isFocused]);
 
   useEffect(() => {
     if (schedulearray !== []) {
@@ -177,16 +179,21 @@ export default function S_Shedule() {
     console.log('----------------------------------------------------------------------------');
     try {
       const response = await fetch(
-        `http://192.168.43.231/HouseOfTutors/api/Student/StudentSchedule?email=${email}`,
+        `http://192.168.43.231/HouseOfTutors/api/Student/GetStudentSchedule?email=${email}`,
       );
       const data = await response.json();
       console.log('Result from getschedule API: ', data);
       console.log('----------------------------------------------------------------------------');
       if (data !== null) {
         const scheduleData = data.split(''); // create an array of characters from the string
-        setSchedulearray(scheduleData);
-        console.log('converted api string to array', scheduleData);
-        console.log('----------------------------------------------------------------------------');
+        if (scheduleData.includes('1')) {
+          setSchedulearray(scheduleData);
+          console.log('converted api string to array', scheduleData);
+          console.log('----------------------------------------------------------------------------');
+        }
+        else {
+          Alert.alert('No Schedule Set please update first');
+        }
         //set_pre_check();
       } else {
         Alert.alert('No Schedule Found!');
@@ -1280,5 +1287,6 @@ const styles = StyleSheet.create({
     elevation: 5,
     marginLeft: 110,
     marginTop: 16,
+    marginBottom: 50,
   },
 });
