@@ -29,7 +29,7 @@ function Login({ navigation }) {
   const Verifylogin = async () => {
     try {
       const response = await fetch(
-        `http://192.168.43.231/HouseOfTutors/api/Login/LoginUser?email=${userEmail}&password=${userPswd}`,
+        `http://192.168.43.231/HouseOfTutors/api/Login/Universal_Login?email=${userEmail}&password=${userPswd}`,
       );
       const data = await response.json();
       console.log('Result from Login API: ', data);
