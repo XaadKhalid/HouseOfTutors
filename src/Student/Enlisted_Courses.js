@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Dialog from 'react-native-dialog';
 import DialogInput from 'react-native-dialog/lib/Input';
 import Entypo from 'react-native-vector-icons/Entypo';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function Enlisted_Courses({ navigation }) {
     const [selectedCourse, setSelectedCourse] = useState([]);
@@ -13,20 +14,14 @@ export default function Enlisted_Courses({ navigation }) {
     const [visible, setVisible] = useState(false);
     const [numOfSlots, setNumOfSlots] = useState(0);
     const [courseId, setCourseId] = useState(0);
+    const isFocused = useIsFocused();
 
     useEffect(() => {
-        if (stdEmail !== '') {
+        if (stdEmail !== '' && isFocused) {
             console.log('Email address against which courses are fetched is ', stdEmail);
             getEnlistedCourses();
         }
-    }, [stdEmail]);
-
-    // useEffect(() => {
-    //     if (selectedCourse !== []) {
-    //         console.log('No courses added yet!');
-    //         getEnlistedCourses();
-    //     }
-    // }, [selectedCourse]);
+    }, [stdEmail, isFocused]);
 
     useEffect(() => {
         getgmail();
@@ -94,7 +89,7 @@ export default function Enlisted_Courses({ navigation }) {
         console.log('Number of slots required => ', numOfSlots);
         console.log('coruseid against which tutor will be searched ', courseId);
         setVisible(false);
-        navigation.navigate('Finding_Tutor', { numOfSlots: { numOfSlots }, courseId: { courseId }, stdEmail: { stdEmail } });
+        navigation.navigate('Finding_Tutor', { numOfSlots, courseId, stdEmail });
     };
 
     return (
@@ -105,7 +100,7 @@ export default function Enlisted_Courses({ navigation }) {
                 }}>
                     <Entypo name={'add-to-list'} size={50} color="#6618E7" />
                 </Pressable>
-                <Text style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 23 }}>
+                <Text style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 23, marginTop: 12 }}>
                     Courses Wishlist
                 </Text>
             </View>
@@ -114,8 +109,8 @@ export default function Enlisted_Courses({ navigation }) {
                     data={selectedCourse}
                     renderItem={({ item }) => (
                         <View style={styles.modal}>
-                            <Text style={styles.text}>Course ID: {item.cid}</Text>
-                            <Text style={styles.text}>Name: {item.cname}</Text>
+                            <Text style={[styles.text, styles.id_mg]}>CID: {item.cid}</Text>
+                            <Text style={styles.text}>{item.cname}</Text>
                             <View>
                                 <Pressable
                                     style={styles.btn}
@@ -124,6 +119,15 @@ export default function Enlisted_Courses({ navigation }) {
                                         setCourseId(item.cid);
                                     }}>
                                     <Text style={styles.btn_text}>Find Tutor</Text>
+                                </Pressable>
+                            </View>
+                            <View>
+                                <Pressable
+                                    style={styles.btn}
+                                    onPress={() => {
+                                        setCourseId(item.cid);
+                                    }}>
+                                    <Text style={styles.btn_text}>Find BTutor</Text>
                                 </Pressable>
                             </View>
                             <View>
@@ -148,10 +152,11 @@ export default function Enlisted_Courses({ navigation }) {
 
 const styles = StyleSheet.create({
     modal: {
-        justifyContent: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
         alignItems: 'center',
         backgroundColor: 'rgba(102,24,231,0.8)',
-        marginHorizontal: 90,
+        marginHorizontal: 10,
         paddingVertical: 15,
         borderRadius: 10,
         marginTop: 10,
@@ -162,11 +167,14 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         textAlign: 'center',
     },
+    id_mg: {
+        marginLeft: 16,
+    },
     btn: {
         backgroundColor: '#FFB22F',
         elevation: 10,
-        paddingHorizontal: 30,
-        paddingVertical: 10,
+        paddingHorizontal: 18,
+        paddingVertical: 6,
         borderRadius: 5,
     },
     btn_text: {

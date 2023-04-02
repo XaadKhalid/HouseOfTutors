@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-/* eslint-disable react-native/no-inline-styles */
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, Pressable, StyleSheet, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -72,19 +71,19 @@ export default function Enlist_Courses({ navigation }) {
 
     return (
         <View>
-            <View>
-                <Text style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 20 }}>
-                    Select Courses to add in Wishlist
-                </Text>
+            <View style={styles.heading}>
+                <Text style={styles.h_text}>CCode</Text>
+                <Text style={styles.h_text}>CName</Text>
+                <Text style={styles.h_text}>Course Addition</Text>
             </View>
             <View style={styles.FList_BM}>
                 <FlatList
                     data={completeCourseList}
                     renderItem={({ item }) => (
                         <View style={styles.modal}>
-                            <Text style={styles.text}>CID: {item.cid}</Text>
-                            <Text style={styles.text}>Name: {item.cname}</Text>
-                            <Text style={styles.text}>C-Code: {item.ccode}</Text>
+                            {/* <Text style={styles.text}>CID: {item.cid}</Text> */}
+                            <Text style={styles.text}>{item.ccode}</Text>
+                            <Text style={styles.text}>{item.cname}</Text>
                             <View>
                                 <Pressable
                                     style={styles.btn}
@@ -106,10 +105,11 @@ export default function Enlist_Courses({ navigation }) {
 
 const styles = StyleSheet.create({
     modal: {
-        justifyContent: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
         alignItems: 'center',
-        backgroundColor: 'rgba(102,24,231,0.8)',
-        marginHorizontal: 80,
+        backgroundColor: 'rgba(102,24,231,0.7)',
+        marginHorizontal: 10,
         paddingVertical: 15,
         borderRadius: 10,
         marginTop: 10,
@@ -120,11 +120,26 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         textAlign: 'center',
     },
+    heading: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        backgroundColor: '#ffffff',
+        marginHorizontal: 10,
+        paddingVertical: 15,
+        marginTop: 10,
+    },
+    h_text: {
+        color: '#000000',
+        fontWeight: 'bold',
+        marginBottom: 5,
+        textAlign: 'center',
+    },
     btn: {
         backgroundColor: '#FFB22F',
         elevation: 10,
-        paddingHorizontal: 30,
-        paddingVertical: 10,
+        paddingHorizontal: 20,
+        paddingVertical: 5,
         borderRadius: 5,
     },
     btn_text: {
