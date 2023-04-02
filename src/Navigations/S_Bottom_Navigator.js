@@ -19,8 +19,12 @@ export default function S_Bottom_Navigator() {
     <Tab.Navigator
       screenOptions={{
         headerShown: true,
-        tabBarShowLabel: false,
+        tabBarShowLabel: true,
         headerTitleAlign: 'center',
+        tabBarLabelStyle: {
+          color: '#ffffff',
+          fontWeight: 'bold',
+        },
         headerStyle: {
           backgroundColor: '#FFB22F',
         },
@@ -28,50 +32,50 @@ export default function S_Bottom_Navigator() {
         tabBarActiveBackgroundColor: '#1A2421',
       }}>
       <Tab.Screen
-        name="Set/Update Schedule"
+        name="Schedule"
         component={S_Shedule}
         options={{
-          tabBarShowLabel: false,
+          headerTitle: 'Set/Update Schedule',
           tabBarIcon: () => {
             return <Icons name={'calendar-clock'} size={24} color="#FFB22F" />;
           },
         }}
       />
       <Tab.Screen
-        name="Add Courses/Find Tutor"
+        name="Tutor"
         component={S_NestsedStack}
         options={{
-          tabBarShowLabel: false,
+          headerTitle: 'Add Courses/Find Tutor',
           tabBarIcon: () => {
             return <Icon name={'book-open'} size={24} color="#FFB22F" />;
           },
         }}
       />
       <Tab.Screen
-        name="Courses Learning"
+        name="Learning"
         component={S_Learning}
         options={{
-          tabBarShowLabel: false,
+          headerTitle: 'Courses Learning',
           tabBarIcon: () => {
             return <Icon2 name={'clipboard-pencil'} size={24} color="#FFB22F" />;
           },
         }}
       />
       <Tab.Screen
-        name="Courses Fee"
+        name="Fees"
         component={S_Fee}
         options={{
-          tabBarShowLabel: false,
+          headerTitle: 'Courses Fee',
           tabBarIcon: () => {
             return <Icon3 name={'credit-card'} size={24} color="#FFB22F" />;
           },
         }}
       />
       <Tab.Screen
-        name="Today Classes"
+        name="Today"
         component={S_TodayClass}
         options={{
-          tabBarShowLabel: false,
+          headerTitle: 'Today Classes',
           tabBarIcon: () => {
             return <Icon3 name={'chalkboard-teacher'} size={24} color="#FFB22F" />;
           },
@@ -81,7 +85,6 @@ export default function S_Bottom_Navigator() {
         name="Profile"
         component={S_Profile}
         options={{
-          tabBarShowLabel: false,
           tabBarIcon: () => {
             return <Icon3 name={'user-graduate'} size={24} color="#FFB22F" />;
           },
