@@ -7,16 +7,22 @@ import CheckBox from '@react-native-community/checkbox';
 export default function Finding_Tutor({ route }) {
     const [tutorsList, setTutorsList] = useState([]);
     const [tEmail, setTEmail] = useState('');
-    const [isChecked, setIsChecked] = useState(false);
-    const myslots = ['Mon : 08-AM', 'Mon : 09-AM', 'Mon : 10-AM', 'Wed : 02-PM'];
-    let numOfSlots = route.params.numOfSlots.numOfSlots;
-    let courseId = route.params.courseId.courseId;
-    let stdEmail = route.params.stdEmail.stdEmail;
+    const [stdSlots, setStdSltos] = useState([]);
+    let numOfSlots = route.params.numOfSlots;
+    let courseId = route.params.courseId;
+    let stdEmail = route.params.stdEmail;
 
     useEffect(() => {
         console.log('numofslots-courseid-stdemail', numOfSlots, courseId, stdEmail);
         get_tutors();
     }, []);
+
+    useEffect(() => {
+        if (stdSlots !== [] && tEmail !== '') {
+            console.log('numofslots-courseid-stdemail', numOfSlots, courseId, stdEmail);
+            send_tutor_request();
+        }
+    }, [stdSlots, tEmail]);
 
     const get_tutors = async () => {
         try {
@@ -41,38 +47,46 @@ export default function Finding_Tutor({ route }) {
         }
     };
 
-    const renderItem = ({ item }) => (
+    const renderItem = ({ item, index }) => (
         <View style={styles.modal}>
-            <View>
-                <Text style={styles.text}>Name: {item.name}</Text>
-                <Text style={styles.text}>
-                    Rating/Grade: {item.rating}/{item.grade}
-                </Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                <Text style={styles.text}>{courseId}</Text>
+                <Text style={styles.text}>{item.name}</Text>
+                <Text style={styles.text}>{item.rating}/{item.grade}</Text>
             </View>
             <View>
-                <Text style={styles.text}>Available Slots:</Text>
-                {item.slots.slice(0, numOfSlots).map((slot, index) => {
-                    //const res = item.slots.map(m => false);
-                    //setIsChecked(res);
+                {/* <Text style={styles.text}>Available Slots:</Text> */}
+                {item.slots.slice(0, numOfSlots).map((slot, sIndex) => {
+                    let flagsofslot = [slot, false];
+                    if (item.checkedslots.includes(slot)) {
+                        flagsofslot = [slot, true];
+                    }
+                    console.log('flagofslot is ', flagsofslot);
                     return (
-                        <View key={index} style={{ flexDirection: 'row' }}>
+                        <View key={sIndex} style={{ flexDirection: 'row' }}>
                             <CheckBox
                                 tintColors={{ true: 'gold', false: 'white' }}
-                                value={isChecked}
+                                value={flagsofslot[1]}
                                 onValueChange={() => {
-                                    if (isChecked) {
-                                        item.checkedslots = [...item.checkedslots, slot];
-                                        setIsChecked(!isChecked);
-                                    }
-                                    else {
-                                        //item.checkedslots.splice(index, 1);
-                                        setIsChecked(!isChecked);
+                                    flagsofslot[1] = !flagsofslot[1];
+                                    if (flagsofslot[1]) {
+                                        console.log('checked');
+                                        setTutorsList(previous => {
+                                            let arr = [...previous];
+                                            arr[index].checkedslots = [...item.checkedslots, flagsofslot[0]];
+                                            return arr;
+                                        });
+                                    } else {
+                                        console.log('un-checked');
+                                        setTutorsList(previous => {
+                                            let arr = [...previous];
+                                            arr[index].checkedslots = item.checkedslots.filter((checkedSlot) => checkedSlot !== flagsofslot[0]);
+                                            return arr;
+                                        });
                                     }
                                 }}
                             />
-                            <Text style={styles.text}>
-                                {slot}
-                            </Text>
+                            <Text style={styles.text}>{slot}</Text>
                         </View>
                     );
                 })}
@@ -83,7 +97,8 @@ export default function Finding_Tutor({ route }) {
                     onPress={() => {
                         console.log('send request is sent');
                         setTEmail(item.email);
-                        handle_send_request();
+                        setStdSltos(item.checkedslots);
+                        send_tutor_request();
                     }}>
                     <Text style={styles.btn_text}>Send Request</Text>
                 </Pressable>
@@ -91,18 +106,24 @@ export default function Finding_Tutor({ route }) {
         </View>
     );
 
-    const handle_send_request = () => {
-        console.log('data to be saved in selected slot for send request is ', tutorsList);
-        //send_tutor_request();
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            semail: stdEmail,
+            temail: tEmail,
+            courseid: courseId,
+            selectedslots: stdSlots,
+        }),
     };
 
     const send_tutor_request = async () => {
+        console.log('options are ', options);
         try {
             const response = await fetch(
-                `http://192.168.43.231/HouseOfTutors/api/Student/SendTutorRequest?semail=${stdEmail}&temail=${tEmail}&cid=${courseId}&slots=${myslots}`,
-                {
-                    method: 'POST',
-                },
+                'http://192.168.43.231/HouseOfTutors/api/Student/SendTutorRequest', options
             );
             const data = await response.json();
             console.log('Result from send_tutor_request API => ', data);
@@ -118,11 +139,10 @@ export default function Finding_Tutor({ route }) {
 
     return (
         <View>
-            <View>
-                <Text
-                    style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 23 }}>
-                    Our Best Teachers
-                </Text>
+            <View style={styles.heading}>
+                <Text style={styles.h_text}>Course ID</Text>
+                <Text style={styles.h_text}>Name</Text>
+                <Text style={styles.h_text}>Rating/Grade</Text>
             </View>
             <View style={styles.FList_BM}>
                 <FlatList
@@ -137,9 +157,8 @@ export default function Finding_Tutor({ route }) {
 const styles = StyleSheet.create({
     modal: {
         justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(102,24,231,0.8)',
-        marginHorizontal: 60,
+        backgroundColor: 'rgba(102,24,231,0.7)',
+        marginHorizontal: 10,
         paddingVertical: 15,
         borderRadius: 10,
         marginTop: 10,
@@ -157,6 +176,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 30,
         paddingVertical: 10,
         borderRadius: 5,
+        width: '40%',
+        marginHorizontal: 120,
     },
     btn_text: {
         color: '#000000',
@@ -164,5 +185,20 @@ const styles = StyleSheet.create({
     },
     FList_BM: {
         marginBottom: 110,
+    },
+    heading: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        backgroundColor: '#ffffff',
+        marginHorizontal: 10,
+        paddingVertical: 15,
+        marginTop: 10,
+    },
+    h_text: {
+        color: '#000000',
+        fontWeight: 'bold',
+        marginBottom: 5,
+        textAlign: 'center',
     },
 });
