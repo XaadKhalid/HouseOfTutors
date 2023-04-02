@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import T_Fee from '../Tutor/T_Fee';
 import T_Teaching from '../Tutor/T_Teaching';
-import T_Shedule from '../Tutor/T_Shedule';
+//import T_Shedule from '../Tutor/T_Shedule';
 import T_TodayClass from '../Tutor/T_TodayClass';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/Feather';
@@ -13,6 +13,7 @@ import Icon3 from 'react-native-vector-icons/FontAwesome5';
 import Notification_Icon from '../Tutor/Notification_Icon';
 import Notification_Stack from './Notification_Stack';
 import T_Courses from '../Tutor/T_Courses';
+import T_Profile from '../Tutor/T_Profile';
 
 export default function T_Bottom_Navigator({ }) {
     const Tab = createBottomTabNavigator();
@@ -29,7 +30,7 @@ export default function T_Bottom_Navigator({ }) {
             })}>
             <Tab.Screen
                 name="Set/Update Schedule"
-                component={T_Shedule}
+                component={Notification_Stack}
                 options={{
                     tabBarShowLabel: false,
                     tabBarIcon: () => {
@@ -83,7 +84,7 @@ export default function T_Bottom_Navigator({ }) {
             />
             <Tab.Screen
                 name="Profile"
-                component={Notification_Stack}
+                component={T_Profile}
                 options={{
                     tabBarShowLabel: false,
                     tabBarIcon: () => {

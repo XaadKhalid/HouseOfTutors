@@ -14,7 +14,7 @@ const Stack = createNativeStackNavigator();
 
 export default function Notification_Stack() {
     return (
-        <Stack.Navigator initialRouteName="T_Profile" screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName="T_Shedule" screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Notification_Icon" component={Notification_Icon} />
             <Stack.Screen name="Notification_Details" component={Notification_Details} options={{ headerShown: true }} />
             <Stack.Screen name="T_Courses" component={T_Courses} />
