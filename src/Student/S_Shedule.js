@@ -421,17 +421,17 @@ export default function S_Shedule() {
         </View>
         <View style={styles.chek_header}>
           <CheckBox
-            value={selectedslot.Sat2}
+            value={selectedslot.Sat3}
             onValueChange={value =>
-              setselectedslot({ ...selectedslot, Sat2: value })
+              setselectedslot({ ...selectedslot, Sat3: value })
             }
           />
         </View>
         <View style={styles.chek_header}>
           <CheckBox
-            value={selectedslot.Sun2}
+            value={selectedslot.Sun3}
             onValueChange={value =>
-              setselectedslot({ ...selectedslot, Sun2: value })
+              setselectedslot({ ...selectedslot, Sun3: value })
             }
           />
         </View>
