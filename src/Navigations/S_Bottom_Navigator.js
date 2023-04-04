@@ -18,8 +18,6 @@ export default function S_Bottom_Navigator() {
   return (
     <Tab.Navigator
       screenOptions={{
-        headerShown: true,
-        tabBarShowLabel: true,
         headerTitleAlign: 'center',
         tabBarLabelStyle: {
           color: '#ffffff',
