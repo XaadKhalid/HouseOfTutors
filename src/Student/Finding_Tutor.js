@@ -8,6 +8,7 @@ export default function Finding_Tutor({ route }) {
     const [tutorsList, setTutorsList] = useState([]);
     const [tEmail, setTEmail] = useState('');
     const [stdSlots, setStdSltos] = useState([]);
+    const [sendRequestFlag, setSendRequestFlag] = useState(false);
     let numOfSlots = route.params.numOfSlots;
     let courseId = route.params.courseId;
     let stdEmail = route.params.stdEmail;
@@ -18,11 +19,11 @@ export default function Finding_Tutor({ route }) {
     }, []);
 
     useEffect(() => {
-        if (stdSlots !== [] && tEmail !== '') {
-            console.log('numofslots-courseid-stdemail', numOfSlots, courseId, stdEmail);
-            send_tutor_request();
+        if (sendRequestFlag) {
+            handle_sendtutor_request();
+            setSendRequestFlag(false);
         }
-    }, [stdSlots, tEmail]);
+    }, [sendRequestFlag]);
 
     const get_tutors = async () => {
         try {
@@ -98,7 +99,7 @@ export default function Finding_Tutor({ route }) {
                         console.log('send request is sent');
                         setTEmail(item.email);
                         setStdSltos(item.checkedslots);
-                        send_tutor_request();
+                        setSendRequestFlag(true);
                     }}>
                     <Text style={styles.btn_text}>Send Request</Text>
                 </Pressable>
@@ -119,16 +120,25 @@ export default function Finding_Tutor({ route }) {
         }),
     };
 
-    const send_tutor_request = async () => {
+    const handle_sendtutor_request = () => {
         console.log('options are ', options);
+        if (stdSlots.length === 0) {
+            Alert.alert('Please confirm slots firts');
+        }
+        else {
+            send_tutor_request();
+        }
+    };
+
+    const send_tutor_request = async () => {
         try {
             const response = await fetch(
                 'http://192.168.43.231/HouseOfTutors/api/Student/SendTutorRequest', options
             );
             const data = await response.json();
             console.log('Result from send_tutor_request API => ', data);
-            if (data === 'Already Requested') {
-                Alert.alert('Already Requested!');
+            if (data === 'Already Requested The Course') {
+                Alert.alert('Already Requested For This Course!');
             } else {
                 Alert.alert(data);
             }
