@@ -11,8 +11,8 @@ import Icon2 from 'react-native-vector-icons/Foundation';
 import Icon3 from 'react-native-vector-icons/FontAwesome5';
 import Notification_Icon from '../Tutor/Notification_Icon';
 import Notification_Stack from './Notification_Stack';
-import T_Courses from '../Tutor/T_Courses';
 import T_Profile from '../Tutor/T_Profile';
+import T_NestsedStack from './T_NestsedStack';
 
 export default function T_Bottom_Navigator({ }) {
     const Tab = createBottomTabNavigator();
@@ -26,8 +26,8 @@ export default function T_Bottom_Navigator({ }) {
                     fontWeight: 'bold',
                 },
                 headerStyle: { backgroundColor: '#FFB22F' },
-                tabBarInactiveBackgroundColor: '#6618E7',
-                tabBarActiveBackgroundColor: '#1A2421',
+                tabBarInactiveBackgroundColor: '#282634',
+                tabBarActiveBackgroundColor: '#677567',
             })}>
             <Tab.Screen
                 name="Schedule"
@@ -41,9 +41,10 @@ export default function T_Bottom_Navigator({ }) {
             />
             <Tab.Screen
                 name="Courses"
-                component={T_Courses}
+                component={T_NestsedStack}
                 options={{
-                    headerTitle: 'Enlisted',
+                    //headerTitle: 'Enlisted',
+                    headerShown: false,
                     tabBarIcon: () => {
                         return <Icon name={'book-open'} size={24} color="#FFB22F" />;
                     },
@@ -77,9 +78,7 @@ export default function T_Bottom_Navigator({ }) {
                 options={{
                     headerTitle: 'Today Classes',
                     tabBarIcon: () => {
-                        return (
-                            <Icon3 name={'chalkboard-teacher'} size={24} color="#FFB22F" />
-                        );
+                        return <Icon3 name={'chalkboard-teacher'} size={24} color="#FFB22F" />;
                     },
                 }}
             />

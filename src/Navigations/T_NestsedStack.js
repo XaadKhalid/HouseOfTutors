@@ -1,16 +1,20 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import T_Courses from '../Tutor/T_Courses';
+import EnlistedCourses from '../Tutor/EnlistedCourse';
+import EnlistCourses from '../Tutor/EnlistCourses';
+import AddCourse from '../Tutor/AddCourse';
 
 const Stack = createNativeStackNavigator();
 
 export default function T_NestsedStack() {
     return (
         <Stack.Navigator
-            initialRouteName="T_Courses"
-            screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="T_Courses" component={T_Courses} />
+            initialRouteName="EnlistedCourses"
+            screenOptions={{ headerTitleAlign: 'center' }}>
+            <Stack.Screen name="EnlistedCourses" component={EnlistedCourses} />
+            <Stack.Screen name="EnlistCourses" component={EnlistCourses} />
+            <Stack.Screen name="AddCourse" component={AddCourse} />
         </Stack.Navigator>
     );
 }
