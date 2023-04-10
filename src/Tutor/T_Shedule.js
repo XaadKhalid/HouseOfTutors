@@ -96,7 +96,7 @@ export default function T_Shedule() {
     console.log('----------------------------------------------------------------------------');
     try {
       const response = await fetch(
-        `http://192.168.43.231/HouseOfTutors/api/Student/GetStudentSchedule?email=${email}`,
+        `http://192.168.43.231/HouseOfTutors/api/Tutor/GetTutorSchedule?email=${email}`,
       );
       const data = await response.json();
       console.log('Result from getschedule API: ', data);
@@ -137,7 +137,7 @@ export default function T_Shedule() {
 
   const setSchedule = async (details, email) => {
     try {
-      const response = await fetch(`http://192.168.43.231/HouseOfTutors/api/student/StudentSchedule?details=${details}&email=${email}`, {
+      const response = await fetch(`http://192.168.43.231/HouseOfTutors/api/Tutor/TutorSchedule?details=${details}&email=${email}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       });
