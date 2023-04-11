@@ -64,7 +64,7 @@ export default function EnlistedCourses({ navigation }) {
                     style={styles.add_Course_btn}
                     onPress={() => {
                         console.log('I m presses');
-                        navigation.navigate('EnlistCourses', tEmail);
+                        navigation.navigate('EnlistCourses');
                     }}>
                     <Ionicons name="add-outline" size={45} color="#ffffff" />
                 </Pressable>
