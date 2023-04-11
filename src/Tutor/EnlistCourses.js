@@ -1,15 +1,23 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
-import { View, Text, StyleSheet, FlatList, Pressable } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Pressable, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
-export default function EnlistCourses({ navigation, temail }) {
+export default function EnlistCourses({ navigation }) {
     const [completeCourseList, setCompleteCourseList] = useState([]);
-    const [courseId, setCourseId] = useState('');
+    const [courseName, setCourseName] = useState('');
+    const [addCourseFlag, setAddCourseFlag] = useState(false);
 
     useEffect(() => {
         getcourses();
     }, []);
+
+    useEffect(() => {
+        if (addCourseFlag) {
+            handle_addCourse();
+        }
+        setAddCourseFlag(false);
+    }, [addCourseFlag]);
 
     const getcourses = async () => {
         try {
@@ -28,6 +36,28 @@ export default function EnlistCourses({ navigation, temail }) {
             console.log(error);
             console.log('----------------------------------------------------------------------------');
         }
+    };
+
+    const renderCoursesList = ({ item }) => (
+        <View style={styles.modal}>
+            <Text style={styles.text}>{item.ccode}</Text>
+            <Text style={styles.text}>{item.cname}</Text>
+            <View>
+                <Pressable
+                    style={styles.btn}
+                    onPress={() => {
+                        setCourseName(item.cname);
+                        setAddCourseFlag(true);
+                    }}>
+                    <Text style={styles.btn_text}>Add Course</Text>
+                </Pressable>
+            </View>
+        </View>
+    );
+
+    const handle_addCourse = () => {
+        console.log('course name is ', courseName);
+        navigation.navigate('AddCourse', { courseName });
     };
 
     return (
@@ -49,22 +79,7 @@ export default function EnlistCourses({ navigation, temail }) {
             <View style={styles.FList_BM}>
                 <FlatList
                     data={completeCourseList}
-                    renderItem={({ item }) => (
-                        <View style={styles.modal}>
-                            <Text style={styles.text}>{item.ccode}</Text>
-                            <Text style={styles.text}>{item.cname}</Text>
-                            <View>
-                                <Pressable
-                                    style={styles.btn}
-                                    onPress={() => {
-                                        setCourseId(item.cid);
-                                        navigation.navigate('AddCourse', temail, courseId);
-                                    }}>
-                                    <Text style={styles.btn_text}>Add Course</Text>
-                                </Pressable>
-                            </View>
-                        </View>
-                    )}
+                    renderItem={renderCoursesList}
                 />
             </View>
         </View>
