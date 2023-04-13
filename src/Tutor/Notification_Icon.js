@@ -17,7 +17,7 @@ export default function Notification_Icon({ navigation }) {
             if (tEmail !== '') {
                 get_notifications();
             }
-        }, 2000);
+        }, 300000);
         return () => clearInterval(intervalId);
     }, [tEmail]);
 
