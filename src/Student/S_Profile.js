@@ -3,7 +3,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import { Button } from 'react-native-paper';
 
 export default function S_Profile() {
   return (

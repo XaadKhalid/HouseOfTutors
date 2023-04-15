@@ -37,6 +37,7 @@ export default function Enlist_Courses({ navigation }) {
             );
             const data = await response.json();
             console.log('Result from Getcourses API => ', data);
+            console.table(data);
             console.log('----------------------------------------------------------------------------');
             if (data !== null) {
                 setCompleteCourseList(data);
@@ -108,10 +109,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         alignItems: 'center',
-        backgroundColor: 'rgba(102,24,231,0.7)',
+        backgroundColor: 'rgba(40,38,52,0.8)',
         marginHorizontal: 10,
         paddingVertical: 15,
-        borderRadius: 10,
+        borderRadius: 5,
         marginTop: 10,
     },
     text: {
@@ -124,13 +125,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         alignItems: 'center',
-        backgroundColor: '#ffffff',
+        //backgroundColor: 'rgba(40,38,52,0.9)',
         marginHorizontal: 10,
         paddingVertical: 15,
         marginTop: 10,
+        //borderWidth: 4,
+        borderRightWidth: 0,
+        borderLeftWidth: 0,
+        //borderColor: '#FFB22F',
     },
     h_text: {
-        color: '#000000',
+        //color: '#ffffff',
         fontWeight: 'bold',
         marginBottom: 5,
         textAlign: 'center',

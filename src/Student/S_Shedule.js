@@ -86,7 +86,8 @@ export default function S_Shedule() {
         console.log('No gmail found in Asyncstorage');
         console.log('----------------------------------------------------------------------------');
       }
-    } catch (e) {
+    }
+    catch (e) {
       console.log(e);
     }
   };

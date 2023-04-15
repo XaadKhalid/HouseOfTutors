@@ -98,7 +98,7 @@ export default function Enlisted_Courses({ navigation }) {
                 <Pressable style={{ marginRight: 60, marginLeft: 8 }} onPress={() => {
                     navigation.navigate('Enlist_Courses');
                 }}>
-                    <Entypo name={'add-to-list'} size={50} color="#6618E7" />
+                    <Entypo name={'add-to-list'} size={50} color="#4C4B49" />
                 </Pressable>
                 <Text style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 23, marginTop: 12 }}>
                     Courses Wishlist
@@ -151,14 +151,30 @@ export default function Enlisted_Courses({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+    // modal: {
+    //     flexDirection: 'row',
+    //     justifyContent: 'space-evenly',
+    //     alignItems: 'center',
+    //     backgroundColor: 'rgba(102,24,231,0.8)',
+    //     marginHorizontal: 10,
+    //     paddingVertical: 15,
+    //     borderRadius: 10,
+    //     marginTop: 10,
+    // },
+    // text: {
+    //     color: '#ffffff',
+    //     fontWeight: 'bold',
+    //     marginBottom: 5,
+    //     textAlign: 'center',
+    // },
     modal: {
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         alignItems: 'center',
-        backgroundColor: 'rgba(102,24,231,0.8)',
+        backgroundColor: 'rgba(40,38,52,0.8)',
         marginHorizontal: 10,
         paddingVertical: 15,
-        borderRadius: 10,
+        borderRadius: 5,
         marginTop: 10,
     },
     text: {

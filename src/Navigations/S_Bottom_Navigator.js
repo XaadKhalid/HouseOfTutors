@@ -26,8 +26,8 @@ export default function S_Bottom_Navigator() {
         headerStyle: {
           backgroundColor: '#FFB22F',
         },
-        tabBarInactiveBackgroundColor: '#6618E7',
-        tabBarActiveBackgroundColor: '#1A2421',
+        tabBarInactiveBackgroundColor: '#282634',
+        tabBarActiveBackgroundColor: '#677567',
       }}>
       <Tab.Screen
         name="Schedule"
