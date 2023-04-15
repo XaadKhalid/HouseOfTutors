@@ -1,11 +1,14 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, Pressable, StyleSheet, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function Enlist_Courses({ navigation }) {
+export default function Enlist_Courses({ route, navigation }) {
     const [completeCourseList, setCompleteCourseList] = useState([]); //array in which all courseslist will be saved from API
     const [stdEmail, setStdEmail] = useState(''); //hold the email of the Student from AsyncStorage
+    const { selectedCourse } = route.params;
 
     useEffect(() => {
         getgmail();
@@ -36,11 +39,15 @@ export default function Enlist_Courses({ navigation }) {
                 'http://192.168.43.231/HouseOfTutors/api/Student/GetCourses',
             );
             const data = await response.json();
-            console.log('Result from Getcourses API => ', data);
+            console.log('Result from Getcourses API=> ', data);
             console.table(data);
             console.log('----------------------------------------------------------------------------');
             if (data !== null) {
-                setCompleteCourseList(data);
+                const temparray = data.filter(
+                    (course) => !selectedCourse.find((c) => c.cname === course.cname)
+                );
+                setCompleteCourseList(temparray);
+                console.log('updated length of total courses is ', temparray.length);
             } else {
                 Alert.alert('No Course Found!');
             }
@@ -64,6 +71,7 @@ export default function Enlist_Courses({ navigation }) {
                 Alert.alert('Course Already Enlisted!');
             } else {
                 Alert.alert(data);
+                navigation.navigate('Enlisted_Courses');
             }
         } catch (error) {
             console.log(error);

@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import { View, Text, StyleSheet, FlatList, Pressable, Alert } from 'react-native';
@@ -96,7 +98,7 @@ export default function Enlisted_Courses({ navigation }) {
         <View>
             <View style={{ flexDirection: 'row' }}>
                 <Pressable style={{ marginRight: 60, marginLeft: 8 }} onPress={() => {
-                    navigation.navigate('Enlist_Courses');
+                    navigation.navigate('Enlist_Courses', {selectedCourse});
                 }}>
                     <Entypo name={'add-to-list'} size={50} color="#4C4B49" />
                 </Pressable>

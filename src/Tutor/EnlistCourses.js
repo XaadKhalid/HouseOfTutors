@@ -1,12 +1,15 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import { View, Text, StyleSheet, FlatList, Pressable, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
-export default function EnlistCourses({ navigation }) {
+export default function EnlistCourses({ route, navigation }) {
     const [completeCourseList, setCompleteCourseList] = useState([]);
     const [courseName, setCourseName] = useState('');
     const [addCourseFlag, setAddCourseFlag] = useState(false);
+    const { selectedCourse } = route.params;
 
     useEffect(() => {
         getcourses();
@@ -28,7 +31,11 @@ export default function EnlistCourses({ navigation }) {
             console.log('Result from Getcourses API => ', data);
             console.log('----------------------------------------------------------------------------');
             if (data !== null) {
-                setCompleteCourseList(data);
+                const temparray = data.filter(
+                    (course) => !selectedCourse.find((c) => c.cname === course.cname)
+                );
+                setCompleteCourseList(temparray);
+                console.log('updated length is ', temparray.length);
             } else {
                 Alert.alert('No Course Found!');
             }

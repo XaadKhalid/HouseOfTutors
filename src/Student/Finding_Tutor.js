@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import { View, Text, StyleSheet, FlatList, Pressable, Alert } from 'react-native';
@@ -9,9 +11,7 @@ export default function Finding_Tutor({ route }) {
     const [tEmail, setTEmail] = useState('');
     const [stdSlots, setStdSltos] = useState([]);
     const [sendRequestFlag, setSendRequestFlag] = useState(false);
-    let numOfSlots = route.params.numOfSlots;
-    let courseId = route.params.courseId;
-    let stdEmail = route.params.stdEmail;
+    const { numOfSlots, courseId, stdEmail } = route.params;
 
     useEffect(() => {
         console.log('numofslots-courseid-stdemail', numOfSlots, courseId, stdEmail);

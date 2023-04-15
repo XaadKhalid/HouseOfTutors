@@ -1,19 +1,23 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import { View, Text, Pressable, StyleSheet, FlatList, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function EnlistedCourses({ navigation }) {
     const [selectedCourse, setSelectedCourse] = useState([]);
     const [tEmail, setTEmail] = useState('');
+    const isFocused = useIsFocused();
 
     useEffect(() => {
-        if (tEmail !== '') {
+        if (tEmail !== '' && isFocused) {
             getEnlistedCourses();
         }
-    }, [tEmail]);
+    }, [tEmail, isFocused]);
 
     useEffect(() => {
         getgmail();
@@ -64,7 +68,7 @@ export default function EnlistedCourses({ navigation }) {
                     style={styles.add_Course_btn}
                     onPress={() => {
                         console.log('I m presses');
-                        navigation.navigate('EnlistCourses');
+                        navigation.navigate('EnlistCourses', { selectedCourse });
                     }}>
                     <Ionicons name="add-outline" size={45} color="#ffffff" />
                 </Pressable>
