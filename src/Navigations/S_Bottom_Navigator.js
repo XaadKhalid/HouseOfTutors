@@ -43,7 +43,7 @@ export default function S_Bottom_Navigator() {
         name="Tutor"
         component={S_NestsedStack}
         options={{
-          headerTitle: 'Add Courses/Find Tutor',
+          headerShown: false,
           tabBarIcon: () => {
             return <Icon name={'book-open'} size={24} color="#FFB22F" />;
           },
