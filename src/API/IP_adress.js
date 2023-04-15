@@ -1,3 +1,6 @@
 /* eslint-disable prettier/prettier */
-const IP_adress = '192.168.43.231';
-export default IP_adress;
+//import React from 'react';
+export default function IP_adress() {
+    const IP = '192.168.43.231';
+    return IP;
+}
