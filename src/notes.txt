@@ -1,0 +1,14 @@
+new color scheme: {
+    black : #282634
+    golden: #FFB22F
+    hovercolor: #677567
+    prev_primary: #6618E7
+}
+Card scheme : {
+    Name: Sunray
+    Hex: #E3BE59
+    RGB: (227, 190, 89)
+    Name: Quartz
+    Hex: #4C4B49
+    RGB: (76, 75, 73)
+}
