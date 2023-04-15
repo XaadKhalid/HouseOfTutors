@@ -12,10 +12,12 @@ import {
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import IP_adress from '../Api/IP_adress';
 
 function Login({ navigation }) {
   const [userEmail, setUseremail] = useState('');
   const [userPswd, setUserpswd] = useState('');
+  const ip = IP_adress();
 
   const storeData = async value => {
     try {
@@ -29,7 +31,7 @@ function Login({ navigation }) {
   const Verifylogin = async () => {
     try {
       const response = await fetch(
-        `http://192.168.43.231/HouseOfTutors/api/Login/Universal_Login?email=${userEmail}&password=${userPswd}`,
+        `http://${ip}/HouseOfTutors/api/Login/Universal_Login?email=${userEmail}&password=${userPswd}`,
       );
       const data = await response.json();
       console.log('Result from Login API: ', data);
@@ -51,7 +53,7 @@ function Login({ navigation }) {
     //navigation.navigate('S_Bottom_Navigator');
   };
 
-  const imagebg = require('../Images/12.png');
+  const imagebg = require('../Images/final_logo.png');
 
   return (
     <View style={Styles.container1}>
@@ -80,13 +82,14 @@ function Login({ navigation }) {
           />
         </View>
         <Pressable
+          style={Styles.button}
           onPress={() => {
             console.log('Login is pressed');
             console.log('----------------------------------------------------------------------------');
             storeData(userEmail);
             Verifylogin();
           }}>
-          <Text style={Styles.button}>Login</Text>
+          <Text style={Styles.lgntxt}>Login</Text>
         </Pressable>
         <Text style={Styles.font}>Don't have an account ?</Text>
         <Pressable
@@ -105,9 +108,12 @@ const Styles = StyleSheet.create({
   container1: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 80,
+    backgroundColor: 'rgb(255,255,255, 0.8)',
+    paddingTop: 80,
+    flex: 1,
   },
   container2: {
+    flex: 1,
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
     width: '100%',
@@ -119,22 +125,25 @@ const Styles = StyleSheet.create({
   img: {
     width: 200,
     height: 200,
+    borderRadius: 200 / 2,
   },
   heading: {
     fontSize: 25,
     margin: 10,
-    color: '#5304D4',
+    color: '#FFB22F',
     fontWeight: 'bold',
   },
   input_box: {
     flexDirection: 'row',
     borderRadius: 5,
     backgroundColor: '#FFFFFF',
+    borderColor: '#282634',
+    borderWidth: 1,
     marginTop: 15,
-    elevation: 10,
+    elevation: 3,
   },
   ip_txt: {
-    borderColor: '#5304D4',
+    borderColor: '#282634',
     borderLeftWidth: 1,
     width: '60%',
     textAlign: 'center',
@@ -145,23 +154,24 @@ const Styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   button: {
-    backgroundColor: '#6618E7',
-    paddingVertical: 15,
-    paddingHorizontal: 70,
-    borderRadius: 12,
+    backgroundColor: '#282634',
+    paddingVertical: 10,
+    paddingHorizontal: 60,
+    borderRadius: 8,
     marginVertical: 18,
-    color: '#FFFFFF',
-    elevation: 5,
+    elevation: 3,
+  },
+  lgntxt: {
+    color: '#FFB22F',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   font: {
     fontSize: 20,
   },
   signup: {
-    color: '#6618E7',
+    color: '#FFB22F',
     fontSize: 30,
+    fontWeight: 'bold',
   },
 });
-
-//primary color: 6618E7
-//secondary color: 5304D4
-//foreground: FFB22F
