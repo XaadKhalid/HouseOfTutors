@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useEffect } from 'react';
@@ -171,7 +172,7 @@ export default function T_Shedule() {
 
   const renderRowWiseCheckBox = ({ item }) => {
     return (
-      <View style={{ marginHorizontal: 4 }}>
+      <View style={{ marginHorizontal: 5 }}>
         {item.map(index => (
           <CheckBox
             key={index}
@@ -243,18 +244,18 @@ const styles = StyleSheet.create({
     borderColor: '#000',
     borderLeftWidth: 0,
     borderRightWidth: 0,
-    paddingVertical: 10,
+    borderTopWidth: 0,
   },
   headertext: {
     fontSize: 14,
-    marginHorizontal: 9,
+    marginRight: 22,
     color: '#000',
   },
   timetext: {
     fontSize: 14,
     color: '#000',
     marginLeft: 0,
-    marginTop: 8,
+    marginTop: 7,
   },
   button: {
     backgroundColor: '#FFB22F',
@@ -265,7 +266,7 @@ const styles = StyleSheet.create({
     color: '#282634',
     elevation: 3,
     marginLeft: 120,
-    marginTop: 3,
+    marginBottom: 18,
     fontWeight: 'bold',
   },
 });
