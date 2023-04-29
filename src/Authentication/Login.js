@@ -36,13 +36,15 @@ function Login({ navigation }) {
       const data = await response.json();
       console.log('Result from Login API: ', data);
       console.log('----------------------------------------------------------------------------');
+      const roleToScreen = {
+        Student: 'S_Bottom_Navigator',
+        Tutor: 'T_Bottom_Navigator',
+        Admin: 'AdminStack',
+      };
       if (data !== 'User Not Found') {
         storeData(userEmail);
-        if (data.Role === 'Student') {
-          navigation.navigate('S_Bottom_Navigator');
-        } else if (data.Role === 'Tutor') {
-          navigation.navigate('T_Bottom_Navigator');
-        }
+        const screenName = roleToScreen[data.Role];
+        navigation.navigate(screenName);
       } else {
         Alert.alert('Wrong username or Password!');
       }
