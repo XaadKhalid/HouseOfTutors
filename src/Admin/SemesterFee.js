@@ -11,8 +11,10 @@ export default function SemesterFee({ navigation }) {
     const [fee, setFee] = useState(0);
 
     useEffect(() => {
-        getfeelist();
-    }, []);
+        if (!editFlag) {
+            getfeelist();
+        }
+    }, [editFlag]);
 
     const getfeelist = async () => {
         const response = await GetSemesterFee();
@@ -65,7 +67,7 @@ export default function SemesterFee({ navigation }) {
                             else {
                                 updateFee(semester, fee);
                                 Alert.alert('Records Updated Successfully');
-                                getfeelist();
+                                setEditFlag(false);
                             }
                         }}
                         >
