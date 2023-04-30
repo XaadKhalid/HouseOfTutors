@@ -45,15 +45,13 @@ export default function AddGroup({ navigation }) {
     const renderSelectedCoursesList = ({ item }) => (
         <View style={style.itembox}>
             <Text style={style.itemText}>{item}</Text>
-            <View style={style.EditingButtons}>
-                <TouchableOpacity onPress={() => {
-                    let tempArray = [...selectedCourse.filter(course => course !== item)];
-                    setSelectedCourse(tempArray);
-                    setflag(true);
-                }}>
-                    <MaterialCommunityIcons name="delete" size={30} color="#FFF" style={style.GroupIdBoxText} />
-                </TouchableOpacity>
-            </View>
+            <TouchableOpacity onPress={() => {
+                let tempArray = [...selectedCourse.filter(course => course !== item)];
+                setSelectedCourse(tempArray);
+                setflag(true);
+            }}>
+                <MaterialCommunityIcons name="delete" size={30} color="#FFF" />
+            </TouchableOpacity>
         </View>
     );
 
@@ -132,10 +130,5 @@ const style = StyleSheet.create({
     itemText: {
         textAlign: 'center',
         color: '#fff',
-    },
-    EditingButtons: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        width: '30%',
     },
 });

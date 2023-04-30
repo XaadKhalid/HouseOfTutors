@@ -95,8 +95,8 @@ const style = StyleSheet.create({
     },
     EditingButtons: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
-        width: '30%',
+        justifyContent: 'space-between',
+        width: '20%',
     },
     AddButton: {
         flexDirection: 'row',

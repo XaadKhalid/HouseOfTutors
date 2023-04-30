@@ -64,17 +64,15 @@ export default function EditGroup({ navigation, route }) {
     const renderCoursesList = ({ item }) => (
         <View style={style.itembox}>
             <Text style={style.itemText}>{item}</Text>
-            <View style={style.EditingButtons}>
-                <TouchableOpacity onPress={() => {
-                    let tempArray = [...courseslist.filter(course => course !== item)];
-                    setCoursesList(tempArray);
-                    deleteCourseOfGroup(groupid, item);
-                    console.log('data in couslist is ', courseslist);
-                    Alert.alert('Course Removed From Group');
-                }}>
-                    <MaterialCommunityIcons name="delete" size={30} color="#FFF" />
-                </TouchableOpacity>
-            </View>
+            <TouchableOpacity onPress={() => {
+                let tempArray = [...courseslist.filter(course => course !== item)];
+                setCoursesList(tempArray);
+                deleteCourseOfGroup(groupid, item);
+                console.log('data in couslist is ', courseslist);
+                Alert.alert('Course Removed From Group');
+            }}>
+                <MaterialCommunityIcons name="delete" size={30} color="#FFF" />
+            </TouchableOpacity>
         </View>
     );
 
@@ -149,10 +147,5 @@ const style = StyleSheet.create({
     itemText: {
         textAlign: 'center',
         color: '#fff',
-    },
-    EditingButtons: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        width: '30%',
     },
 });
