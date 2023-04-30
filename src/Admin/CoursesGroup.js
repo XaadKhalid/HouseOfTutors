@@ -48,14 +48,14 @@ export default function CoursesGroup({ navigation }) {
             <Text style={style.GroupIdBoxText}>Group ID: {item}</Text>
             <View style={style.EditingButtons}>
                 <TouchableOpacity onPress={() => {
-                    navigation.navigate('EditGroup');
+                    navigation.navigate('EditGroup', { groupid: item });
                 }}>
                     <MaterialIcons name="edit" size={20} color="#FFB22F" style={style.GroupIdBoxText} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {
                     showAlert(item);
                 }}>
-                    <MaterialCommunityIcons name="delete" size={20} color="#FFB22F" style={style.GroupIdBoxText} />
+                    <MaterialCommunityIcons name="delete" size={20} color="#FFF" />
                 </TouchableOpacity>
             </View>
         </View>
