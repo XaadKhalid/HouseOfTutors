@@ -2,25 +2,31 @@
 
 import { IP } from './IPAdress_For_API';
 
-const deletGroup = async () => {
+const deletGroup = async (groupid) => {
     try {
-        const response = await fetch('');
-        const data = response.json();
-        if (data !== null) {
-            return data;
-        }
-        else {
-            console.log('Error occured in API');
-        }
+        const response = await fetch(`http://${IP}/HouseOfTutors/api/Admin/DeleteGroup?groupid=${groupid}`, {
+            method: 'POST',
+        });
+        const data = await response.json();
+        console.log('Result from DeleteGroup', data);
+        console.log('----------------------------------------------------------------------------');
     } catch (error) {
         console.log(error);
-        return [];
     }
 };
 
-const addGroup = async () => {
+const addGroup = async (newgroup) => {
     try {
-
+        const response = await fetch(`http://${IP}/HouseOfTutors/api/Admin/AddGroup`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newgroup),
+        });
+        const data = await response.json();
+        console.log('Result from AddGroup', data);
+        console.log('----------------------------------------------------------------------------');
     } catch (error) {
         console.log(error);
     }

@@ -3,9 +3,10 @@
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { addGroup } from '../Api/ApiForAdmin';
 
 export default function AddGroup({ navigation }) {
     const [selectedCourse, setSelectedCourse] = useState([]);
@@ -74,6 +75,7 @@ export default function AddGroup({ navigation }) {
                     />
                     <TouchableOpacity onPress={async () => {
                         try {
+                            addGroup(selectedCourse);
                             await AsyncStorage.removeItem('selectedCourse');
                             Alert.alert('Group Added Successfully');
                             setSelectedCourse([]);

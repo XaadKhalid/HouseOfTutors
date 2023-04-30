@@ -1,22 +1,29 @@
 /* eslint-disable prettier/prettier */
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
+import { useIsFocused } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { GetCourseGroupIds } from '../Api/ApiForAdmin';
+import { GetCourseGroupIds, deletGroup } from '../Api/ApiForAdmin';
 
 export default function CoursesGroup({ navigation }) {
     const [groupidList, setgroupidList] = useState([]);
+    const [flag, setflag] = useState(false);
+    const isFocused = useIsFocused();
 
     useEffect(() => {
-        const updatedList = async () => {
-            const groupIds = await GetCourseGroupIds();
-            setgroupidList(groupIds);
-        };
-        updatedList();
-    }, []);
+        if (isFocused || flag) {
+            updatedList();
+            setflag(false);
+        }
+    }, [isFocused, flag]);
 
-    const showAlert = () => {
+    const updatedList = async () => {
+        const groupIds = await GetCourseGroupIds();
+        setgroupidList(groupIds);
+    };
+
+    const showAlert = (item) => {
         Alert.alert(
             'Confirmation!!!',
             'Are you sure you want to take this action?',
@@ -27,7 +34,9 @@ export default function CoursesGroup({ navigation }) {
                 {
                     text: 'Confirm',
                     onPress: () => {
+                        deletGroup(item);
                         Alert.alert('Its Deleted Now');
+                        setflag(true);
                     },
                 },
             ],
@@ -44,7 +53,7 @@ export default function CoursesGroup({ navigation }) {
                     <MaterialIcons name="edit" size={20} color="#FFB22F" style={style.GroupIdBoxText} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {
-                    showAlert();
+                    showAlert(item);
                 }}>
                     <MaterialCommunityIcons name="delete" size={20} color="#FFB22F" style={style.GroupIdBoxText} />
                 </TouchableOpacity>
