@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { IP } from '../IPAdress_For_API';
+
+import { IP } from './IPAdress_For_API';
 
 const deletGroup = async () => {
     try {
@@ -55,4 +56,4 @@ const GetCoursesList = async () => {
     }
 };
 
-export { addGroup, deletGroup, GetCourseGroupIds, GetCoursesList };
+export { GetCourseGroupIds, GetCoursesList, deletGroup, addGroup };
