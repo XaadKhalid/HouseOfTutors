@@ -11,7 +11,7 @@ import Signup from '../Screens/Authentication/Signup';
 
 const Stack = createNativeStackNavigator();
 
-function Stack_Navigator() {
+function Navigation_Container() {
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -28,4 +28,4 @@ function Stack_Navigator() {
   );
 }
 
-export default Stack_Navigator;
+export default Navigation_Container;

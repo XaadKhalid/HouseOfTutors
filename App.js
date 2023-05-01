@@ -2,7 +2,7 @@
 import React from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { StatusBar } from 'react-native';
-import Stack_Navigator from './src/Navigations/Stack_Navigator';
+import Navigation_Container from './src/Navigations/Navigation_Container';
 
 export default function App() {
   return (
@@ -13,7 +13,7 @@ export default function App() {
         backgroundColor="#282634"
         translucent={true}
       />
-      <Stack_Navigator />
+      <Navigation_Container />
     </PaperProvider>
   );
 }
