@@ -36,9 +36,9 @@ export default function Dashboard({ navigation }) {
             </View>
             <View style={style.RowForButtons}>
                 <TouchableOpacity style={style.buttonn} onPress={() => {
-                    navigation.navigate('TutorRequest');
+                    navigation.navigate('AllStudents');
                 }}>
-                    <Text style={style.button_text}>TutorRequest</Text>
+                    <Text style={style.button_text}>AllStudents</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={style.buttonn} onPress={() => {
                     navigation.navigate('AllTutors');

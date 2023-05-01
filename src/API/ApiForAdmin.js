@@ -138,6 +138,40 @@ const updateFee = async (semester, fee) => {
     }
 };
 
+const GetAllTutorsData = async () => {
+    try {
+        const response = await fetch(`http://${IP}/HouseOfTutors/api/Admin/GetAllTutors`);
+        const data = await response.json();
+        console.log('Result from GetAllTutors API=> ', data);
+        console.log('----------------------------------------------------------------------------');
+        if (data !== null) {
+            return data;
+        } else {
+            console.log('No Course Found!');
+        }
+    } catch (error) {
+        console.log(error);
+        return [];
+    }
+};
+
+const GetAllStudents = async () => {
+    try {
+        const response = await fetch(`http://${IP}/HouseOfTutors/api/Admin/GetAllStudents`);
+        const data = await response.json();
+        console.log('Result from GetAllStudents API=> ', data);
+        console.log('----------------------------------------------------------------------------');
+        if (data !== null) {
+            return data;
+        } else {
+            console.log('No Student Found!');
+        }
+    } catch (error) {
+        console.log(error);
+        return [];
+    }
+};
+
 export {
     GetCourseGroupIds,
     GetCoursesList,
@@ -148,4 +182,6 @@ export {
     deleteCourseOfGroup,
     GetSemesterFee,
     updateFee,
+    GetAllTutorsData,
+    GetAllStudents,
 };

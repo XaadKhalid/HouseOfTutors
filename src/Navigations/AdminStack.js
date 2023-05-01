@@ -9,6 +9,7 @@ import AllTutors from '../Admin/AllTutors';
 import EditGroup from '../Admin/EditGroup';
 import AddGroup from '../Admin/AddGroup';
 import CoursesForGroup from '../Admin/CoursesForGroup';
+import AllStudents from '../Admin/AllStudents';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,6 +28,7 @@ export default function AdminStack() {
             <Stack.Screen name="EditGroup" component={EditGroup} />
             <Stack.Screen name="AddGroup" component={AddGroup} />
             <Stack.Screen name="CoursesForGroup" component={CoursesForGroup} />
+            <Stack.Screen name="AllStudents" component={AllStudents} />
         </Stack.Navigator>
     );
 }
