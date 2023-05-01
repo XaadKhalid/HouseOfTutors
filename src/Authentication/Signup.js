@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { TextInput as TextIp, RadioButton } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { Studentsignup, Tutorsignup } from '../Api/ApiForAuthentication';
 
 export default function Signup() {
   const [name, setname] = useState('');
@@ -17,39 +18,36 @@ export default function Signup() {
   const [nic, setNic] = useState('');
   const [role, setrole] = useState('Student');
 
-  const options = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      sname: name,
-      semail: email,
-      spassword: password,
-      semester: semeter,
-      contact: contact,
-      cgpa: cgpa,
-      gender: gender,
-      fcnic: nic,
-    }),
+  const userdata = {
+    sname: name,
+    semail: email,
+    spassword: password,
+    semester: semeter,
+    contact: contact,
+    cgpa: cgpa,
+    gender: gender,
+    fcnic: nic,
   };
-  const Register = async () => {
-    try {
-      const response = await fetch(
-        'http://192.168.43.231/HouseOfTutors/api/Student/StudentSignup', options
-      );
-      const data = await response.json();
-      console.log('Response from Student Signup API =>', data);
-      console.log('----------------------------------------------------------------------------');
-      if (data === 'Student Already Registered!') {
-        Alert.alert('Student Already Registered!');
-      } else {
-        Alert.alert(data);
-      }
-    } catch (error) {
-      console.log(error);
-      console.log('----------------------------------------------------------------------------');
+
+  const tutordata = {
+    tname: name,
+    temail: email,
+    tpassword: password,
+    semester: semeter,
+    contact: contact,
+    cgpa: cgpa,
+    gender: gender,
+  };
+
+  const Register = async (status) => {
+    let response = null;
+    if (status === 'Student') {
+      response = await Studentsignup(userdata);
     }
+    else {
+      response = await Tutorsignup(tutordata);
+    }
+    Alert.alert(response);
   };
 
   return (
@@ -185,7 +183,7 @@ export default function Signup() {
                     if (nic !== '') {
                       console.log('Submit Button is pressed and studnetsingup api is called!');
                       console.log('----------------------------------------------------------------------------');
-                      Register();
+                      Register(role);
                     }
                     else {
                       Alert.alert('All fields are mandatory');

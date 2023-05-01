@@ -12,12 +12,11 @@ import {
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import IP_adress from '../Api/IP_adress';
+import { Userlogin } from '../Api/ApiForAuthentication';
 
 function Login({ navigation }) {
   const [userEmail, setUseremail] = useState('');
   const [userPswd, setUserpswd] = useState('');
-  const ip = IP_adress();
 
   const storeData = async value => {
     try {
@@ -29,30 +28,21 @@ function Login({ navigation }) {
   };
 
   const Verifylogin = async () => {
-    try {
-      const response = await fetch(
-        `http://${ip}/HouseOfTutors/api/Login/Universal_Login?email=${userEmail}&password=${userPswd}`,
-      );
-      const data = await response.json();
-      console.log('Result from Login API: ', data);
-      console.log('----------------------------------------------------------------------------');
-      const roleToScreen = {
-        Student: 'S_Bottom_Navigator',
-        Tutor: 'T_Bottom_Navigator',
-        Admin: 'AdminStack',
-      };
-      if (data !== 'User Not Found') {
-        storeData(userEmail);
-        const screenName = roleToScreen[data.Role];
-        navigation.navigate(screenName);
-      } else {
-        Alert.alert('Wrong username or Password!');
-      }
-    } catch (error) {
-      console.log(error);
-      console.log('----------------------------------------------------------------------------');
+    const response = await Userlogin(userEmail, userPswd);
+    const roleToScreen = {
+      Student: 'S_Bottom_Navigator',
+      Tutor: 'T_Bottom_Navigator',
+      Admin: 'AdminStack',
+      Parent: 'ParentStack',
+    };
+    if (response !== 'User Not Found') {
+      storeData(userEmail);
+      const screenName = roleToScreen[response.Role];
+      navigation.navigate(screenName);
     }
-    //navigation.navigate('S_Bottom_Navigator');
+    else {
+      Alert.alert('Wrong username or Password!');
+    }
   };
 
   const imagebg = require('../Images/final_logo.png');
