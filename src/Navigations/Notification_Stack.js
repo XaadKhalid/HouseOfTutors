@@ -1,13 +1,13 @@
 /* eslint-disable prettier/prettier */
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import Notification_Details from '../Tutor/Notification_Details';
-import Notification_Icon from '../Tutor/Notification_Icon';
-import T_Profile from '../Tutor/T_Profile';
-import T_Fee from '../Tutor/T_Fee';
-import T_Teaching from '../Tutor/T_Teaching';
-import T_Shedule from '../Tutor/T_Shedule';
-import T_TodayClass from '../Tutor/T_TodayClass';
+import Notification_Icon from '../Screens/Tutor/Notification_Icon';
+import Notification_Details from '../Screens/Tutor/Notification_Details';
+import T_TodayClass from '../Screens/Tutor/T_TodayClass';
+import T_Profile from '../Screens/Tutor/T_Profile';
+import T_Shedule from '../Screens/Tutor/T_Shedule';
+import T_Fee from '../Screens/Tutor/T_Fee';
+import T_Teaching from '../Screens/Tutor/T_Teaching';
 
 const Stack = createNativeStackNavigator();
 

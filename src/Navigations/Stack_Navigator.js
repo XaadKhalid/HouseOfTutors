@@ -2,12 +2,12 @@
 import React from 'react';
 import AdminStack from './AdminStack';
 import ParentStack from './ParentStack';
-import Login from '../Authentication/Login';
-import Signup from '../Authentication/Signup';
 import S_Bottom_Navigator from './S_Bottom_Navigator';
 import T_Bottom_Navigator from './T_Bottom_Naivgator';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Login from '../Screens/Authentication/Login';
+import Signup from '../Screens/Authentication/Signup';
 
 const Stack = createNativeStackNavigator();
 

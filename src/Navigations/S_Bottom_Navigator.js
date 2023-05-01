@@ -2,16 +2,16 @@
 /* eslint-disable prettier/prettier */
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
-import S_Profile from '../Student/S_Profile';
-import S_Fee from '../Student/S_Fee';
-import S_Learning from '../Student/S_Learning';
-import S_Shedule from '../Student/S_Shedule';
-import S_TodayClass from '../Student/S_TodayClass';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/Feather';
 import Icon2 from 'react-native-vector-icons/Foundation';
 import Icon3 from 'react-native-vector-icons/FontAwesome5';
 import S_NestsedStack from './S_NestsedStack';
+import S_Shedule from '../Screens/Student/S_Shedule';
+import S_Learning from '../Screens/Student/S_Learning';
+import S_Fee from '../Screens/Student/S_Fee';
+import S_TodayClass from '../Screens/Student/S_TodayClass';
+import S_Profile from '../Screens/Student/S_Profile';
 
 export default function S_Bottom_Navigator() {
   const Tab = createBottomTabNavigator();

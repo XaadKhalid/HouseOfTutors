@@ -1,9 +1,9 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Finding_Tutor from '../Student/Finding_Tutor';
-import Enlist_Courses from '../Student/Enlist_Courses';
-import Enlisted_Courses from '../Student/Enlisted_Courses';
+import Enlist_Courses from '../Screens/Student/Enlist_Courses';
+import Enlisted_Courses from '../Screens/Student/Enlisted_Courses';
+import Finding_Tutor from '../Screens/Student/Finding_Tutor';
 
 const Stack = createNativeStackNavigator();
 

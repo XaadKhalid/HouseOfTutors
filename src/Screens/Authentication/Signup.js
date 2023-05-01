@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { TextInput as TextIp, RadioButton } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { Studentsignup, Tutorsignup } from '../Api/ApiForAuthentication';
+import { Studentsignup, Tutorsignup } from '../../Api/ApiForAuthentication';
 
 export default function Signup() {
   const [name, setname] = useState('');

@@ -12,7 +12,7 @@ import {
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Userlogin } from '../Api/ApiForAuthentication';
+import { Userlogin } from '../../Api/ApiForAuthentication';
 
 function Login({ navigation }) {
   const [userEmail, setUseremail] = useState('');
@@ -45,7 +45,7 @@ function Login({ navigation }) {
     }
   };
 
-  const imagebg = require('../Images/final_logo.png');
+  const imagebg = require('../../Images/final_logo.png');
 
   return (
     <View style={Styles.container1}>

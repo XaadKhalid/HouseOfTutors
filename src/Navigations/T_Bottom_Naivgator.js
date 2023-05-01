@@ -2,17 +2,17 @@
 /* eslint-disable prettier/prettier */
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
-import T_Fee from '../Tutor/T_Fee';
-import T_Teaching from '../Tutor/T_Teaching';
-import T_TodayClass from '../Tutor/T_TodayClass';
+import T_Fee from '../Screens/Tutor/T_Fee';
+import T_Teaching from '../Screens/Tutor/T_Teaching';
+import T_Profile from '../Screens/Tutor/T_Profile';
+import T_TodayClass from '../Screens/Tutor/T_TodayClass';
+import Notification_Icon from '../Screens/Tutor/Notification_Icon';
+import Notification_Stack from './Notification_Stack';
+import T_NestsedStack from './T_NestsedStack';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/Feather';
 import Icon2 from 'react-native-vector-icons/Foundation';
 import Icon3 from 'react-native-vector-icons/FontAwesome5';
-import Notification_Icon from '../Tutor/Notification_Icon';
-import Notification_Stack from './Notification_Stack';
-import T_Profile from '../Tutor/T_Profile';
-import T_NestsedStack from './T_NestsedStack';
 
 export default function T_Bottom_Navigator({ }) {
     const Tab = createBottomTabNavigator();
@@ -43,7 +43,6 @@ export default function T_Bottom_Navigator({ }) {
                 name="Courses"
                 component={T_NestsedStack}
                 options={{
-                    //headerTitle: 'Enlisted',
                     headerShown: false,
                     tabBarIcon: () => {
                         return <Icon name={'book-open'} size={24} color="#FFB22F" />;
