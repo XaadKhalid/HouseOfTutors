@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react
 import React, { useEffect, useState } from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { UpdateGroup, deleteCourseOfGroup, getCourseOfGroup } from '../Api/ApiForAdmin';
+import { UpdateGroup, deleteCourseOfGroup, getCourseOfGroup } from '../../Api/ApiForAdmin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 

@@ -1,15 +1,15 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import CoursesGroup from '../Admin/CoursesGroup';
-import SemesterFee from '../Admin/SemesterFee';
-import Dashboard from '../Admin/Dashboard';
-import TutorRequest from '../Admin/TutorRequest';
-import AllTutors from '../Admin/AllTutors';
-import EditGroup from '../Admin/EditGroup';
-import AddGroup from '../Admin/AddGroup';
-import CoursesForGroup from '../Admin/CoursesForGroup';
-import AllStudents from '../Admin/AllStudents';
+import Dashboard from '../Screens/Admin/Dashboard';
+import SemesterFee from '../Screens/Admin/SemesterFee';
+import CoursesGroup from '../Screens/Admin/CoursesGroup';
+import TutorRequest from '../Screens/Admin/TutorRequest';
+import AllTutors from '../Screens/Admin/AllTutors';
+import EditGroup from '../Screens/Admin/EditGroup';
+import AddGroup from '../Screens/Admin/AddGroup';
+import CoursesForGroup from '../Screens/Admin/CoursesForGroup';
+import AllStudents from '../Screens/Admin/AllStudents';
 
 const Stack = createNativeStackNavigator();
 

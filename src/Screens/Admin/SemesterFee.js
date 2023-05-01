@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, TextInput } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { GetSemesterFee, updateFee } from '../Api/ApiForAdmin';
+import { GetSemesterFee, updateFee } from '../../Api/ApiForAdmin';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 export default function SemesterFee({ navigation }) {

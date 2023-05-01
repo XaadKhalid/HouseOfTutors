@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { GetCourseGroupIds, deletGroup } from '../Api/ApiForAdmin';
+import { GetCourseGroupIds, deletGroup } from '../../Api/ApiForAdmin';
 
 export default function CoursesGroup({ navigation }) {
     const [groupidList, setgroupidList] = useState([]);

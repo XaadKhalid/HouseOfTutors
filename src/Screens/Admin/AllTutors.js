@@ -1,34 +1,35 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable prettier/prettier */
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { GetAllStudents } from '../Api/ApiForAdmin';
+import { GetAllTutorsData } from '../../Api/ApiForAdmin';
 
-export default function AllStudents() {
-    const [students, setStudents] = useState([]);
+export default function AllTutors() {
+    const [allTutors, setAlltutors] = useState([]);
 
     useEffect(() => {
         GetAlltutors();
     }, []);
 
     const GetAlltutors = async () => {
-        const response = await GetAllStudents();
+        const response = await GetAllTutorsData();
         if (response !== null) {
             const tutors = response.map(tutor => ({ ...tutor, flag: false }));
-            setStudents(tutors);
+            setAlltutors(tutors);
         }
     };
 
     const toggleFlag = index => {
-        const temparray = [...students];
-        temparray[index].flag = !temparray[index].flag;
-        setStudents(temparray);
+        const tutors = [...allTutors];
+        tutors[index].flag = !tutors[index].flag;
+        setAlltutors(tutors);
     };
 
-    const renderStudents = ({ item, index }) => (
+    const renderTutors = ({ item, index }) => (
         <View style={style.container}>
             <View style={style.itembox}>
-                <Text style={style.itemText}>{item.sname}</Text>
+                <Text style={style.itemText}>{item.tname}</Text>
                 <TouchableOpacity onPress={() => {
                     toggleFlag(index);
                 }}>
@@ -43,7 +44,7 @@ export default function AllStudents() {
                 <View style={style.detailsbox}>
                     <View style={style.itembox}>
                         <Text style={style.itemText}>Email :</Text>
-                        <Text style={style.itemText}>{item.semail}</Text>
+                        <Text style={style.itemText}>{item.temail}</Text>
                     </View>
                     <View style={style.itembox}>
                         <Text style={style.itemText}>Semester :</Text>
@@ -69,8 +70,8 @@ export default function AllStudents() {
     return (
         <View>
             <FlatList
-                data={students}
-                renderItem={renderStudents}
+                data={allTutors}
+                renderItem={renderTutors}
             />
         </View>
     );
@@ -97,4 +98,3 @@ const style = StyleSheet.create({
         alignContent: 'flex-start',
     },
 });
-

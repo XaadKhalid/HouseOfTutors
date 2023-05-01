@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput, Alert } 
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
-import { GetCoursesList } from '../Api/ApiForAdmin';
+import { GetCoursesList } from '../../Api/ApiForAdmin';
 
 export default function CoursesForGroup({ navigation }) {
     const [complete_Courses_List, set_Complete_Courses_List] = useState([]);
