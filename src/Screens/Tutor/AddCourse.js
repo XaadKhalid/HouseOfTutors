@@ -5,13 +5,12 @@ import { View, Text, Alert, StyleSheet, FlatList, Pressable } from 'react-native
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
-import IP_adress from '../Api/IP_adress';
+import { IP } from '../../Api/IPAdress_For_API';
 
 export default function AddCourse({ route, navigation }) {
     const courseName = route.params.courseName;
     const [tEmail, setTEmail] = useState('');
     const [preReqList, setPreReqList] = useState([]);
-    const ip = IP_adress();
 
     useEffect(() => {
         getgmail();
@@ -43,7 +42,7 @@ export default function AddCourse({ route, navigation }) {
     const getPreReqofCourse = async () => {
         try {
             const response = await fetch(
-                `http://${ip}/HouseOfTutors/api/Tutor/Get_PreReq?coursename=${courseName}&temail=${tEmail}`,
+                `http://${IP}/HouseOfTutors/api/Tutor/Get_PreReq?coursename=${courseName}&temail=${tEmail}`,
             );
             const data = await response.json();
             console.log('Result from get PreReq API: ', data);
@@ -79,7 +78,7 @@ export default function AddCourse({ route, navigation }) {
     const CourseEnlist = async () => {
         try {
             const response = await fetch(
-                'http://192.168.43.231/HouseOfTutors/api/Tutor/TutorCourseEnlist', options
+                `http://${IP}/HouseOfTutors/api/Tutor/TutorCourseEnlist`, options
             );
             const data = await response.json();
             console.log('Response from Tutor CourseEnlist API => ', data);
