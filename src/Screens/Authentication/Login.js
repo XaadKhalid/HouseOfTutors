@@ -35,7 +35,7 @@ function Login({ navigation }) {
       Admin: 'AdminStack',
       Parent: 'ParentStack',
     };
-    if (response !== 'User Not Found') {
+    if (response !== 'User Not Found' && response !== 'Wrong CNIC Entered') {
       storeData(userEmail);
       const screenName = roleToScreen[response.Role];
       navigation.navigate(screenName);
