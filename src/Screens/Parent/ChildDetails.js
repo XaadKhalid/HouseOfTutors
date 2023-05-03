@@ -44,7 +44,7 @@ export default function ChildDetails({ route }) {
                 <View style={style.itembox}>
                     <Text style={style.itemText}>Class Time :</Text>
                     {item.timeslots.map((slot) => (
-                        <Text style={style.itemText}>{slot}</Text>
+                        <Text key={slot} style={style.itemText}>{slot}</Text>
                     ))}
                 </View>
             </View>

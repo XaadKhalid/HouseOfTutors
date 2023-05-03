@@ -34,7 +34,7 @@ export default function AllStudents() {
                 }}>
                     <FontAwesome
                         name={item.flag ? 'arrow-circle-o-up' : 'arrow-circle-o-down'}
-                        size={20}
+                        size={30}
                         color="#FFF"
                     />
                 </TouchableOpacity>

@@ -33,17 +33,27 @@ export default function Dashboard({ navigation }) {
                 }}>
                     <Text style={style.button_text}>SemesterFee</Text>
                 </TouchableOpacity>
+                <TouchableOpacity style={style.buttonn} onPress={() => {
+                    navigation.navigate('AllCourses');
+                }}>
+                    <Text style={style.button_text}>Courses</Text>
+                </TouchableOpacity>
             </View>
             <View style={style.RowForButtons}>
                 <TouchableOpacity style={style.buttonn} onPress={() => {
                     navigation.navigate('AllStudents');
                 }}>
-                    <Text style={style.button_text}>AllStudents</Text>
+                    <Text style={style.button_text}>Students</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={style.buttonn} onPress={() => {
                     navigation.navigate('AllTutors');
                 }}>
-                    <Text style={style.button_text}>AllTutors</Text>
+                    <Text style={style.button_text}>Tutors</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={style.buttonn} onPress={() => {
+                    navigation.navigate('Enrollements');
+                }}>
+                    <Text style={style.button_text}>Enrollements</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -65,9 +75,9 @@ const style = StyleSheet.create({
         marginHorizontal: 5,
     },
     button_text: {
-        color: '#FFB22F',
+        color: '#FFF',
         textAlign: 'center',
-        fontWeight: 'bold',
+        fontWeight: 500,
     },
     RowForButtons: {
         flexDirection: 'row',

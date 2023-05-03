@@ -30,7 +30,7 @@ export default function SemesterFee({ navigation }) {
             <TouchableOpacity onPress={() => {
                 setEditFlag(true);
             }}>
-                <MaterialIcons name="edit" size={20} color="#FFF" />
+                <MaterialIcons name="edit" size={30} color="#FFF" />
             </TouchableOpacity>
         </View>
     );

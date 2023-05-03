@@ -50,12 +50,12 @@ export default function CoursesGroup({ navigation }) {
                 <TouchableOpacity onPress={() => {
                     navigation.navigate('EditGroup', { groupid: item });
                 }}>
-                    <MaterialIcons name="edit" size={20} color="#FFB22F" style={style.GroupIdBoxText} />
+                    <MaterialIcons name="edit" size={30} color="#FFB22F" style={style.GroupIdBoxText} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {
                     showAlert(item);
                 }}>
-                    <MaterialCommunityIcons name="delete" size={20} color="#FFF" />
+                    <MaterialCommunityIcons name="delete" size={30} color="#FFF" />
                 </TouchableOpacity>
             </View>
         </View>
