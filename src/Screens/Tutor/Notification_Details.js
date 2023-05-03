@@ -259,10 +259,10 @@ const style = StyleSheet.create({
     },
     modal: {
         justifyContent: 'center',
-        backgroundColor: 'rgba(102,24,231,0.7)',
+        backgroundColor: '#4C4B49',
         marginHorizontal: 10,
         paddingVertical: 15,
-        borderRadius: 10,
+        borderRadius: 5,
         marginTop: 10,
     },
     heading: {

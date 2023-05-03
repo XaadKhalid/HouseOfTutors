@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-/* eslint-disable prettier/prettier */
 import { View, Text, StyleSheet, FlatList, Pressable, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
@@ -45,8 +44,8 @@ export default function EnlistCourses({ route, navigation }) {
         }
     };
 
-    const renderCoursesList = ({ item }) => (
-        <View style={styles.modal}>
+    const renderCoursesList = ({ item, index }) => (
+        <View key={index} style={styles.modal}>
             <Text style={styles.text}>{item.ccode}</Text>
             <Text style={styles.text}>{item.cname}</Text>
             <View>

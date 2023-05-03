@@ -91,8 +91,8 @@ export default function AddCourse({ route, navigation }) {
         }
     };
 
-    const renderPreReqList = ({ item }) => (
-        <View style={styles.container}>
+    const renderPreReqList = ({ item, index }) => (
+        <View key={index} style={styles.container}>
             <View style={styles.coursebox}>
                 <Text style={styles.prereqtext}>{item.name}</Text>
                 <Picker

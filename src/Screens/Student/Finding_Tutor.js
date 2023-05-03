@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-/* eslint-disable prettier/prettier */
 import { View, Text, StyleSheet, FlatList, Pressable, Alert } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import CheckBox from '@react-native-community/checkbox';
@@ -49,14 +48,13 @@ export default function Finding_Tutor({ route }) {
     };
 
     const renderItem = ({ item, index }) => (
-        <View style={styles.modal}>
+        <View key={index} style={styles.modal}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
                 <Text style={styles.text}>{courseId}</Text>
                 <Text style={styles.text}>{item.name}</Text>
                 <Text style={styles.text}>{item.rating}/{item.grade}</Text>
             </View>
             <View>
-                {/* <Text style={styles.text}>Available Slots:</Text> */}
                 {item.slots.slice(0, numOfSlots).map((slot, sIndex) => {
                     let flagsofslot = [slot, false];
                     if (item.checkedslots.includes(slot)) {
@@ -92,7 +90,7 @@ export default function Finding_Tutor({ route }) {
                     );
                 })}
             </View>
-            <View>
+            <View style={styles.btn_alignment}>
                 <Pressable
                     style={styles.btn}
                     onPress={() => {
@@ -167,10 +165,10 @@ export default function Finding_Tutor({ route }) {
 const styles = StyleSheet.create({
     modal: {
         justifyContent: 'center',
-        backgroundColor: 'rgba(102,24,231,0.7)',
+        backgroundColor: '#4C4B49',
         marginHorizontal: 10,
         paddingVertical: 15,
-        borderRadius: 10,
+        borderRadius: 5,
         marginTop: 10,
     },
     text: {
@@ -187,14 +185,19 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 5,
         width: '40%',
-        marginHorizontal: 120,
+        marginRight: 0,
     },
     btn_text: {
         color: '#000000',
         fontWeight: '600',
+        textAlign: 'center',
+    },
+    btn_alignment: {
+        flexDirection: 'row',
+        justifyContent: 'center',
     },
     FList_BM: {
-        marginBottom: 110,
+        marginBottom: 130,
     },
     heading: {
         flexDirection: 'row',
