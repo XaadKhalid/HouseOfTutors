@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-/* eslint-disable prettier/prettier */
 import { View, Text, StyleSheet, FlatList, Pressable, Alert } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -98,7 +97,7 @@ export default function Enlisted_Courses({ navigation }) {
         <View>
             <View style={{ flexDirection: 'row' }}>
                 <Pressable style={{ marginRight: 60, marginLeft: 8 }} onPress={() => {
-                    navigation.navigate('Enlist_Courses', {selectedCourse});
+                    navigation.navigate('Enlist_Courses', { selectedCourse });
                 }}>
                     <Entypo name={'add-to-list'} size={50} color="#4C4B49" />
                 </Pressable>
@@ -153,22 +152,6 @@ export default function Enlisted_Courses({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    // modal: {
-    //     flexDirection: 'row',
-    //     justifyContent: 'space-evenly',
-    //     alignItems: 'center',
-    //     backgroundColor: 'rgba(102,24,231,0.8)',
-    //     marginHorizontal: 10,
-    //     paddingVertical: 15,
-    //     borderRadius: 10,
-    //     marginTop: 10,
-    // },
-    // text: {
-    //     color: '#ffffff',
-    //     fontWeight: 'bold',
-    //     marginBottom: 5,
-    //     textAlign: 'center',
-    // },
     modal: {
         flexDirection: 'row',
         justifyContent: 'space-evenly',

@@ -21,6 +21,17 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignContent: 'flex-start',
     },
+    noDataContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    noDataText: {
+        textAlign: 'center',
+        fontSize: 70,
+        fontWeight: 'bold',
+        fontStyle: 'italic',
+    },
 });
 
 export default styles;

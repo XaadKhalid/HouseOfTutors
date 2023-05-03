@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react';
@@ -143,7 +144,7 @@ export default function T_TodayClass() {
 const styles = StyleSheet.create({
   modal: {
     justifyContent: 'center',
-    backgroundColor: 'rgba(102,24,231,0.7)',
+    backgroundColor: '#4C4B49',
     marginHorizontal: 10,
     paddingVertical: 15,
     borderRadius: 5,
@@ -155,19 +156,18 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontWeight: 'bold',
     marginBottom: 5,
-    //textAlign: 'center',
   },
   heading: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: 'rgba(102,24,231,0.9)',
+    backgroundColor: '#ffffff',
     marginHorizontal: 10,
     paddingVertical: 15,
     marginTop: 10,
   },
   h_text: {
-    color: '#ffffff',
+    color: '#000000',
     fontWeight: 'bold',
     marginHorizontal: 20,
     textAlign: 'center',
