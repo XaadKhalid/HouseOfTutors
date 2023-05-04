@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, TextInput } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Alert, TextInput } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { GetSemesterFee, updateFee } from '../../Api/ApiForAdmin';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import styles from '../../Assests/Styling';
 
 export default function SemesterFee({ navigation }) {
     const [feeList, setFeeList] = useState([]);
@@ -24,26 +25,28 @@ export default function SemesterFee({ navigation }) {
     };
 
     const renderFeeList = ({ item }) => (
-        <View style={style.itembox}>
-            <Text style={style.itemText}>Semester : {item.SemesterNo}</Text>
-            <Text style={style.itemText}>Fees: {item.Fees}</Text>
-            <TouchableOpacity onPress={() => {
-                setEditFlag(true);
-            }}>
-                <MaterialIcons name="edit" size={30} color="#FFF" />
-            </TouchableOpacity>
+        <View style={styles.containerbox}>
+            <View style={styles.itembox}>
+                <Text style={styles.itemText}>Semester : {item.SemesterNo}</Text>
+                <Text style={styles.itemText}>Fees: {item.Fees}</Text>
+                <TouchableOpacity onPress={() => {
+                    setEditFlag(true);
+                }}>
+                    <MaterialIcons name="edit" size={25} style={styles.iconcolor} />
+                </TouchableOpacity>
+            </View>
         </View>
     );
 
     return (
-        <View>
+        <View style={styles.bodyContainer}>
             {editFlag && (
                 <View>
-                    <View style={style.inputsParent}>
+                    <View style={styles.inputsParent}>
                         <TextInput
-                            style={style.inputsChild}
+                            style={styles.inputsChild}
                             placeholder="Enter Semester No"
-                            keyboardType="number"
+                            keyboardType="numeric"
                             textAlign="center"
                             value={semester}
                             onChangeText={(value) => {
@@ -53,14 +56,14 @@ export default function SemesterFee({ navigation }) {
                             placeholder="Enter Fees"
                             value={fee}
                             textAlign="center"
-                            keyboardType="number"
-                            style={style.inputsChild}
+                            keyboardType="numeric"
+                            style={styles.inputsChild}
                             onChangeText={(value) => {
                                 setFee(value);
                             }} />
                     </View>
-                    <View style={style.inputsParent}>
-                        <TouchableOpacity style={style.SubmitButton} onPress={() => {
+                    <View style={styles.inputsParent}>
+                        <TouchableOpacity style={styles.SubmitButton} onPress={() => {
                             if (semester === 0 || fee === 0) {
                                 Alert.alert('Input Fields are mandatory to update Records');
                             }
@@ -71,13 +74,13 @@ export default function SemesterFee({ navigation }) {
                             }
                         }}
                         >
-                            <Text style={style.SubbmitText}>Update Fee Records</Text>
+                            <Text style={styles.SubbmitText}>Update Fee Records</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={style.SubmitButton} onPress={() => {
+                        <TouchableOpacity style={styles.SubmitButton} onPress={() => {
                             setEditFlag(false);
                         }}
                         >
-                            <Text style={style.SubbmitText}>Cancel Request</Text>
+                            <Text style={styles.SubbmitText}>Cancel Request</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -89,42 +92,3 @@ export default function SemesterFee({ navigation }) {
         </View>
     );
 }
-
-const style = StyleSheet.create({
-    itembox: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        backgroundColor: '#4C4B49',
-        padding: 15,
-        borderRadius: 5,
-        marginVertical: 5,
-        marginHorizontal: 20,
-    },
-    itemText: {
-        textAlign: 'center',
-        color: '#fff',
-    },
-    inputsParent: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginHorizontal: 20,
-        marginVertical: 5,
-    },
-    inputsChild: {
-        borderWidth: 1,
-        borderColor: 'black',
-        width: '50%',
-    },
-    SubmitButton: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        backgroundColor: 'green',
-        padding: 12,
-        borderRadius: 4,
-        width: '49%',
-    },
-    SubbmitText: {
-        textAlign: 'center',
-        color: 'white',
-    },
-});

@@ -7,7 +7,13 @@ import ChildDetails from '../Screens/Parent/ChildDetails';
 export default function ParentStack() {
     const Stack = createNativeStackNavigator();
     return (
-        <Stack.Navigator initialRouteName="PDashBoard" screenOptions={{ headerTitleAlign: 'center' }} >
+        <Stack.Navigator initialRouteName="PDashBoard" screenOptions={{
+            headerTitleAlign: 'center',
+            headerTintColor: '#FFB22F',
+            headerStyle: {
+                backgroundColor: '#282634',
+            },
+        }} >
             <Stack.Screen name="PDashBoard" component={PDashBoard} options={{ headerBackVisible: false }} />
             <Stack.Screen name="ChildDetails" component={ChildDetails} />
         </Stack.Navigator>

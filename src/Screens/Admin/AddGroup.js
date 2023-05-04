@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable prettier/prettier */
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import { addGroup } from '../../Api/ApiForAdmin';
+import styles from '../../Assests/Styling';
 
 export default function AddGroup({ navigation }) {
     const [selectedCourse, setSelectedCourse] = useState([]);
@@ -43,22 +44,24 @@ export default function AddGroup({ navigation }) {
     };
 
     const renderSelectedCoursesList = ({ item }) => (
-        <View style={style.itembox}>
-            <Text style={style.itemText}>{item}</Text>
-            <TouchableOpacity onPress={() => {
-                let tempArray = [...selectedCourse.filter(course => course !== item)];
-                setSelectedCourse(tempArray);
-                setflag(true);
-            }}>
-                <MaterialCommunityIcons name="delete" size={30} color="#FFF" />
-            </TouchableOpacity>
+        <View style={styles.containerbox}>
+            <View style={styles.itembox}>
+                <Text style={styles.itemText}>{item}</Text>
+                <TouchableOpacity onPress={() => {
+                    let tempArray = [...selectedCourse.filter(course => course !== item)];
+                    setSelectedCourse(tempArray);
+                    setflag(true);
+                }}>
+                    <MaterialCommunityIcons name="delete" size={30} style={styles.iconcolor} />
+                </TouchableOpacity>
+            </View>
         </View>
     );
 
     return (
-        <View style={style.container}>
-            <View style={style.AddButtonBox}>
-                <Text style={style.ButtonText}>Press Right Button to Select Courses for Group</Text>
+        <View style={styles.bodyContainer}>
+            <View style={styles.addtoListbox}>
+                <Text style={styles.addtoListtxt}>Press Right Button to Select Courses for Group</Text>
                 <TouchableOpacity onPress={() => {
                     navigation.navigate('CoursesForGroup');
                 }}>
@@ -81,54 +84,12 @@ export default function AddGroup({ navigation }) {
                             console.log(e);
                         }
                     }}
-                        style={style.SubmitButton}
+                        style={styles.SubmitButton}
                     >
-                        <Text style={style.SubbmitText}>Submit Courses</Text>
+                        <Text style={styles.SubbmitText}>Submit Courses</Text>
                     </TouchableOpacity>
                 </View>
             )}
         </View>
     );
 }
-
-const style = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    AddButtonBox: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginRight: 5,
-    },
-    ButtonText: {
-        marginTop: 15,
-        marginLeft: 5,
-    },
-    SubmitButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'green',
-        padding: 12,
-        borderWidth: 1,
-        borderColor: 'white',
-        marginHorizontal: 35,
-    },
-    SubbmitText: {
-        textAlign: 'center',
-        color: 'white',
-    },
-    itembox: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        backgroundColor: '#4C4B49',
-        padding: 15,
-        borderRadius: 5,
-        marginVertical: 5,
-        marginHorizontal: 35,
-    },
-    itemText: {
-        textAlign: 'center',
-        color: '#fff',
-    },
-});

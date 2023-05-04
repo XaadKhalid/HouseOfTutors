@@ -1,10 +1,12 @@
 /* eslint-disable prettier/prettier */
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { GetCourseGroupIds, deletGroup } from '../../Api/ApiForAdmin';
+import styles from '../../Assests/Styling';
 
 export default function CoursesGroup({ navigation }) {
     const [groupidList, setgroupidList] = useState([]);
@@ -43,30 +45,32 @@ export default function CoursesGroup({ navigation }) {
         );
     };
 
-    const renderGroupIds = ({ item }) => (
-        <View style={style.GroupIdBox}>
-            <Text style={style.GroupIdBoxText}>Group ID: {item}</Text>
-            <View style={style.EditingButtons}>
-                <TouchableOpacity onPress={() => {
-                    navigation.navigate('EditGroup', { groupid: item });
-                }}>
-                    <MaterialIcons name="edit" size={30} color="#FFB22F" style={style.GroupIdBoxText} />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => {
-                    showAlert(item);
-                }}>
-                    <MaterialCommunityIcons name="delete" size={30} color="#FFF" />
-                </TouchableOpacity>
+    const renderGroupIds = ({ item, index }) => (
+        <View style={styles.containerbox}>
+            <View style={styles.itembox}>
+                <Text style={styles.itemText}>GROUP : {index + 1}</Text>
+                <View style={styles.EditingButtons}>
+                    <TouchableOpacity onPress={() => {
+                        navigation.navigate('EditGroup', { groupid: item });
+                    }}>
+                        <MaterialIcons name="edit" size={25} style={styles.iconcolor} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => {
+                        showAlert(item);
+                    }}>
+                        <MaterialCommunityIcons name="delete" size={25} style={styles.iconcolor} />
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     );
 
     return (
-        <View style={style.container}>
-            <TouchableOpacity style={style.AddButton} onPress={() => {
+        <View style={styles.bodyContainer}>
+            <TouchableOpacity style={styles.addRounded} onPress={() => {
                 navigation.navigate('AddGroup');
             }}>
-                <Text style={style.AddButtonText}>Add New Group</Text>
+                <Ionicons name="add-outline" size={45} color="#fff" />
             </TouchableOpacity>
             <FlatList
                 data={groupidList}
@@ -75,40 +79,3 @@ export default function CoursesGroup({ navigation }) {
         </View>
     );
 }
-
-const style = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    GroupIdBox: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        backgroundColor: '#4C4B49',
-        padding: 15,
-        marginVertical: 4,
-        marginHorizontal: 12,
-        borderRadius: 5,
-    },
-    GroupIdBoxText: {
-        textAlign: 'center',
-        color: '#ffffff',
-    },
-    EditingButtons: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '20%',
-    },
-    AddButton: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        marginTop: 4,
-    },
-    AddButtonText: {
-        backgroundColor: '#4C4B49',
-        textAlign: 'center',
-        fontWeight: 'bold',
-        fontSize: 15,
-        color: '#fff',
-        padding: 8,
-    },
-});

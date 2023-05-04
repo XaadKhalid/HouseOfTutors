@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable prettier/prettier */
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { UpdateGroup, deleteCourseOfGroup, getCourseOfGroup } from '../../Api/ApiForAdmin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
+import styles from '../../Assests/Styling';
 
 export default function EditGroup({ navigation, route }) {
     const { groupid } = route.params;
@@ -62,24 +63,26 @@ export default function EditGroup({ navigation, route }) {
     };
 
     const renderCoursesList = ({ item }) => (
-        <View style={style.itembox}>
-            <Text style={style.itemText}>{item}</Text>
-            <TouchableOpacity onPress={() => {
-                let tempArray = [...courseslist.filter(course => course !== item)];
-                setCoursesList(tempArray);
-                deleteCourseOfGroup(groupid, item);
-                console.log('data in couslist is ', courseslist);
-                Alert.alert('Course Removed From Group');
-            }}>
-                <MaterialCommunityIcons name="delete" size={30} color="#FFF" />
-            </TouchableOpacity>
+        <View style={styles.containerbox}>
+            <View style={styles.itembox}>
+                <Text style={styles.itemText}>{item}</Text>
+                <TouchableOpacity onPress={() => {
+                    let tempArray = [...courseslist.filter(course => course !== item)];
+                    setCoursesList(tempArray);
+                    deleteCourseOfGroup(groupid, item);
+                    console.log('data in couslist is ', courseslist);
+                    Alert.alert('Course Removed From Group');
+                }}>
+                    <MaterialCommunityIcons name="delete" size={30} style={styles.iconcolor} />
+                </TouchableOpacity>
+            </View>
         </View>
     );
 
     return (
-        <View>
-            <View style={style.AddButtonBox}>
-                <Text style={style.ButtonText}>Press Right Button to add more courses to a Group</Text>
+        <View style={styles.bodyContainer}>
+            <View style={styles.addtoListbox}>
+                <Text style={styles.addtoListtxt}>Press Right Button to add more courses to a Group</Text>
                 <TouchableOpacity onPress={() => {
                     navigation.navigate('CoursesForGroup');
                 }}>
@@ -101,51 +104,12 @@ export default function EditGroup({ navigation, route }) {
                             console.log(e);
                         }
                     }}
-                        style={style.SubmitButton}
+                        style={styles.SubmitButton}
                     >
-                        <Text style={style.SubbmitText}>Update Group</Text>
+                        <Text style={styles.SubbmitText}>Update Group</Text>
                     </TouchableOpacity>
                 </View>
             )}
         </View>
     );
 }
-
-const style = StyleSheet.create({
-    AddButtonBox: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginRight: 5,
-    },
-    ButtonText: {
-        marginTop: 15,
-        marginLeft: 5,
-    },
-    SubmitButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'green',
-        padding: 12,
-        borderWidth: 1,
-        borderColor: 'white',
-        marginHorizontal: 35,
-    },
-    SubbmitText: {
-        textAlign: 'center',
-        color: 'white',
-    },
-    itembox: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        backgroundColor: '#4C4B49',
-        padding: 15,
-        borderRadius: 5,
-        marginVertical: 5,
-        marginHorizontal: 35,
-    },
-    itemText: {
-        textAlign: 'center',
-        color: '#fff',
-    },
-});

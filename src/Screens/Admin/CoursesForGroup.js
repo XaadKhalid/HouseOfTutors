@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable prettier/prettier */
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, TextInput, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import { GetCoursesList } from '../../Api/ApiForAdmin';
+import styles from '../../Assests/Styling';
 
 export default function CoursesForGroup({ navigation }) {
     const [complete_Courses_List, set_Complete_Courses_List] = useState([]);
@@ -62,7 +63,7 @@ export default function CoursesForGroup({ navigation }) {
     };
 
     const renderCoursesList = ({ item }) => (
-        <View style={style.itembox}>
+        <View style={styles.containerbox}>
             <TouchableOpacity onPress={() => {
                 let itemAdded = selectedCourse;
                 itemAdded = [...itemAdded, item.cname];
@@ -73,15 +74,15 @@ export default function CoursesForGroup({ navigation }) {
                 set_Complete_Courses_List(temparray);
                 setflag(true);
             }}>
-                <Text style={style.itemText}>{item.cname}</Text>
+                <Text style={styles.itemText}>{item.cname}</Text>
             </TouchableOpacity>
         </View>
     );
 
     return (
-        <View style={style.container}>
+        <View style={styles.bodyContainer}>
             <View>
-                <TextInput style={style.searchbar}
+                <TextInput style={styles.searchbar}
                     placeholder="Enter course name to filter list"
                     onChangeText={(value) => {
                         if (value !== '') {
@@ -105,27 +106,3 @@ export default function CoursesForGroup({ navigation }) {
         </View>
     );
 }
-
-const style = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    itembox: {
-        backgroundColor: '#4C4B49',
-        padding: 15,
-        borderRadius: 5,
-        marginVertical: 5,
-        marginHorizontal: 35,
-    },
-    itemText: {
-        textAlign: 'center',
-        color: '#fff',
-    },
-    searchbar: {
-        padding: 5,
-        borderWidth: 1.5,
-        borderColor: 'green',
-        marginTop: 7,
-        marginHorizontal: 35,
-    },
-});

@@ -11,7 +11,13 @@ export default function T_NestsedStack() {
     return (
         <Stack.Navigator
             initialRouteName="EnlistedCourses"
-            screenOptions={{ headerTitleAlign: 'center' }}>
+            screenOptions={{
+                headerTitleAlign: 'center',
+                headerTintColor: '#FFB22F',
+                headerStyle: {
+                    backgroundColor: '#282634',
+                },
+            }}>
             <Stack.Screen name="EnlistedCourses" component={EnlistedCourses} />
             <Stack.Screen name="EnlistCourses" component={EnlistCourses} />
             <Stack.Screen name="AddCourse" component={AddCourse} />

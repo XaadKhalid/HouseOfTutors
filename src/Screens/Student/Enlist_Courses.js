@@ -80,11 +80,6 @@ export default function Enlist_Courses({ route, navigation }) {
 
     return (
         <View>
-            <View style={styles.heading}>
-                <Text style={styles.h_text}>CCode</Text>
-                <Text style={styles.h_text}>CName</Text>
-                <Text style={styles.h_text}>Course Addition</Text>
-            </View>
             <View style={styles.FList_BM}>
                 <FlatList
                     data={completeCourseList}
@@ -125,26 +120,6 @@ const styles = StyleSheet.create({
     },
     text: {
         color: '#ffffff',
-        fontWeight: 'bold',
-        marginBottom: 5,
-        textAlign: 'center',
-    },
-    heading: {
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        alignItems: 'center',
-        //backgroundColor: 'rgba(40,38,52,0.9)',
-        marginHorizontal: 10,
-        paddingVertical: 15,
-        marginTop: 10,
-        //borderWidth: 4,
-        borderRightWidth: 0,
-        borderLeftWidth: 0,
-        //borderColor: '#FFB22F',
-    },
-    h_text: {
-        //color: '#ffffff',
-        fontWeight: 'bold',
         marginBottom: 5,
         textAlign: 'center',
     },
@@ -160,6 +135,6 @@ const styles = StyleSheet.create({
         fontWeight: '600',
     },
     FList_BM: {
-        marginBottom: 70,
+        marginBottom: 3,
     },
 });

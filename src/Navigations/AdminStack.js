@@ -18,7 +18,13 @@ const Stack = createNativeStackNavigator();
 export default function AdminStack() {
     return (
         <Stack.Navigator initialRouteName="Dashboard"
-            screenOptions={{ headerTitleAlign: 'center' }}
+            screenOptions={{
+                headerTitleAlign: 'center',
+                headerTintColor: '#FFB22F',
+                headerStyle: {
+                    backgroundColor: '#282634',
+                },
+            }}
         >
             <Stack.Screen name="Dashboard" component={Dashboard}
                 options={{ headerBackVisible: false }}

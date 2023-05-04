@@ -94,7 +94,7 @@ export default function Enlisted_Courses({ navigation }) {
     };
 
     return (
-        <View>
+        <View style={{ backgroundColor: '#FFFFFF', flex: 1 }}>
             <View style={{ flexDirection: 'row' }}>
                 <Pressable style={{ marginRight: 60, marginLeft: 8 }} onPress={() => {
                     navigation.navigate('Enlist_Courses', { selectedCourse });
@@ -122,7 +122,7 @@ export default function Enlisted_Courses({ navigation }) {
                                     <Text style={styles.btn_text}>Find Tutor</Text>
                                 </Pressable>
                             </View>
-                            <View>
+                            {/* <View>
                                 <Pressable
                                     style={styles.btn}
                                     onPress={() => {
@@ -130,7 +130,7 @@ export default function Enlisted_Courses({ navigation }) {
                                     }}>
                                     <Text style={styles.btn_text}>Find BTutor</Text>
                                 </Pressable>
-                            </View>
+                            </View> */}
                             <View>
                                 <Dialog.Container visible={visible}>
                                     <Dialog.Title>Slots Confirmation</Dialog.Title>
@@ -154,7 +154,7 @@ export default function Enlisted_Courses({ navigation }) {
 const styles = StyleSheet.create({
     modal: {
         flexDirection: 'row',
-        justifyContent: 'space-evenly',
+        justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: 'rgba(40,38,52,0.8)',
         marginHorizontal: 10,
@@ -164,8 +164,6 @@ const styles = StyleSheet.create({
     },
     text: {
         color: '#ffffff',
-        fontWeight: 'bold',
-        marginBottom: 5,
         textAlign: 'center',
     },
     id_mg: {

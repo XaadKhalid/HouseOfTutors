@@ -33,7 +33,7 @@ export default function AllCourses() {
                 <TouchableOpacity onPress={() => {
                     let tempArray = [...courseslist.filter(course => course !== item)];
                     setCoursesList(tempArray);
-                    Alert.alert('Course Removed From Group');
+                    Alert.alert('Course Removed From List');
                 }}>
                     <MaterialCommunityIcons name="delete" size={30} color="#FFF" />
                 </TouchableOpacity>
@@ -42,7 +42,7 @@ export default function AllCourses() {
     );
 
     return (
-        <View>
+        <View style={styles.bodyContainer}>
             <FlatList
                 data={courseslist}
                 renderItem={renderCourses} />

@@ -21,11 +21,11 @@ export default function T_Bottom_Navigator({ }) {
             screenOptions={({ navigation }) => ({
                 headerRight: () => <Notification_Icon navigation={navigation} />,
                 headerTitleAlign: 'center',
+                headerTintColor: '#FFB22F',
+                headerStyle: { backgroundColor: '#282634' },
                 tabBarLabelStyle: {
-                    color: '#ffffff',
-                    fontWeight: 'bold',
+                    color: '#FFFFFF',
                 },
-                headerStyle: { backgroundColor: '#FFB22F' },
                 tabBarInactiveBackgroundColor: '#282634',
                 tabBarActiveBackgroundColor: '#677567',
             })}>
@@ -33,7 +33,7 @@ export default function T_Bottom_Navigator({ }) {
                 name="Schedule"
                 component={Notification_Stack}
                 options={{
-                    headerTitle: 'Set/Update Schedule',
+                    headerTitle: 'Tutor Schedule',
                     tabBarIcon: () => {
                         return <Icons name={'calendar-clock'} size={24} color="#FFB22F" />;
                     },

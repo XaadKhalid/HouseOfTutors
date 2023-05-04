@@ -41,8 +41,8 @@ export default function Enrollements() {
                 }}>
                     <FontAwesome
                         name={item.flag ? 'arrow-circle-o-up' : 'arrow-circle-o-down'}
-                        size={30}
-                        color="#FFF"
+                        size={25}
+                        color="gold"
                     />
                 </TouchableOpacity>
             </View>

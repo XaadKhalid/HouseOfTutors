@@ -3,7 +3,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon from 'react-native-vector-icons/Feather';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/Foundation';
 import Icon3 from 'react-native-vector-icons/FontAwesome5';
 import S_NestsedStack from './S_NestsedStack';
@@ -19,13 +19,12 @@ export default function S_Bottom_Navigator() {
     <Tab.Navigator
       screenOptions={{
         headerTitleAlign: 'center',
+        headerTintColor: '#FFB22F',
         tabBarLabelStyle: {
-          color: '#ffffff',
-          fontWeight: 'bold',
+          color: '#FFFFFF',
+          fontSize: 12,
         },
-        headerStyle: {
-          backgroundColor: '#FFB22F',
-        },
+        headerStyle: { backgroundColor: '#282634' },
         tabBarInactiveBackgroundColor: '#282634',
         tabBarActiveBackgroundColor: '#677567',
       }}>
@@ -33,19 +32,19 @@ export default function S_Bottom_Navigator() {
         name="Schedule"
         component={S_Shedule}
         options={{
-          headerTitle: 'Set/Update Schedule',
+          headerTitle: 'Student Schedule',
           tabBarIcon: () => {
             return <Icons name={'calendar-clock'} size={24} color="#FFB22F" />;
           },
         }}
       />
       <Tab.Screen
-        name="Tutor"
+        name="Find Tutor"
         component={S_NestsedStack}
         options={{
           headerShown: false,
           tabBarIcon: () => {
-            return <Icon name={'book-open'} size={24} color="#FFB22F" />;
+            return <MaterialIcons name={'person-search'} size={32} color="#FFB22F" />;
           },
         }}
       />
@@ -70,7 +69,7 @@ export default function S_Bottom_Navigator() {
         }}
       />
       <Tab.Screen
-        name="Today"
+        name="Today Class"
         component={S_TodayClass}
         options={{
           headerTitle: 'Today Classes',

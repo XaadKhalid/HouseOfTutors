@@ -1,9 +1,10 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable prettier/prettier */
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { GetAllTutorsData } from '../../Api/ApiForAdmin';
+import styles from '../../Assests/Styling';
 
 export default function AllTutors() {
     const [allTutors, setAlltutors] = useState([]);
@@ -27,40 +28,40 @@ export default function AllTutors() {
     };
 
     const renderTutors = ({ item, index }) => (
-        <View style={style.container}>
-            <View style={style.itembox}>
-                <Text style={style.itemText}>{item.tname}</Text>
+        <View style={styles.containerbox}>
+            <View style={styles.itembox}>
+                <Text style={styles.itemText}>{item.tname}</Text>
                 <TouchableOpacity onPress={() => {
                     toggleFlag(index);
                 }}>
                     <FontAwesome
                         name={item.flag ? 'arrow-circle-o-up' : 'arrow-circle-o-down'}
-                        size={30}
-                        color="#FFF"
+                        size={25}
+                        style={styles.iconcolor}
                     />
                 </TouchableOpacity>
             </View>
             {item.flag && (
-                <View style={style.detailsbox}>
-                    <View style={style.itembox}>
-                        <Text style={style.itemText}>Email :</Text>
-                        <Text style={style.itemText}>{item.temail}</Text>
+                <View style={styles.detailsbox}>
+                    <View style={styles.itembox}>
+                        <Text style={styles.itemText}>Email :</Text>
+                        <Text style={styles.itemText}>{item.temail}</Text>
                     </View>
-                    <View style={style.itembox}>
-                        <Text style={style.itemText}>Semester :</Text>
-                        <Text style={style.itemText}>{item.semester}</Text>
+                    <View style={styles.itembox}>
+                        <Text style={styles.itemText}>Semester :</Text>
+                        <Text style={styles.itemText}>{item.semester}</Text>
                     </View>
-                    <View style={style.itembox}>
-                        <Text style={style.itemText}>Cgpa :</Text>
-                        <Text style={style.itemText}>{item.cgpa}</Text>
+                    <View style={styles.itembox}>
+                        <Text style={styles.itemText}>Cgpa :</Text>
+                        <Text style={styles.itemText}>{item.cgpa}</Text>
                     </View>
-                    <View style={style.itembox}>
-                        <Text style={style.itemText}>Contact :</Text>
-                        <Text style={style.itemText}>{item.contact}</Text>
+                    <View style={styles.itembox}>
+                        <Text style={styles.itemText}>Contact :</Text>
+                        <Text style={styles.itemText}>{item.contact}</Text>
                     </View>
-                    <View style={style.itembox}>
-                        <Text style={style.itemText}>Gender :</Text>
-                        <Text style={style.itemText}>{item.gender}</Text>
+                    <View style={styles.itembox}>
+                        <Text style={styles.itemText}>Gender :</Text>
+                        <Text style={styles.itemText}>{item.gender}</Text>
                     </View>
                 </View>
             )}
@@ -68,7 +69,7 @@ export default function AllTutors() {
     );
 
     return (
-        <View>
+        <View style={styles.bodyContainer}>
             <FlatList
                 data={allTutors}
                 renderItem={renderTutors}
@@ -76,25 +77,3 @@ export default function AllTutors() {
         </View>
     );
 }
-
-const style = StyleSheet.create({
-    container: {
-        backgroundColor: '#4C4B49',
-        padding: 15,
-        borderRadius: 5,
-        marginVertical: 5,
-        marginHorizontal: 20,
-    },
-    itembox: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    itemText: {
-        textAlign: 'center',
-        color: '#fff',
-    },
-    detailsbox: {
-        flexDirection: 'column',
-        alignContent: 'flex-start',
-    },
-});
