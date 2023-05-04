@@ -42,7 +42,7 @@ export default function Enrollements() {
                     <FontAwesome
                         name={item.flag ? 'arrow-circle-o-up' : 'arrow-circle-o-down'}
                         size={25}
-                        color="gold"
+                        style={styles.iconcolor}
                     />
                 </TouchableOpacity>
             </View>
@@ -76,7 +76,7 @@ export default function Enrollements() {
     );
 
     return (
-        <View>
+        <View style={styles.bodyContainer}>
             <FlatList
                 data={enrollements}
                 renderItem={renderEnrollements} />

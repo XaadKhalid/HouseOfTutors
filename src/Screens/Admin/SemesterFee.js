@@ -48,13 +48,13 @@ export default function SemesterFee({ navigation }) {
                             placeholder="Enter Semester No"
                             keyboardType="numeric"
                             textAlign="center"
-                            value={semester}
+                            value={semester !== 0 ? String(semester) : ''}
                             onChangeText={(value) => {
                                 setSemester(value);
                             }} />
                         <TextInput
                             placeholder="Enter Fees"
-                            value={fee}
+                            value={fee !== 0 ? String(fee) : ''}
                             textAlign="center"
                             keyboardType="numeric"
                             style={styles.inputsChild}
