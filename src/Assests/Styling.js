@@ -103,6 +103,18 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         width: '48%',
     },
+    button: {
+        backgroundColor: '#FFB22F',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+        marginHorizontal: 35,
+    },
+    buttonText: {
+        color: '#000000',
+        fontStyle: 'italic',
+        textAlign: 'center',
+    },
 });
 
 export default styles;

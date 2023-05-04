@@ -1,189 +1,85 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, Alert, Pressable } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View, Text, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import styles from '../../Assests/Styling';
+import { getgmailFormAsync } from '../../AsyncStorage/GlobalData';
+import { GetWithParams } from '../../Api/API_Types';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function T_TodayClass() {
-  const [todayClassesList, setTodayClassesList] = useState([]);
-  const [stdEmail, setStdEmail] = useState('');
+
+  const [classesList, setClassesList] = useState([]);
 
   useEffect(() => {
-    getgmail();
+    getClasses();
   }, []);
 
-  useEffect(() => {
-    if (stdEmail !== '') {
-      get_today_classes();
-    }
-  }, [stdEmail]);
-
-  useEffect(() => {
-    if (todayClassesList.length > 0) {
-      console.log('updated list is ', todayClassesList);
-    }
-  }, [todayClassesList]);
-
-  const getgmail = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('std_email');
-      if (jsonValue != null) {
-        setStdEmail(jsonValue);
-        console.log(
-          'Getting the email address of student from Asyncstorage => ',
-          jsonValue,
-        );
-        console.log(
-          '----------------------------------------------------------------------------',
-        );
-      } else {
-        console.log('No gmail found in Asyncstorage');
-        console.log(
-          '----------------------------------------------------------------------------',
-        );
+  const getClasses = async () => {
+    let gmail = '';
+    let asyncresponse = await getgmailFormAsync();
+    if (asyncresponse !== null) {
+      gmail = asyncresponse;
+      const paramsObject = {
+        controller: 'Tutor',
+        action: 'Get_Today_Classes',
+        params: { temail: gmail },
+      };
+      let response = await GetWithParams(paramsObject);
+      if (response !== 'No class are schedule for today' && response !== 'No Record Found in the Enrollment') {
+        setClassesList(response);
+        console.log('i find the records');
       }
-    } catch (e) {
-      console.log(e);
-      console.log(
-        '----------------------------------------------------------------------------',
-      );
+      else {
+        setClassesList(null);
+        console.log('i m not able to find the records');
+      }
     }
   };
 
-  const get_today_classes = async () => {
-    try {
-      const response = await fetch(
-        `http://192.168.43.231/HouseOfTutors/api/Tutor/Get_Today_Classes?temail=${stdEmail}`,
-      );
-      const data = await response.json();
-      console.log('Result from get_today_classes API =>', data);
-      console.log(
-        '----------------------------------------------------------------------------',
-      );
-      if (
-        data !== 'No class are schedule for today' &&
-        data !== 'No Record Found in the Enrollment'
-      ) {
-        setTodayClassesList(data);
-      } else {
-        Alert.alert('No class are schedule for today');
-        console.log(
-          '----------------------------------------------------------------------------',
-        );
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const renderItem = ({ item }) => (
-    <View style={styles.modal}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-evenly',
-        }}>
-        <Text style={styles.text}>{item.cname}</Text>
-        <Text style={styles.text}>{item.sname}</Text>
-        <Text style={styles.text}>{item.slotindexes.toString()}</Text>
+  const renderclasses = ({ item, index }) => (
+    <View key={index} style={styles.containerbox}>
+      <View style={styles.itembox}>
+        <Text style={styles.itemText}>Course: </Text>
+        <Text style={styles.itemText}>{item.cname}</Text>
       </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginHorizontal: 42,
-        }}>
-        <Pressable
-          style={styles.btn}
-          onPress={() => {
-            console.log(
-              'Take is presseed!'
-            );
-            console.log(
-              '----------------------------------------------------------------------------',
-            );
-          }}>
-          <Text style={styles.btn_text}>Take</Text>
-        </Pressable>
-        <Pressable
-          style={styles.btn}
-          onPress={() => {
-            console.log(
-              'ReSchedule is presseed!'
-            );
-            console.log(
-              '----------------------------------------------------------------------------',
-            );
-          }}>
-          <Text style={styles.btn_text}>ReSchedule</Text>
-        </Pressable>
+      <View style={styles.itembox}>
+        <Text style={styles.itemText}>Student: </Text>
+        <Text style={styles.itemText}>{item.sname}</Text>
+      </View>
+      <View style={styles.itembox}>
+        <Text style={styles.itemText}>Time: </Text>
+        <Text style={styles.itemText}>{item.slotindexes}</Text>
+      </View>
+      <View style={styles.itembox}>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Take Class</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>ReSchedule Class</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
 
   return (
-    <View>
-      <View style={styles.heading}>
-        <Text style={styles.h_text}>CName</Text>
-        <Text style={styles.h_text}>Student</Text>
-        <Text style={styles.h_text}>Time Slot</Text>
-      </View>
-      {todayClassesList && (
-        <View style={styles.FList_BM}>
+    <View style={styles.bodyContainer}>
+      {classesList ? (
+        <View>
           <FlatList
-            data={todayClassesList}
-            renderItem={renderItem}
-          />
+            data={classesList}
+            renderItem={renderclasses} />
+        </View>
+      ) : (
+        <View style={styles.noDataContainer}>
+          <Text style={styles.noDataText}>
+            You are not having any class for Today{'\n'}
+            <SimpleLineIcons name={'emotsmile'} size={50} color="#000000" />
+            <SimpleLineIcons name={'emotsmile'} size={50} color="#000000" />
+            <SimpleLineIcons name={'emotsmile'} size={50} color="#000000" />
+          </Text>
         </View>
       )}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  modal: {
-    justifyContent: 'center',
-    backgroundColor: '#4C4B49',
-    marginHorizontal: 10,
-    paddingVertical: 15,
-    borderRadius: 5,
-    marginTop: 10,
-    borderColor: '#ffffff',
-    borderWidth: 2,
-  },
-  text: {
-    color: '#ffffff',
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  heading: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#ffffff',
-    marginHorizontal: 10,
-    paddingVertical: 15,
-    marginTop: 10,
-  },
-  h_text: {
-    color: '#000000',
-    fontWeight: 'bold',
-    marginHorizontal: 20,
-    textAlign: 'center',
-  },
-  btn: {
-    backgroundColor: '#FFB22F',
-    elevation: 10,
-    paddingHorizontal: 20,
-    paddingVertical: 5,
-    borderRadius: 5,
-  },
-  btn_text: {
-    color: '#000000',
-    fontWeight: '600',
-  },
-  FList_BM: {
-    marginBottom: 70,
-  },
-});
