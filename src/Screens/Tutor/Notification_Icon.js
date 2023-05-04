@@ -18,7 +18,7 @@ export default function Notification_Icon({ navigation }) {
             if (tEmail !== '') {
                 get_notifications();
             }
-        }, 300000);
+        }, 3000);
         return () => clearInterval(intervalId);
     }, [tEmail]);
 
@@ -61,7 +61,7 @@ export default function Notification_Icon({ navigation }) {
         <View>
             <View style={style.main_container}>
                 <TouchableOpacity onPress={() => navigation.navigate('Notification_Details')}>
-                    <Ionicons name="notifications" size={30} color="black" />
+                    <Ionicons name="notifications" size={30} color="white" />
                 </TouchableOpacity>
                 {counter > 0 && (
                     <View style={style.bage_container}>

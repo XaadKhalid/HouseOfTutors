@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
         color: '#ffffff',
     },
     noDataContainer: {
-        flexDirection: 'row',
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },

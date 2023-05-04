@@ -6,6 +6,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { GetWithParams } from '../../Api/API_Types';
 import styles from '../../Assests/Styling';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
 export default function S_Learning() {
   const [learningCourses, SetLearningCourses] = useState([]);
@@ -44,11 +45,11 @@ export default function S_Learning() {
       params: { email: stdEmail },
     };
     let response = await GetWithParams(paramsObject);
-    if (response !== 'No Courses found in enrollement Table') {
-      SetLearningCourses(response);
+    if (response.includes('No Courses found in enrollement Table')) {
+      SetLearningCourses(null);
     }
     else {
-      SetLearningCourses(null);
+      SetLearningCourses(response);
     }
   };
 
@@ -94,7 +95,7 @@ export default function S_Learning() {
   );
 
   return (
-    <View>
+    <View style={styles.bodyContainer}>
       {learningCourses ? (
         <View>
           <FlatList
@@ -103,7 +104,12 @@ export default function S_Learning() {
         </View>
       ) : (
         <View style={styles.noDataContainer}>
-          <Text style={styles.noDataText}>You are not learning any course from Tutors LAMO!</Text>
+          <Text style={styles.noDataText}>
+            You are not learning any course from Tutors {'\n'}
+            <SimpleLineIcons name={'emotsmile'} size={50} color="#000000" />
+            <SimpleLineIcons name={'emotsmile'} size={50} color="#000000" />
+            <SimpleLineIcons name={'emotsmile'} size={50} color="#000000" />
+          </Text>
         </View>
       )}
     </View>
