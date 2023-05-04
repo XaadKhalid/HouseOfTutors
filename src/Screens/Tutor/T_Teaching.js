@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable prettier/prettier */
-import { Text, View, TouchableOpacity, FlatList } from 'react-native';
+import { Text, View, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { GetWithParams } from '../../Api/API_Types';
@@ -52,49 +52,33 @@ export default function T_Teaching() {
     }
   };
 
-  const toggleFlag = index => {
-    const temparray = [...teachingCourses];
-    temparray[index].flag = !temparray[index].flag;
-    SetteachingCourses(temparray);
-  };
-
   const renderteachingCourses = ({ item, index }) => (
     <View key={index} style={styles.containerbox}>
-      <View style={styles.itembox}>
-        <Text style={styles.itemText}>{item.cname}</Text>
-        <TouchableOpacity onPress={() => {
-          toggleFlag(index);
-        }}>
-          <FontAwesome
-            name={item.flag ? 'arrow-circle-o-up' : 'arrow-circle-o-down'}
-            size={25}
-            color="gold"
-          />
-        </TouchableOpacity>
-      </View>
-      {item.flag && (
-        <View style={styles.detailsbox}>
-          <View style={styles.itembox}>
-            <Text style={styles.itemText}>Student :</Text>
-            <Text style={styles.itemText}>{item.sname}</Text>
-          </View>
-          <View style={styles.itembox}>
-            <Text style={styles.itemText}>Status :</Text>
-            <Text style={styles.itemText}>{item.status}</Text>
-          </View>
-          <View style={styles.itembox}>
-            <Text style={styles.itemText}>Class Time :</Text>
-            {item.timeslots.map((slot) => (
-              <Text key={slot} style={styles.itemText}>{slot}</Text>
-            ))}
-          </View>
+      <View style={styles.detailsbox}>
+        <View style={styles.itembox}>
+          <Text style={styles.itemText}>Course :</Text>
+          <Text style={styles.itemText}>{item.cname}</Text>
         </View>
-      )}
+        <View style={styles.itembox}>
+          <Text style={styles.itemText}>Student :</Text>
+          <Text style={styles.itemText}>{item.sname}</Text>
+        </View>
+        <View style={styles.itembox}>
+          <Text style={styles.itemText}>Status :</Text>
+          <Text style={styles.itemText}>{item.status}</Text>
+        </View>
+        <View style={styles.itembox}>
+          <Text style={styles.itemText}>Class Time :</Text>
+          {item.timeslots.map((slot) => (
+            <Text key={slot} style={styles.itemText}>{slot}</Text>
+          ))}
+        </View>
+      </View>
     </View>
   );
 
   return (
-    <View>
+    <View style={styles.bodyContainer}>
       {teachingCourses ? (
         <View>
           <FlatList
