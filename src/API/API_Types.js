@@ -3,6 +3,8 @@ const { apiString } = require('./API_String');
 
 const paramsToString = (params) => {
     const keys = Object.keys(params);
+    console.log('params keys are ', keys);
+    console.log();
     const totalKeys = keys.length;
     let paramstring = '';
     for (let i = 0; i < totalKeys; i++) {
@@ -19,6 +21,7 @@ const paramsToString = (params) => {
 
 const GetWithParams = async (paramsObject) => {
     console.log('GetWithParams is called With data ', paramsObject);
+    console.log();
     let paramstring = paramsToString(paramsObject.params);
     try {
         const response = await fetch(
@@ -26,7 +29,7 @@ const GetWithParams = async (paramsObject) => {
         );
         const data = await response.json();
         console.log('Result from ' + paramsObject.action + 'API: ', data);
-        console.log('----------------------------------------------------------------------------');
+        console.log();
         return data;
     } catch (error) {
         console.log(error);
@@ -35,13 +38,14 @@ const GetWithParams = async (paramsObject) => {
 
 const GetWithoutParams = async (paramsObject) => {
     console.log('GetWithoutParams is called With data ', paramsObject);
+    console.log();
     try {
         const response = await fetch(
             `${apiString}/${paramsObject.controller}/${paramsObject.action}`
         );
         const data = await response.json();
         console.log('Result from ' + paramsObject.action + 'API: ', data);
-        console.log('----------------------------------------------------------------------------');
+        console.log();
         return data;
     } catch (error) {
         console.log(error);
@@ -50,7 +54,8 @@ const GetWithoutParams = async (paramsObject) => {
 
 const PostWithParams = async (paramsObject) => {
     console.log('PostWithParams is called With data ', paramsObject);
-    let paramstring = paramsToString(paramsObject.param);
+    console.log();
+    let paramstring = paramsToString(paramsObject.params);
     try {
         const response = await fetch(
             `${apiString}/${paramsObject.controller}/${paramsObject.action}?${paramstring}`, {
@@ -63,7 +68,7 @@ const PostWithParams = async (paramsObject) => {
         );
         const data = await response.json();
         console.log('Result from ' + paramsObject.action + 'API: ', data);
-        console.log('----------------------------------------------------------------------------');
+        console.log();
         return data;
     } catch (error) {
         console.log(error);
@@ -72,6 +77,7 @@ const PostWithParams = async (paramsObject) => {
 
 const PostWithObject = async (paramsObject) => {
     console.log('PostWithObject is called With data ', paramsObject);
+    console.log();
     try {
         const response = await fetch(
             `${apiString}/${paramsObject.controller}/${paramsObject.action}`, {
@@ -84,7 +90,7 @@ const PostWithObject = async (paramsObject) => {
         );
         const data = await response.json();
         console.log('Result from ' + paramsObject.action + 'API: ', data);
-        console.log('----------------------------------------------------------------------------');
+        console.log();
         return data;
     } catch (error) {
         console.log(error);

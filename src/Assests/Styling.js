@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 5,
         marginVertical: 5,
+        elevation: 3,
     },
     itembox: {
         flexDirection: 'row',

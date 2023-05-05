@@ -3,7 +3,7 @@ import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import styles from '../../Assests/Styling';
 import { getgmailFormAsync } from '../../AsyncStorage/GlobalData';
-import { GetWithParams } from '../../Api/API_Types';
+import { GetWithParams, PostWithParams } from '../../Api/API_Types';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
 export default function T_TodayClass() {
@@ -35,16 +35,36 @@ export default function T_TodayClass() {
     }
   };
 
+  const takeclass = async (semail, temail, cid, slot) => {
+    const paramsObject = {
+      controller: 'Tutor',
+      action: 'Take_Class',
+      params: {
+        sname: semail,
+        tname: temail,
+        cname: cid,
+        slot: slot,
+      },
+    };
+    let response = await PostWithParams(paramsObject);
+    if (response !== null) {
+      console.log('Class Data has been saved to ClassReport Table');
+      console.log();
+    }
+  };
+
   const toggleFlag = (index, selectedFlag) => {
     setClassesList((prev) =>
       prev.map((item, i) => {
         if (i === index) {
-          if (selectedFlag === 'Take') {
-            console.log('i m ', selectedFlag);
+          if (selectedFlag === 'TakeClass') {
+            console.log(selectedFlag, 'Button is Pressed');
+            console.log();
             return { ...item, takenflag: true, btnflag: false };
           }
           else {
-            console.log('i m ', selectedFlag);
+            console.log(selectedFlag, 'Button is Pressed');
+            console.log();
             return { ...item, resflag: true, btnflag: false };
           }
         }
@@ -52,7 +72,6 @@ export default function T_TodayClass() {
       })
     );
   };
-
 
   const renderclasses = ({ item, index }) => (
     <View key={index} style={styles.containerbox}>
@@ -77,13 +96,14 @@ export default function T_TodayClass() {
       {item.btnflag && (
         <View style={styles.itembox}>
           <TouchableOpacity style={styles.button} onPressIn={() => {
-            let selectedFlag = 'Take';
+            let selectedFlag = 'TakeClass';
             toggleFlag(index, selectedFlag);
+            takeclass(item.sname, item.tname, item.cname, item.slotindexes[0]);
           }}>
             <Text style={styles.buttonText}>Take Class</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={() => {
-            let selectedFlag = 'ReTake';
+            let selectedFlag = 'ReScheduleClass';
             toggleFlag(index, selectedFlag);
           }}>
             <Text style={styles.buttonText}>ReSchedule Class</Text>

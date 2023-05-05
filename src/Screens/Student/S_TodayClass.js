@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { View, Text, FlatList } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import styles from '../../Assests/Styling';
 import { getgmailFormAsync } from '../../AsyncStorage/GlobalData';
@@ -50,6 +50,12 @@ export default function S_TodayClass() {
         <Text style={styles.itemText}>Time: </Text>
         <Text style={styles.itemText}>{item.slotindexes}</Text>
       </View>
+      <TouchableOpacity style={styles.button} onPress={() => {
+        console.log('Reschedule is Pressed');
+        console.log();
+      }}>
+        <Text style={styles.buttonText}>ReSchedule Class</Text>
+      </TouchableOpacity>
     </View>
   );
 
