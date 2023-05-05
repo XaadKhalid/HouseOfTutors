@@ -13,13 +13,19 @@ export default function Notification_Icon({ navigation }) {
         getgmail();
     }, []);
 
+    // useEffect(() => {
+    //     const intervalId = setInterval(() => {
+    //         if (tEmail !== '') {
+    //             get_notifications();
+    //         }
+    //     }, 1000);
+    //     return () => clearInterval(intervalId);
+    // }, [tEmail]);
+
     useEffect(() => {
-        const intervalId = setInterval(() => {
-            if (tEmail !== '') {
-                get_notifications();
-            }
-        }, 3000);
-        return () => clearInterval(intervalId);
+        if (tEmail !== '') {
+            get_notifications();
+        }
     }, [tEmail]);
 
 
@@ -77,6 +83,7 @@ const style = StyleSheet.create({
     main_container: {
         flexDirection: 'row',
         alignItems: 'center',
+        marginRight: 5,
     },
     bage_container: {
         backgroundColor: 'red',
@@ -90,6 +97,6 @@ const style = StyleSheet.create({
     },
     txt: {
         color: 'white',
-        fontSize: 13,
+        fontSize: 12,
     },
 });

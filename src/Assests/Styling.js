@@ -108,12 +108,16 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 5,
-        marginHorizontal: 35,
+        marginTop: 5,
     },
     buttonText: {
         color: '#000000',
         fontStyle: 'italic',
         textAlign: 'center',
+    },
+    disabledButton: {
+        backgroundColor: 'lightgrey',
+        opacity: 0.8,
     },
 });
 

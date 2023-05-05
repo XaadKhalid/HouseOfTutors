@@ -1,11 +1,10 @@
 /* eslint-disable prettier/prettier */
-import { View, Text, FlatList } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import styles from '../../Assests/Styling';
 import { getgmailFormAsync } from '../../AsyncStorage/GlobalData';
 import { GetWithParams } from '../../Api/API_Types';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function T_TodayClass() {
 
@@ -27,15 +26,33 @@ export default function T_TodayClass() {
       };
       let response = await GetWithParams(paramsObject);
       if (response !== 'No class are schedule for today' && response !== 'No Record Found in the Enrollment') {
-        setClassesList(response);
-        console.log('i find the records');
+        let updatedresponse = response.map(item => ({ ...item, takenflag: false, resflag: false, btnflag: true }));
+        setClassesList(updatedresponse);
       }
       else {
         setClassesList(null);
-        console.log('i m not able to find the records');
       }
     }
   };
+
+  const toggleFlag = (index, selectedFlag) => {
+    setClassesList((prev) =>
+      prev.map((item, i) => {
+        if (i === index) {
+          if (selectedFlag === 'Take') {
+            console.log('i m ', selectedFlag);
+            return { ...item, takenflag: true, btnflag: false };
+          }
+          else {
+            console.log('i m ', selectedFlag);
+            return { ...item, resflag: true, btnflag: false };
+          }
+        }
+        return item;
+      })
+    );
+  };
+
 
   const renderclasses = ({ item, index }) => (
     <View key={index} style={styles.containerbox}>
@@ -51,14 +68,28 @@ export default function T_TodayClass() {
         <Text style={styles.itemText}>Time: </Text>
         <Text style={styles.itemText}>{item.slotindexes}</Text>
       </View>
-      <View style={styles.itembox}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Take Class</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>ReSchedule Class</Text>
-        </TouchableOpacity>
-      </View>
+      {item.takenflag && (
+        <Text style={styles.itemText}>Class is Already Taken</Text>
+      )}
+      {item.resflag && (
+        <Text style={styles.itemText}>Sorry your Class is ReSchedule</Text>
+      )}
+      {item.btnflag && (
+        <View style={styles.itembox}>
+          <TouchableOpacity style={styles.button} onPressIn={() => {
+            let selectedFlag = 'Take';
+            toggleFlag(index, selectedFlag);
+          }}>
+            <Text style={styles.buttonText}>Take Class</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => {
+            let selectedFlag = 'ReTake';
+            toggleFlag(index, selectedFlag);
+          }}>
+            <Text style={styles.buttonText}>ReSchedule Class</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 
