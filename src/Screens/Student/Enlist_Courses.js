@@ -62,16 +62,16 @@ export default function Enlist_Courses({ route, navigation }) {
     const renderclasses = ({ item, index }) => (
         <View key={index} style={styles.containerbox}>
             <View style={styles.itembox}>
-                <Text style={styles.itemText}>Course Id: </Text>
+                <Text style={styles.itemText}>Course ID: </Text>
                 <Text style={styles.itemText}>{item.cid}</Text>
-            </View>
-            <View style={styles.itembox}>
-                <Text style={styles.itemText}>Course Code: </Text>
-                <Text style={styles.itemText}>{item.ccode}</Text>
             </View>
             <View style={styles.itembox}>
                 <Text style={styles.itemText}>Course Name: </Text>
                 <Text style={styles.itemText}>{item.cname}</Text>
+            </View>
+            <View style={styles.itembox}>
+                <Text style={styles.itemText}>Course Code: </Text>
+                <Text style={styles.itemText}>{item.ccode}</Text>
             </View>
             <TouchableOpacity style={styles.button} onPress={() => {
                 console.log('Add Course is Pressed');

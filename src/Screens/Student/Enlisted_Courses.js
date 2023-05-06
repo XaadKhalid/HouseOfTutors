@@ -10,7 +10,7 @@ import DialogInput from 'react-native-dialog/lib/Input';
 import { useIsFocused } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-export default function S_Fee({ navigation }) {
+export default function Enlisted_Courses({ navigation }) {
 
     const [selectedCourse, setselectedCourse] = useState([]);
     const [visible, setVisible] = useState(false);
@@ -21,11 +21,11 @@ export default function S_Fee({ navigation }) {
 
     useEffect(() => {
         if (isFocused) {
-            getClasses();
+            getEnlistedCourses();
         }
     }, [isFocused]);
 
-    const getClasses = async () => {
+    const getEnlistedCourses = async () => {
         let asyncresponse = await getgmailFormAsync();
         if (asyncresponse !== null) {
             console.log();
@@ -67,6 +67,10 @@ export default function S_Fee({ navigation }) {
             <View style={styles.itembox}>
                 <Text style={styles.itemText}>Course Name: </Text>
                 <Text style={styles.itemText}>{item.cname}</Text>
+            </View>
+            <View style={styles.itembox}>
+                <Text style={styles.itemText}>Course Fee: </Text>
+                <Text style={styles.itemText}>{item.cfee}</Text>
             </View>
             <View style={styles.itembox}>
                 <TouchableOpacity style={styles.button} onPressIn={() => {

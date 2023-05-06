@@ -1,11 +1,15 @@
-/* eslint-disable prettier/prettier */
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react-native/no-inline-styles */
-import { View, Text, StyleSheet, FlatList, Pressable, Alert } from 'react-native';
+/* eslint-disable prettier/prettier */
+import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
+import styles from '../../Assests/Styling';
+import { getgmailFormAsync } from '../../AsyncStorage/GlobalData';
+import { GetWithoutParams } from '../../Api/API_Types';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
 export default function EnlistCourses({ route, navigation }) {
-    const [completeCourseList, setCompleteCourseList] = useState([]);
+
+    const [completeCourseList, setcompleteCourseList] = useState([]);
     const [courseName, setCourseName] = useState('');
     const [addCourseFlag, setAddCourseFlag] = useState(false);
     const { selectedCourse } = route.params;
@@ -21,140 +25,81 @@ export default function EnlistCourses({ route, navigation }) {
         setAddCourseFlag(false);
     }, [addCourseFlag]);
 
-    const getcourses = async () => {
-        try {
-            const response = await fetch(
-                'http://192.168.43.231/HouseOfTutors/api/Student/GetCourses',
-            );
-            const data = await response.json();
-            console.log('Result from Getcourses API => ', data);
-            console.log('----------------------------------------------------------------------------');
-            if (data !== null) {
-                const temparray = data.filter(
-                    (course) => !selectedCourse.find((c) => c.cname === course.cname)
-                );
-                setCompleteCourseList(temparray);
-                console.log('updated length is ', temparray.length);
-            } else {
-                Alert.alert('No Course Found!');
-            }
-        } catch (error) {
-            console.log(error);
-            console.log('----------------------------------------------------------------------------');
-        }
-    };
-
-    const renderCoursesList = ({ item, index }) => (
-        <View key={index} style={styles.modal}>
-            <Text style={styles.text}>{item.ccode}</Text>
-            <Text style={styles.text}>{item.cname}</Text>
-            <View>
-                <Pressable
-                    style={styles.btn}
-                    onPress={() => {
-                        setCourseName(item.cname);
-                        setAddCourseFlag(true);
-                    }}>
-                    <Text style={styles.btn_text}>Add Course</Text>
-                </Pressable>
-            </View>
-        </View>
-    );
-
     const handle_addCourse = () => {
-        console.log('course name is ', courseName);
         navigation.navigate('AddCourse', { courseName });
     };
 
+    const getcourses = async () => {
+        let asyncresponse = await getgmailFormAsync();
+        if (asyncresponse !== null) {
+            const paramsObject = {
+                controller: 'Student',
+                action: 'GetCourses',
+            };
+            let response = await GetWithoutParams(paramsObject);
+            if (response !== null) {
+                if (selectedCourse !== null) {
+                    const temparray = response.filter(
+                        (course) => !selectedCourse.find((c) => c.cname === course.cname)
+                    );
+                    setcompleteCourseList(temparray);
+                    console.log('updated length of total courses is ', temparray.length);
+                    console.log();
+                }
+                else {
+                    setcompleteCourseList(response);
+                    console.log('updated length of total courses is ', response.length);
+                    console.log();
+                }
+            } else {
+                Alert.alert('No Course Found!');
+            }
+        }
+    };
+
+    const renderclasses = ({ item, index }) => (
+        <View key={index} style={styles.containerbox}>
+            <View style={styles.itembox}>
+                <Text style={styles.itemText}>Course Id: </Text>
+                <Text style={styles.itemText}>{item.cid}</Text>
+            </View>
+            <View style={styles.itembox}>
+                <Text style={styles.itemText}>Course Name: </Text>
+                <Text style={styles.itemText}>{item.cname}</Text>
+            </View>
+            <View style={styles.itembox}>
+                <Text style={styles.itemText}>Course Code: </Text>
+                <Text style={styles.itemText}>{item.ccode}</Text>
+            </View>
+            <TouchableOpacity style={styles.button} onPress={() => {
+                console.log('Add Course is Pressed and ', item.cname, 'is passing to add');
+                console.log();
+                setCourseName(item.cname);
+                setAddCourseFlag(true);
+            }}>
+                <Text style={styles.buttonText}>Add Course</Text>
+            </TouchableOpacity>
+        </View>
+    );
+
     return (
-        <View style={styles.main_container}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                <Text
-                    style={{ fontWeight: 'bold', fontSize: 23 }}>
-                    CCode
-                </Text>
-                <Text
-                    style={{ fontWeight: 'bold', fontSize: 23 }}>
-                    CName
-                </Text>
-                <Text
-                    style={{ fontWeight: 'bold', fontSize: 23 }}>
-                    Course Addition
-                </Text>
-            </View>
-            <View style={styles.FList_BM}>
-                <FlatList
-                    data={completeCourseList}
-                    renderItem={renderCoursesList}
-                />
-            </View>
+        <View style={styles.bodyContainer}>
+            {completeCourseList ? (
+                <View>
+                    <FlatList
+                        data={completeCourseList}
+                        renderItem={renderclasses} />
+                </View>
+            ) : (
+                <View style={styles.noDataContainer}>
+                    <Text style={styles.noDataText}>
+                        No course found in courses table{'\n'}
+                        <SimpleLineIcons name={'emotsmile'} size={50} color="#000000" />
+                        <SimpleLineIcons name={'emotsmile'} size={50} color="#000000" />
+                        <SimpleLineIcons name={'emotsmile'} size={50} color="#000000" />
+                    </Text>
+                </View>
+            )}
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    main_container: {
-        padding: 15,
-    },
-    add_Course_btn: {
-        backgroundColor: '#4C4B49',
-        borderRadius: 50 / 2,
-        height: 50,
-        width: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginLeft: 'auto',
-        elevation: 10,
-    },
-    modal: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        backgroundColor: '#4C4B49',
-        marginHorizontal: 10,
-        paddingVertical: 10,
-        paddingHorizontal: 15,
-        borderRadius: 5,
-        marginTop: 10,
-    },
-    text: {
-        color: '#ffffff',
-        fontWeight: 'bold',
-        marginBottom: 5,
-        textAlign: 'center',
-    },
-    crse_bm: {
-        marginBottom: 100,
-    },
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    modalContent: {
-        backgroundColor: '#fff',
-        borderRadius: 10,
-        padding: 20,
-    },
-    inputField: {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginBottom: 10,
-    },
-    btn: {
-        backgroundColor: '#FFB22F',
-        elevation: 10,
-        paddingHorizontal: 30,
-        paddingVertical: 10,
-        borderRadius: 5,
-    },
-    btn_text: {
-        color: '#000000',
-        fontWeight: '600',
-    },
-    FList_BM: {
-        marginBottom: 52,
-    },
-});

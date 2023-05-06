@@ -1,11 +1,12 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable prettier/prettier */
-import { View, Text, Alert, StyleSheet, FlatList, Pressable } from 'react-native';
+import { View, Text, Alert, FlatList, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
-import { IP } from '../../Api/IPAdress_For_API';
+import styles from '../../Assests/Styling';
+import { getgmailFormAsync } from '../../AsyncStorage/GlobalData';
+import { GetWithParams, PostWithObject } from '../../Api/API_Types';
 
 export default function AddCourse({ route, navigation }) {
     const courseName = route.params.courseName;
@@ -13,92 +14,57 @@ export default function AddCourse({ route, navigation }) {
     const [preReqList, setPreReqList] = useState([]);
 
     useEffect(() => {
-        getgmail();
+        getPreReqofCourse();
     }, []);
 
-    useEffect(() => {
-        if (tEmail !== '') {
-            getPreReqofCourse();
-        }
-    }, [tEmail]);
-
-    const getgmail = async () => {
-        try {
-            const jsonValue = await AsyncStorage.getItem('std_email');
-            if (jsonValue != null) {
-                setTEmail(jsonValue);
-                console.log('Getting the email address of student from Asyncstorage => ', jsonValue);
-                console.log('----------------------------------------------------------------------------');
-            } else {
-                console.log('No gmail found in Asyncstorage');
-                console.log('----------------------------------------------------------------------------');
-            }
-        } catch (e) {
-            console.log(e);
-            console.log('----------------------------------------------------------------------------');
-        }
-    };
-
     const getPreReqofCourse = async () => {
-        try {
-            const response = await fetch(
-                `http://${IP}/HouseOfTutors/api/Tutor/Get_PreReq?coursename=${courseName}&temail=${tEmail}`,
-            );
-            const data = await response.json();
-            console.log('Result from get PreReq API: ', data);
-            console.log('----------------------------------------------------------------------------');
-            if (data !== 'Your Grade is already added WRT PreReq Courses') {
-                let objArr = data.map(element => {
-                    return { name: element, grade: '0' };
-                });
-                setPreReqList(objArr);
-                console.log('Updated PreReqList with Grade is ', objArr);
-                console.log('----------------------------------------------------------------------------');
-            } else {
-                Alert.alert(data);
-            }
-        } catch (error) {
-            console.log(error);
-            console.log('----------------------------------------------------------------------------');
+        let gmail = await getgmailFormAsync();
+        if (gmail !== null) {
+            setTEmail(gmail);
         }
-    };
-
-    const options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            cname: courseName,
-            temail: tEmail,
-            courselist: preReqList,
-        }),
+        const paramsObject = {
+            controller: 'Tutor',
+            action: 'Get_PreReq',
+            params: { coursename: courseName, temail: gmail },
+        };
+        let response = await GetWithParams(paramsObject);
+        if (response !== 'Your Grade is already added WRT PreReq Courses') {
+            let objArr = response.map(element => {
+                return { name: element, grade: '0' };
+            });
+            setPreReqList(objArr);
+            console.log('Updated PreReqList with Grade is ', objArr);
+            console.log();
+        }
+        else {
+            Alert.alert(response);
+        }
     };
 
     const CourseEnlist = async () => {
-        try {
-            const response = await fetch(
-                `http://${IP}/HouseOfTutors/api/Tutor/TutorCourseEnlist`, options
-            );
-            const data = await response.json();
-            console.log('Response from Tutor CourseEnlist API => ', data);
-            console.log('----------------------------------------------------------------------------');
-            Alert.alert(data);
+        const paramsObject = {
+            controller: 'Tutor',
+            action: 'TutorCourseEnlist',
+            params: {
+                cname: courseName,
+                temail: tEmail,
+                courselist: preReqList,
+            },
+        };
+        let response = await PostWithObject(paramsObject);
+        if (response !== null) {
+            Alert.alert(response);
             navigation.navigate('EnlistedCourses');
-        } catch (error) {
-            console.log(error);
-            console.log('----------------------------------------------------------------------------');
         }
     };
 
     const renderPreReqList = ({ item, index }) => (
-        <View key={index} style={styles.container}>
-            <View style={styles.coursebox}>
-                <Text style={styles.prereqtext}>{item.name}</Text>
+        <View key={index} style={[styles.containerbox, { paddingVertical: 1 }]}>
+            <View style={styles.itembox}>
+                <Text style={{ color: '#ffffff', marginTop: 18 }}>{item.name}</Text>
                 <Picker
-                    style={{ width: '30%' }}
+                    style={[{ width: '30%' }, styles.itemText]}
                     selectedValue={item.grade}
-                    prompt="Choose your grade"
                     onValueChange={(itemValue) => {
                         const updatedPreReqList = preReqList.map((preReq) =>
                             preReq.name === item.name ? { ...preReq, grade: itemValue } : preReq
@@ -110,58 +76,43 @@ export default function AddCourse({ route, navigation }) {
                     <Picker.Item label="B" value="B" />
                     <Picker.Item label="C" value="C" />
                     <Picker.Item label="D" value="D" />
-                    <Picker.Item label="No Grade Yet" value="0" />
+                    <Picker.Item label="Not Graded" value="0" />
                 </Picker>
             </View>
         </View>
     );
 
+    const checkAllGradesAreZero = (arr) => {
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i].grade === '0' && arr[i].name === courseName) {
+                console.log('i m the course and i dont have any grade so will not allow you to moveon');
+                return false;
+            }
+        }
+        return true;
+    };
+
     return (
-        <View>
-            <Text style={{ textAlign: 'center', fontSize: 20 }}>Grade Selection</Text>
+        <View style={styles.bodyContainer}>
+            <Text style={{ textAlign: 'center' }}>Select your Grades</Text>
             <FlatList
                 data={preReqList}
                 renderItem={renderPreReqList}
             />
-            <Pressable onPress={() => {
+            <TouchableOpacity style={styles.button} onPress={() => {
                 console.log('PreReqList after grade selection is ', preReqList);
-                console.log('----------------------------------------------------------------------------');
-                CourseEnlist();
+                console.log();
+                let flag = checkAllGradesAreZero(preReqList);
+                if (flag) {
+                    CourseEnlist();
+                }
+                else {
+                    console.log('I m empty grade array');
+                    Alert.alert('Grade submission is mandatory for ', courseName);
+                }
             }}>
-                <Text style={styles.button}>Submit Request</Text>
-            </Pressable>
+                <Text style={styles.buttonText}>Submit Grades</Text>
+            </TouchableOpacity>
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    prereqtext: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        color: '#000',
-        marginTop: 18,
-    },
-    container: {
-        alignItems: 'center',
-    },
-    coursebox: {
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        borderWidth: 1,
-        borderColor: '#4C4B49',
-        width: '80%',
-        marginTop: 8,
-    },
-    button: {
-        backgroundColor: '#FFB22F',
-        paddingVertical: 8,
-        borderRadius: 5,
-        textAlign: 'center',
-        width: '40%',
-        color: '#000',
-        elevation: 3,
-        marginLeft: 120,
-        marginTop: 10,
-        fontWeight: 'bold',
-    },
-});

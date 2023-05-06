@@ -27,11 +27,9 @@ export default function S_TodayClass() {
       let response = await GetWithParams(paramsObject);
       if (response !== 'No class are schedule for today' && response !== 'No Record Found in the Enrollment') {
         setClassesList(response);
-        console.log('i find the records');
       }
       else {
         setClassesList(null);
-        console.log('i m not able to find the records');
       }
     }
   };

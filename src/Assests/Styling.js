@@ -14,6 +14,8 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginVertical: 5,
         elevation: 3,
+        borderBottomWidth: 3,
+        borderColor: 'gold',
     },
     itembox: {
         flexDirection: 'row',
