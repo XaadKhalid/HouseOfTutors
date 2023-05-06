@@ -1,19 +1,21 @@
-/* eslint-disable prettier/prettier */
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react-native/no-inline-styles */
-import { View, Text, StyleSheet, FlatList, Pressable, Alert } from 'react-native';
-import React, { useState, useEffect } from 'react';
+/* eslint-disable prettier/prettier */
+import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import styles from '../../Assests/Styling';
+import { GetWithParams, PostWithObject } from '../../Api/API_Types';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import CheckBox from '@react-native-community/checkbox';
 
 export default function Finding_Tutor({ route }) {
-    const [tutorsList, setTutorsList] = useState([]);
-    const [tEmail, setTEmail] = useState('');
+
+    const [tutorsList, settutorsList] = useState([]);
+    const [tEmail, settEmail] = useState('');
     const [stdSlots, setStdSltos] = useState([]);
     const [sendRequestFlag, setSendRequestFlag] = useState(false);
-    const { numOfSlots, courseId, stdEmail } = route.params;
+    const { numOfSlots, courseId, gmail } = route.params;
 
     useEffect(() => {
-        console.log('numofslots-courseid-stdemail', numOfSlots, courseId, stdEmail);
         get_tutors();
     }, []);
 
@@ -25,34 +27,69 @@ export default function Finding_Tutor({ route }) {
     }, [sendRequestFlag]);
 
     const get_tutors = async () => {
-        try {
-            const response = await fetch(
-                `http://192.168.43.231/HouseOfTutors/api/student/FindTutor?semail=${stdEmail}&cid=${courseId}`,
-            );
-            const data = await response.json();
-            console.log('Result from get_tutors API => ', data);
-            console.log('----------------------------------------------------------------------------');
-            if (data === 'No tutor available') {
-                Alert.alert('No tutor available!');
-            } else {
-                data.forEach(element => {
-                    element.checkedslots = [];
-                });
-                setTutorsList(data);
-            }
-            console.log('Updated tutorlist is ', data);
-        } catch (error) {
-            console.log(error);
-            console.log('----------------------------------------------------------------------------');
+        const paramsObject = {
+            controller: 'Student',
+            action: 'FindTutor',
+            params: {
+                semail: gmail,
+                cid: courseId,
+            },
+        };
+        let response = await GetWithParams(paramsObject);
+        if (response !== 'No tutor available') {
+            response.forEach(element => {
+                element.checkedslots = [];
+            });
+            settutorsList(response);
+            console.log('Updated tutorlist is ', response);
+            console.log();
+        }
+        else {
+            settutorsList(null);
         }
     };
 
-    const renderItem = ({ item, index }) => (
-        <View key={index} style={styles.modal}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                <Text style={styles.text}>{courseId}</Text>
-                <Text style={styles.text}>{item.name}</Text>
-                <Text style={styles.text}>{item.rating}/{item.grade}</Text>
+    const handle_sendtutor_request = () => {
+        if (stdSlots.length === 0) {
+            Alert.alert('Slots Confirmation is mandatory');
+        }
+        else {
+            send_tutor_request();
+        }
+    };
+
+    const send_tutor_request = async () => {
+        try {
+            const paramsObject = {
+                controller: 'Student',
+                action: 'SendTutorRequest',
+                params: {
+                    semail: gmail,
+                    temail: tEmail,
+                    courseid: courseId,
+                    selectedslots: stdSlots,
+                },
+            };
+            let response = await PostWithObject(paramsObject);
+            Alert.alert(response);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const renderclasses = ({ item, index }) => (
+        <View key={index} style={styles.containerbox}>
+            <View style={styles.itembox}>
+                <Text style={styles.itemText}>Course ID: </Text>
+                <Text style={styles.itemText}>{courseId}</Text>
+            </View>
+            <View style={styles.itembox}>
+                <Text style={styles.itemText}>Tutor: </Text>
+                <Text style={styles.itemText}>{item.name}</Text>
+            </View>
+            <View style={styles.itembox}>
+                <Text style={styles.itemText}>Rating/Grade: </Text>
+                <Text style={styles.itemText}>{item.rating}/{item.grade}</Text>
             </View>
             <View>
                 {item.slots.slice(0, numOfSlots).map((slot, sIndex) => {
@@ -62,7 +99,7 @@ export default function Finding_Tutor({ route }) {
                     }
                     console.log('flagofslot is ', flagsofslot);
                     return (
-                        <View key={sIndex} style={{ flexDirection: 'row' }}>
+                        <View key={sIndex} style={{ flexDirection: 'row', marginTop: 5 }}>
                             <CheckBox
                                 tintColors={{ true: 'gold', false: 'white' }}
                                 value={flagsofslot[1]}
@@ -70,14 +107,14 @@ export default function Finding_Tutor({ route }) {
                                     flagsofslot[1] = !flagsofslot[1];
                                     if (flagsofslot[1]) {
                                         console.log('checked');
-                                        setTutorsList(previous => {
+                                        settutorsList(previous => {
                                             let arr = [...previous];
                                             arr[index].checkedslots = [...item.checkedslots, flagsofslot[0]];
                                             return arr;
                                         });
                                     } else {
                                         console.log('un-checked');
-                                        setTutorsList(previous => {
+                                        settutorsList(previous => {
                                             let arr = [...previous];
                                             arr[index].checkedslots = item.checkedslots.filter((checkedSlot) => checkedSlot !== flagsofslot[0]);
                                             return arr;
@@ -85,133 +122,41 @@ export default function Finding_Tutor({ route }) {
                                     }
                                 }}
                             />
-                            <Text style={styles.text}>{slot}</Text>
+                            <Text style={{ fontStyle: 'italic', color: '#ffffff', marginTop: 5 }}>{slot}</Text>
                         </View>
                     );
                 })}
             </View>
-            <View style={styles.btn_alignment}>
-                <Pressable
-                    style={styles.btn}
-                    onPress={() => {
-                        console.log('send request is sent');
-                        setTEmail(item.email);
-                        setStdSltos(item.checkedslots);
-                        setSendRequestFlag(true);
-                    }}>
-                    <Text style={styles.btn_text}>Send Request</Text>
-                </Pressable>
-            </View>
+            <TouchableOpacity style={styles.button} onPressIn={() => {
+                console.log('Send Request is Pressed');
+                console.log();
+                settEmail(item.email);
+                setStdSltos(item.checkedslots);
+                setSendRequestFlag(true);
+            }}>
+                <Text style={styles.buttonText}>Send Request</Text>
+            </TouchableOpacity>
         </View>
     );
 
-    const options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            semail: stdEmail,
-            temail: tEmail,
-            courseid: courseId,
-            selectedslots: stdSlots,
-        }),
-    };
-
-    const handle_sendtutor_request = () => {
-        console.log('options are ', options);
-        if (stdSlots.length === 0) {
-            Alert.alert('Please confirm slots firts');
-        }
-        else {
-            send_tutor_request();
-        }
-    };
-
-    const send_tutor_request = async () => {
-        try {
-            const response = await fetch(
-                'http://192.168.43.231/HouseOfTutors/api/Student/SendTutorRequest', options
-            );
-            const data = await response.json();
-            console.log('Result from send_tutor_request API => ', data);
-            if (data === 'Already Requested The Course') {
-                Alert.alert('Already Requested For This Course!');
-            } else {
-                Alert.alert(data);
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
     return (
-        <View>
-            <View style={styles.heading}>
-                <Text style={styles.h_text}>Course ID</Text>
-                <Text style={styles.h_text}>Name</Text>
-                <Text style={styles.h_text}>Rating/Grade</Text>
-            </View>
-            <View style={styles.FList_BM}>
-                <FlatList
-                    data={tutorsList}
-                    renderItem={renderItem}
-                />
-            </View>
+        <View style={styles.bodyContainer}>
+            {tutorsList ? (
+                <View>
+                    <FlatList
+                        data={tutorsList}
+                        renderItem={renderclasses} />
+                </View>
+            ) : (
+                <View style={styles.noDataContainer}>
+                    <Text style={styles.noDataText}>
+                        No tutor is available as per your schedule{'\n'}
+                        <SimpleLineIcons name={'emotsmile'} size={50} color="#000000" />
+                        <SimpleLineIcons name={'emotsmile'} size={50} color="#000000" />
+                        <SimpleLineIcons name={'emotsmile'} size={50} color="#000000" />
+                    </Text>
+                </View>
+            )}
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    modal: {
-        justifyContent: 'center',
-        backgroundColor: '#4C4B49',
-        marginHorizontal: 10,
-        paddingVertical: 15,
-        borderRadius: 5,
-        marginTop: 10,
-    },
-    text: {
-        color: '#ffffff',
-        fontWeight: 'bold',
-        marginBottom: 5,
-        marginTop: 6,
-        textAlign: 'center',
-    },
-    btn: {
-        backgroundColor: '#FFB22F',
-        elevation: 10,
-        paddingHorizontal: 30,
-        paddingVertical: 10,
-        borderRadius: 5,
-        width: '40%',
-        marginRight: 0,
-    },
-    btn_text: {
-        color: '#000000',
-        fontWeight: '600',
-        textAlign: 'center',
-    },
-    btn_alignment: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-    },
-    FList_BM: {
-        marginBottom: 130,
-    },
-    heading: {
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        alignItems: 'center',
-        backgroundColor: '#ffffff',
-        marginHorizontal: 10,
-        paddingVertical: 15,
-        marginTop: 10,
-    },
-    h_text: {
-        color: '#000000',
-        fontWeight: 'bold',
-        marginBottom: 5,
-        textAlign: 'center',
-    },
-});
