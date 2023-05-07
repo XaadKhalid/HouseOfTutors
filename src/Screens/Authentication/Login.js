@@ -11,24 +11,20 @@ import {
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Userlogin } from '../../Api/ApiForAuthentication';
+import { GetWithParams } from '../../Api/API_Types';
+import { storegmailToAsync } from '../../AsyncStorage/GlobalData';
 
 function Login({ navigation }) {
   const [userEmail, setUseremail] = useState('');
   const [userPswd, setUserpswd] = useState('');
 
-  const storeData = async value => {
-    try {
-      await AsyncStorage.setItem('std_email', value);
-    } catch (e) {
-      console.log(e);
-      console.log('----------------------------------------------------------------------------');
-    }
-  };
-
   const Verifylogin = async () => {
-    const response = await Userlogin(userEmail, userPswd);
+    const paramsObject = {
+      controller: 'Login',
+      action: 'Universal_Login',
+      params: { email: userEmail, password: userPswd },
+    };
+    let response = await GetWithParams(paramsObject);
     const roleToScreen = {
       Student: 'S_Bottom_Navigator',
       Tutor: 'T_Bottom_Navigator',
@@ -36,7 +32,7 @@ function Login({ navigation }) {
       Parent: 'ParentStack',
     };
     if (response !== 'User Not Found' && response !== 'Wrong CNIC Entered') {
-      storeData(userEmail);
+      storegmailToAsync(userEmail);
       const screenName = roleToScreen[response.Role];
       navigation.navigate(screenName);
     }
@@ -77,8 +73,7 @@ function Login({ navigation }) {
           style={Styles.button}
           onPress={() => {
             console.log('Login is pressed');
-            console.log('----------------------------------------------------------------------------');
-            storeData(userEmail);
+            console.log();
             Verifylogin();
           }}>
           <Text style={Styles.lgntxt}>Login</Text>

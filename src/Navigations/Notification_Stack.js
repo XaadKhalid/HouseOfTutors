@@ -15,7 +15,7 @@ export default function Notification_Stack() {
     return (
         <Stack.Navigator initialRouteName="T_Shedule" screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Notification_Icon" component={Notification_Icon} />
-            <Stack.Screen name="Notification_Details" component={Notification_Details} options={{ headerShown: true }} />
+            <Stack.Screen name="Notification_Details" component={Notification_Details} />
             <Stack.Screen name="T_Fee" component={T_Fee} />
             <Stack.Screen name="T_Shedule" component={T_Shedule} />
             <Stack.Screen name="T_Teaching" component={T_Teaching} />

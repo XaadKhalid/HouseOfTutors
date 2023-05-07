@@ -143,7 +143,7 @@ export default function Notification_Details() {
                 headers: { 'Content-Type': 'application/json' },
             });
             const data = await response.json();
-            console.log(data);
+            console.log('reply from rejected', data);
             console.log('----------------------------------------------------------------------------');
             Alert.alert(data);
             get_notifications();

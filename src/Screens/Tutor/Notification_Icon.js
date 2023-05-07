@@ -1,65 +1,36 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable prettier/prettier */
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getgmailFormAsync } from '../../AsyncStorage/GlobalData';
+import { GetWithParams } from '../../Api/API_Types';
 
 export default function Notification_Icon({ navigation }) {
     const [counter, setCounter] = useState(0);
-    const [tEmail, setTEmail] = useState('');
-
-    useEffect(() => {
-        getgmail();
-    }, []);
 
     // useEffect(() => {
     //     const intervalId = setInterval(() => {
-    //         if (tEmail !== '') {
-    //             get_notifications();
-    //         }
+    //         get_notifications();
     //     }, 1000);
     //     return () => clearInterval(intervalId);
-    // }, [tEmail]);
+    // }, []);
 
     useEffect(() => {
-        if (tEmail !== '') {
-            get_notifications();
-        }
-    }, [tEmail]);
-
-
-    const getgmail = async () => {
-        try {
-            const jsonValue = await AsyncStorage.getItem('std_email');
-            if (jsonValue != null) {
-                setTEmail(jsonValue);
-                console.log('Getting the email address of tutor from Asyncstorage => ', jsonValue);
-                console.log('----------------------------------------------------------------------------');
-            } else {
-                console.log('No gmail found in Asyncstorage');
-                console.log('----------------------------------------------------------------------------');
-            }
-        } catch (e) {
-            console.log(e);
-            console.log('----------------------------------------------------------------------------');
-        }
-    };
+        get_notifications();
+    }, []);
 
     const get_notifications = async () => {
-        try {
-            const response = await fetch(
-                `http://192.168.43.231/HouseOfTutors/api/Tutor/GetStudentRequests?temail=${tEmail}`,
-            );
-            const data = await response.json();
-            console.log('data from get notifications', data);
-            console.log('----------------------------------------------------------------------------');
-            if (data !== 'No Requests') {
-                setCounter(data.length);
+        let gmail = await getgmailFormAsync();
+        if (gmail !== null) {
+            const paramsObject = {
+                controller: 'Tutor',
+                action: 'GetStudentRequests',
+                params: { temail: gmail },
+            };
+            let response = await GetWithParams(paramsObject);
+            if (response !== 'No Requests') {
+                setCounter(response.length);
             }
-        } catch (error) {
-            console.log(error);
-            console.log('----------------------------------------------------------------------------');
         }
     };
 
