@@ -3,8 +3,6 @@ const { apiString } = require('./API_String');
 
 const paramsToString = (params) => {
     const keys = Object.keys(params);
-    console.log('params keys are ', keys);
-    console.log();
     const totalKeys = keys.length;
     let paramstring = '';
     for (let i = 0; i < totalKeys; i++) {
@@ -28,7 +26,7 @@ const GetWithParams = async (paramsObject) => {
             `${apiString}/${paramsObject.controller}/${paramsObject.action}?${paramstring}`
         );
         const data = await response.json();
-        console.log('Result from ' + paramsObject.action + 'API: ', data);
+        console.log('Result from ' + paramsObject.action + ' API: ', data);
         console.log();
         return data;
     } catch (error) {
@@ -44,7 +42,7 @@ const GetWithoutParams = async (paramsObject) => {
             `${apiString}/${paramsObject.controller}/${paramsObject.action}`
         );
         const data = await response.json();
-        console.log('Result from ' + paramsObject.action + 'API: ', data);
+        console.log('Result from ' + paramsObject.action + ' API: ', data);
         console.log();
         return data;
     } catch (error) {
@@ -67,7 +65,7 @@ const PostWithParams = async (paramsObject) => {
         }
         );
         const data = await response.json();
-        console.log('Result from ' + paramsObject.action + 'API: ', data);
+        console.log('Result from ' + paramsObject.action + ' API: ', data);
         console.log();
         return data;
     } catch (error) {
@@ -89,7 +87,7 @@ const PostWithObject = async (paramsObject) => {
         }
         );
         const data = await response.json();
-        console.log('Result from ' + paramsObject.action + 'API: ', data);
+        console.log('Result from ' + paramsObject.action + ' API: ', data);
         console.log();
         return data;
     } catch (error) {

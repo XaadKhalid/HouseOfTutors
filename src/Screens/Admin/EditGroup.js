@@ -4,10 +4,10 @@ import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { UpdateGroup, deleteCourseOfGroup, getCourseOfGroup } from '../../Api/ApiForAdmin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import styles from '../../Assests/Styling';
+import { GetWithParams, PostWithObject, PostWithParams } from '../../Api/API_Types';
 
 export default function EditGroup({ navigation, route }) {
     const { groupid } = route.params;
@@ -29,9 +29,16 @@ export default function EditGroup({ navigation, route }) {
     }, [flag]);
 
     const GetGroupCoruses = async () => {
-        const response = await getCourseOfGroup(groupid);
-        setCoursesList(response);
-        setflag(true);
+        const paramsObject = {
+            controller: 'Admin',
+            action: 'GetGroupList',
+            params: { groupid: groupid },
+        };
+        let response = await GetWithParams(paramsObject);
+        if (response !== null) {
+            setCoursesList(response);
+            setflag(true);
+        }
     };
 
     const getSelectedItems = async () => {
@@ -62,22 +69,48 @@ export default function EditGroup({ navigation, route }) {
         }
     };
 
+    const deleteCourseGroup = async (item) => {
+        let tempArray = [...courseslist.filter(course => course !== item)];
+        setCoursesList(tempArray);
+        const paramsObject = {
+            controller: 'Admin',
+            action: 'deleteCourseofGroup',
+            params: { groupid: groupid, course: item },
+        };
+        let response = await PostWithParams(paramsObject);
+        if (response !== null) {
+            Alert.alert('Course Removed From Group');
+        }
+    };
+
     const renderCoursesList = ({ item }) => (
         <View style={styles.containerbox}>
             <View style={styles.itembox}>
                 <Text style={styles.itemText}>{item}</Text>
                 <TouchableOpacity onPress={() => {
-                    let tempArray = [...courseslist.filter(course => course !== item)];
-                    setCoursesList(tempArray);
-                    deleteCourseOfGroup(groupid, item);
-                    console.log('data in couslist is ', courseslist);
-                    Alert.alert('Course Removed From Group');
+                    deleteCourseGroup(item);
                 }}>
                     <MaterialCommunityIcons name="delete" size={30} style={styles.iconcolor} />
                 </TouchableOpacity>
             </View>
         </View>
     );
+
+    const UpdateGroup = async (id, list) => {
+        const paramsObject = {
+            controller: 'Admin',
+            action: 'UpdateGroup',
+            params: {
+                groupid: id,
+                courses: list,
+            },
+        };
+        let response = await PostWithObject(paramsObject);
+        if (response !== null) {
+            Alert.alert('Group Updated');
+            deleteAysncStorage();
+        }
+    };
 
     return (
         <View style={styles.bodyContainer}>
@@ -96,13 +129,7 @@ export default function EditGroup({ navigation, route }) {
                         renderItem={renderCoursesList}
                     />
                     <TouchableOpacity onPress={() => {
-                        try {
-                            UpdateGroup(groupid, courseslist);
-                            Alert.alert('Group Updated');
-                            deleteAysncStorage();
-                        } catch (e) {
-                            console.log(e);
-                        }
+                        UpdateGroup(groupid, courseslist);
                     }}
                         style={styles.SubmitButton}
                     >

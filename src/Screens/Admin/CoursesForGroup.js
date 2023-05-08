@@ -4,8 +4,8 @@ import { View, Text, FlatList, TouchableOpacity, TextInput, Alert } from 'react-
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
-import { GetCoursesList } from '../../Api/ApiForAdmin';
 import styles from '../../Assests/Styling';
+import { GetWithoutParams } from '../../Api/API_Types';
 
 export default function CoursesForGroup({ navigation }) {
     const [complete_Courses_List, set_Complete_Courses_List] = useState([]);
@@ -35,9 +35,15 @@ export default function CoursesForGroup({ navigation }) {
     }, [selectedFlag]);
 
     const fetchcourseslist = async () => {
-        const response = await GetCoursesList();
-        set_Complete_Courses_List(response);
-        setSelectedFlag(true);
+        const paramsObject = {
+            controller: 'Student',
+            action: 'GetCourses',
+        };
+        let response = await GetWithoutParams(paramsObject);
+        if (response !== null) {
+            set_Complete_Courses_List(response);
+            setSelectedFlag(true);
+        }
     };
 
     const getSelectedItems = async () => {
@@ -49,7 +55,6 @@ export default function CoursesForGroup({ navigation }) {
             );
             set_Complete_Courses_List(temparray);
             setSelectedCourse(selectedItems);
-            console.log('I get this data from aysncstorage when course screen renders', selectedItems);
         }
     };
 

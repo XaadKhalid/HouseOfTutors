@@ -6,8 +6,8 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
-import { addGroup } from '../../Api/ApiForAdmin';
 import styles from '../../Assests/Styling';
+import { PostWithObject } from '../../Api/API_Types';
 
 export default function AddGroup({ navigation }) {
     const [selectedCourse, setSelectedCourse] = useState([]);
@@ -58,6 +58,20 @@ export default function AddGroup({ navigation }) {
         </View>
     );
 
+    const handleSubmitCourses = async () => {
+        const paramsObject = {
+            controller: 'Admin',
+            action: 'AddGroup',
+            params: selectedCourse,
+        };
+        let response = await PostWithObject(paramsObject);
+        if (response !== null) {
+            await AsyncStorage.removeItem('selectedCourse');
+            Alert.alert('Group Added Successfully');
+            setSelectedCourse([]);
+        }
+    };
+
     return (
         <View style={styles.bodyContainer}>
             <View style={styles.addtoListbox}>
@@ -74,15 +88,8 @@ export default function AddGroup({ navigation }) {
                         data={selectedCourse}
                         renderItem={renderSelectedCoursesList}
                     />
-                    <TouchableOpacity onPress={async () => {
-                        try {
-                            addGroup(selectedCourse);
-                            await AsyncStorage.removeItem('selectedCourse');
-                            Alert.alert('Group Added Successfully');
-                            setSelectedCourse([]);
-                        } catch (e) {
-                            console.log(e);
-                        }
+                    <TouchableOpacity onPress={() => {
+                        handleSubmitCourses();
                     }}
                         style={styles.SubmitButton}
                     >

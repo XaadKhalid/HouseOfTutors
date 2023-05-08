@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { TextInput as TextIp, RadioButton } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { Studentsignup, Tutorsignup } from '../../Api/ApiForAuthentication';
+import { PostWithObject } from '../../Api/API_Types';
 
 export default function Signup() {
   const [name, setname] = useState('');
@@ -42,10 +42,20 @@ export default function Signup() {
   const Register = async (status) => {
     let response = null;
     if (status === 'Student') {
-      response = await Studentsignup(userdata);
+      const paramsObject = {
+        controller: 'Student',
+        action: 'StudentSignup',
+        params: userdata,
+      };
+      response = await PostWithObject(paramsObject);
     }
     else {
-      response = await Tutorsignup(tutordata);
+      const paramsObject = {
+        controller: 'Tutor',
+        action: 'TutorSignup',
+        params: tutordata,
+      };
+      response = await PostWithObject(paramsObject);
     }
     Alert.alert(response);
   };

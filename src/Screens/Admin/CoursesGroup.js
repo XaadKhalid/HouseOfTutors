@@ -5,8 +5,8 @@ import { useIsFocused } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { GetCourseGroupIds, deletGroup } from '../../Api/ApiForAdmin';
 import styles from '../../Assests/Styling';
+import { GetWithoutParams, PostWithParams } from '../../Api/API_Types';
 
 export default function CoursesGroup({ navigation }) {
     const [groupidList, setgroupidList] = useState([]);
@@ -21,8 +21,27 @@ export default function CoursesGroup({ navigation }) {
     }, [isFocused, flag]);
 
     const updatedList = async () => {
-        const groupIds = await GetCourseGroupIds();
-        setgroupidList(groupIds);
+        const paramsObject = {
+            controller: 'Admin',
+            action: 'GetCoursesGroupList',
+        };
+        let response = await GetWithoutParams(paramsObject);
+        if (response !== null) {
+            setgroupidList(response);
+        }
+    };
+
+    const DeleteGroup = async (item) => {
+        const paramsObject = {
+            controller: 'Admin',
+            action: 'DeleteGroup',
+            params: { groupid: item },
+        };
+        let response = await PostWithParams(paramsObject);
+        if (response !== null) {
+            Alert.alert('Its Deleted Now');
+            setflag(true);
+        }
     };
 
     const showAlert = (item) => {
@@ -36,9 +55,7 @@ export default function CoursesGroup({ navigation }) {
                 {
                     text: 'Confirm',
                     onPress: () => {
-                        deletGroup(item);
-                        Alert.alert('Its Deleted Now');
-                        setflag(true);
+                        DeleteGroup(item);
                     },
                 },
             ],

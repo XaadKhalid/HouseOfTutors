@@ -2,8 +2,8 @@
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { GetAllStudents } from '../../Api/ApiForAdmin';
 import styles from '../../Assests/Styling';
+import { GetWithoutParams } from '../../Api/API_Types';
 
 export default function AllStudents() {
     const [students, setStudents] = useState([]);
@@ -13,7 +13,11 @@ export default function AllStudents() {
     }, []);
 
     const GetAlltutors = async () => {
-        const response = await GetAllStudents();
+        const paramsObject = {
+            controller: 'Admin',
+            action: 'GetAllStudents',
+        };
+        let response = await GetWithoutParams(paramsObject);
         if (response !== null) {
             const tutors = response.map(tutor => ({ ...tutor, flag: false }));
             setStudents(tutors);

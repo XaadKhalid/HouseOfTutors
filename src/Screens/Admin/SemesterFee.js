@@ -1,9 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { View, Text, FlatList, TouchableOpacity, Alert, TextInput } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { GetSemesterFee, updateFee } from '../../Api/ApiForAdmin';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from '../../Assests/Styling';
+import { GetWithoutParams, PostWithParams } from '../../Api/API_Types';
 
 export default function SemesterFee({ navigation }) {
     const [feeList, setFeeList] = useState([]);
@@ -18,7 +18,11 @@ export default function SemesterFee({ navigation }) {
     }, [editFlag]);
 
     const getfeelist = async () => {
-        const response = await GetSemesterFee();
+        const paramsObject = {
+            controller: 'Admin',
+            action: 'GetSemesterFee',
+        };
+        let response = await GetWithoutParams(paramsObject);
         if (response !== null) {
             setFeeList(response);
         }
@@ -37,6 +41,22 @@ export default function SemesterFee({ navigation }) {
             </View>
         </View>
     );
+
+    const handleUpdatefee = async () => {
+        if (semester === 0 || fee === 0) {
+            Alert.alert('Input Fields are mandatory to update Records');
+        }
+        else {
+            const paramsObject = {
+                controller: 'Admin',
+                action: 'updateFee',
+                params: { semester: semester, fee: fee },
+            };
+            let response = await PostWithParams(paramsObject);
+            Alert.alert(response);
+            setEditFlag(false);
+        }
+    };
 
     return (
         <View style={styles.bodyContainer}>
@@ -63,17 +83,7 @@ export default function SemesterFee({ navigation }) {
                             }} />
                     </View>
                     <View style={styles.inputsParent}>
-                        <TouchableOpacity style={styles.SubmitButton} onPress={() => {
-                            if (semester === 0 || fee === 0) {
-                                Alert.alert('Input Fields are mandatory to update Records');
-                            }
-                            else {
-                                updateFee(semester, fee);
-                                Alert.alert('Records Updated Successfully');
-                                setEditFlag(false);
-                            }
-                        }}
-                        >
+                        <TouchableOpacity style={styles.SubmitButton} onPress={handleUpdatefee}>
                             <Text style={styles.SubbmitText}>Update Fee Records</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.SubmitButton} onPress={() => {
