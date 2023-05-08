@@ -7,12 +7,14 @@ import CheckBox from '@react-native-community/checkbox';
 import styles from '../../Assests/Styling';
 import { getgmailFormAsync } from '../../AsyncStorage/GlobalData';
 import { GetWithParams, PostWithParams } from '../../Api/API_Types';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function S_Shedule() {
   const [selectedslot, setselectedslot] = useState(Array(112).fill(false));
   const [checkBoxIndex, setCheckBoxIndex] = useState([]);
   const [schedulearray, setSchedulearray] = useState(Array(112).fill(0));
   const [stdemail, setStdEmail] = useState('');
+  const isFocused = useIsFocused();
 
   const daysofweek = [
     ' Time  Slots ',
@@ -45,8 +47,13 @@ export default function S_Shedule() {
   ];
 
   useEffect(() => {
+    if (isFocused) {
+      getSchedule();
+    }
+  }, [isFocused]);
+
+  useEffect(() => {
     getCompleteIndexTable();
-    getSchedule();
   }, []);
 
   useEffect(() => {
