@@ -78,6 +78,25 @@ export default function Finding_Tutor({ route }) {
         }
     };
 
+    const checkboxVerification = (flagsofslot, index, item) => {
+        flagsofslot[1] = !flagsofslot[1];
+        if (flagsofslot[1]) {
+            console.log('checked');
+            settutorsList(previous => {
+                let arr = [...previous];
+                arr[index].checkedslots = [...item.checkedslots, flagsofslot[0]];
+                return arr;
+            });
+        } else {
+            console.log('un-checked');
+            settutorsList(previous => {
+                let arr = [...previous];
+                arr[index].checkedslots = item.checkedslots.filter((checkedSlot) => checkedSlot !== flagsofslot[0]);
+                return arr;
+            });
+        }
+    };
+
     const renderclasses = ({ item, index }) => (
         <View key={index} style={styles.containerbox}>
             <View style={styles.itembox}>
@@ -105,22 +124,7 @@ export default function Finding_Tutor({ route }) {
                                 tintColors={{ true: 'gold', false: 'white' }}
                                 value={flagsofslot[1]}
                                 onValueChange={() => {
-                                    flagsofslot[1] = !flagsofslot[1];
-                                    if (flagsofslot[1]) {
-                                        console.log('checked');
-                                        settutorsList(previous => {
-                                            let arr = [...previous];
-                                            arr[index].checkedslots = [...item.checkedslots, flagsofslot[0]];
-                                            return arr;
-                                        });
-                                    } else {
-                                        console.log('un-checked');
-                                        settutorsList(previous => {
-                                            let arr = [...previous];
-                                            arr[index].checkedslots = item.checkedslots.filter((checkedSlot) => checkedSlot !== flagsofslot[0]);
-                                            return arr;
-                                        });
-                                    }
+                                    checkboxVerification(flagsofslot, index, item);
                                 }}
                             />
                             <Text style={{ fontStyle: 'italic', color: '#ffffff', marginTop: 5 }}>{slot}</Text>

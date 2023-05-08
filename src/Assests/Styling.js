@@ -122,6 +122,14 @@ const styles = StyleSheet.create({
         backgroundColor: 'lightgrey',
         opacity: 0.8,
     },
+    dayOfWeekWrapper: {
+        backgroundColor: '#4C4B49',
+        paddingVertical: 15,
+        borderRadius: 5,
+        elevation: 3,
+        borderBottomWidth: 3,
+        borderColor: 'gold',
+    },
 });
 
 export default styles;

@@ -1,14 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
-import { View, Text, StyleSheet, FlatList, Pressable, Alert } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import CheckBox from '@react-native-community/checkbox';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import styles from '../../Assests/Styling';
+import { getgmailFormAsync } from '../../AsyncStorage/GlobalData';
+import { GetWithParams, PostWithObject, PostWithParams } from '../../Api/API_Types';
 
 export default function Notification_Details() {
     const [notificationList, setNotificationList] = useState([]);
-    const [notificationFlag, setNotificationFalg] = useState(false);
     const [tEmail, setTEmail] = useState('');
     const [approvedSlots, setApprovedSlots] = useState([]);
     const [stdEmail, setStdEmail] = useState('');
@@ -17,14 +19,8 @@ export default function Notification_Details() {
     const [rejection_Flag, set_Rejection_Flag] = useState(false);
 
     useEffect(() => {
-        getgmail();
+        get_notifications();
     }, []);
-
-    useEffect(() => {
-        if (tEmail !== '') {
-            get_notifications();
-        }
-    }, [tEmail]);
 
     useEffect(() => {
         if (acceptance_Flag) {
@@ -35,51 +31,31 @@ export default function Notification_Details() {
 
     useEffect(() => {
         if (rejection_Flag) {
-            handle_reject_request();
+            reject_request();
             set_Rejection_Flag(false);
         }
     }, [rejection_Flag]);
 
-    const getgmail = async () => {
-        try {
-            const jsonValue = await AsyncStorage.getItem('std_email');
-            if (jsonValue != null) {
-                setTEmail(jsonValue);
-                console.log('Getting the email address of tutor from Asyncstorage => ', jsonValue);
-                console.log('----------------------------------------------------------------------------');
-            } else {
-                console.log('No gmail found in Asyncstorage');
-                console.log('----------------------------------------------------------------------------');
-            }
-        } catch (e) {
-            console.log(e);
-            console.log('----------------------------------------------------------------------------');
-        }
-    };
-
     const get_notifications = async () => {
-        try {
-            const response = await fetch(
-                `http://192.168.43.231/HouseOfTutors/api/Tutor/GetStudentRequests?temail=${tEmail}`,
-            );
-            const data = await response.json();
-            console.log('data from get notifications', data);
-            console.log('----------------------------------------------------------------------------');
-            if (data !== 'No Requests') {
-                data.forEach(element => {
+        let gmail = await getgmailFormAsync();
+        if (gmail !== null) {
+            const paramsObject = {
+                controller: 'Tutor',
+                action: 'GetStudentRequests',
+                params: { temail: gmail },
+            };
+            setTEmail(gmail);
+            let response = await GetWithParams(paramsObject);
+            if (response !== 'No Requests') {
+                response.forEach(element => {
                     element.checkedslots = [];
                 });
-                setNotificationList(data);
-                setNotificationFalg(true);
-                console.log('updated notificationlist is ', data);
-                console.log('----------------------------------------------------------------------------');
+                setNotificationList(response);
+                console.log('updated notificationlist is ', response);
             }
             else {
-                setNotificationFalg(false);
+                setNotificationList(null);
             }
-        } catch (error) {
-            console.log(error);
-            console.log('----------------------------------------------------------------------------');
         }
     };
 
@@ -88,77 +64,69 @@ export default function Notification_Details() {
             Alert.alert('No slot confirmed yet');
         }
         else {
-            console.log('temail => ', tEmail);
-            console.log('semail => ', stdEmail);
-            console.log('courseid => ', courseId);
-            console.log('approved slots => ', approvedSlots);
             accept_request();
         }
     };
 
-    const options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            semail: stdEmail,
-            temail: tEmail,
-            courseid: courseId,
-            selectedslots: approvedSlots,
-        }),
-    };
-
     const accept_request = async () => {
-        console.log('options are ', options);
-        try {
-            const response = await fetch(
-                'http://192.168.43.231/HouseOfTutors/api/Tutor/Accept_Student_Request', options
-            );
-            const data = await response.json();
-            console.log('Result from accept request API => ', data);
-            if (data === 'No Requests') {
-                Alert.alert('Request Already Accepted');
-                get_notifications();
-            } else {
-                Alert.alert(data);
-                get_notifications();
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    const handle_reject_request = () => {
-        console.log('temail', tEmail);
-        console.log('stdemail', stdEmail);
-        console.log('courseid', courseId);
-        reject_request();
+        const paramsObject = {
+            controller: 'Tutor',
+            action: 'Accept_Student_Request',
+            params: {
+                semail: stdEmail,
+                temail: tEmail,
+                courseid: courseId,
+                selectedslots: approvedSlots,
+            },
+        };
+        let response = await PostWithObject(paramsObject);
+        Alert.alert(response);
+        get_notifications();
     };
 
     const reject_request = async () => {
-        try {
-            const response = await fetch(`http://192.168.43.231/HouseOfTutors/api/Tutor/Reject_Student_Request?temail=${tEmail}&semail=${stdEmail}&cid=${courseId}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+        const paramsObject = {
+            controller: 'Tutor',
+            action: 'Reject_Student_Request',
+            params: {
+                semail: stdEmail,
+                temail: tEmail,
+                cid: courseId,
+            },
+        };
+        let response = await PostWithParams(paramsObject);
+        Alert.alert(response);
+        get_notifications();
+    };
+
+    const checkboxVerification = (flagsofslot, index, item) => {
+        flagsofslot[1] = !flagsofslot[1];
+        if (flagsofslot[1]) {
+            console.log('checked');
+            setNotificationList(previous => {
+                let arr = [...previous];
+                arr[index].checkedslots = [...item.checkedslots, flagsofslot[0]];
+                return arr;
             });
-            const data = await response.json();
-            console.log('reply from rejected', data);
-            console.log('----------------------------------------------------------------------------');
-            Alert.alert(data);
-            get_notifications();
-        }
-        catch (error) {
-            console.log(error);
-            console.log('----------------------------------------------------------------------------');
+        } else {
+            console.log('un-checked');
+            setNotificationList(previous => {
+                let arr = [...previous];
+                arr[index].checkedslots = item.checkedslots.filter((checkedSlot) => checkedSlot !== flagsofslot[0]);
+                return arr;
+            });
         }
     };
 
-    const renderItem = ({ item, index }) => (
-        <View style={style.modal}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 18, marginRight: 55 }}>
-                <Text style={style.text}>{item.semail}</Text>
-                <Text style={style.text}>{item.cname}</Text>
+    const renderNotifications = ({ item, index }) => (
+        <View style={styles.containerbox}>
+            <View style={styles.itembox}>
+                <Text style={styles.itemText}>Course :</Text>
+                <Text style={styles.itemText}>{item.cname}</Text>
+            </View>
+            <View style={styles.itembox}>
+                <Text style={styles.itemText}>Student :</Text>
+                <Text style={styles.itemText}>{item.semail}</Text>
             </View>
             <View>
                 {item.Slots.map((slot, sIndex) => {
@@ -168,136 +136,59 @@ export default function Notification_Details() {
                     }
                     console.log('flagofslot is ', flagsofslot);
                     return (
-                        <View key={sIndex} style={{ flexDirection: 'row', marginLeft: 10 }}>
+                        <View key={sIndex} style={{ flexDirection: 'row', marginTop: 5 }}>
                             <CheckBox
                                 tintColors={{ true: 'gold', false: 'white' }}
                                 value={flagsofslot[1]}
                                 onValueChange={() => {
-                                    flagsofslot[1] = !flagsofslot[1];
-                                    if (flagsofslot[1]) {
-                                        console.log('checked');
-                                        setNotificationList(previous => {
-                                            let arr = [...previous];
-                                            arr[index].checkedslots = [...item.checkedslots, flagsofslot[0]];
-                                            return arr;
-                                        });
-                                    } else {
-                                        console.log('un-checked');
-                                        setNotificationList(previous => {
-                                            let arr = [...previous];
-                                            arr[index].checkedslots = item.checkedslots.filter((checkedSlot) => checkedSlot !== flagsofslot[0]);
-                                            return arr;
-                                        });
-                                    }
+                                    checkboxVerification(flagsofslot, index, item);
                                 }}
                             />
-                            <Text style={style.text}>{slot}</Text>
+                            <Text style={{ fontStyle: 'italic', color: '#ffffff', marginTop: 5 }}>{slot}</Text>
                         </View>
                     );
                 })}
             </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Pressable
-                    style={style.btn}
-                    onPress={() => {
-                        setStdEmail(item.semail);
-                        setCourseId(item.cid);
-                        setApprovedSlots(item.checkedslots);
-                        set_Accpetance_Flag(true);
-                        console.log('Request Accpeted');
-                    }}>
-                    <Text style={style.btn_text}>Accept Request</Text>
-                </Pressable>
-                <Pressable
-                    style={style.btn}
-                    onPress={() => {
-                        console.log('Request Rejected');
-                        setStdEmail(item.semail);
-                        setCourseId(item.cid);
-                        set_Rejection_Flag(true);
-                    }}>
-                    <Text style={style.btn_text}>Reject Request</Text>
-                </Pressable>
+            <View style={styles.itembox}>
+                <TouchableOpacity style={styles.button} onPressIn={() => {
+                    setStdEmail(item.semail);
+                    setCourseId(item.cid);
+                    setApprovedSlots(item.checkedslots);
+                    set_Accpetance_Flag(true);
+                    console.log('Request Accpeted is pressed');
+                }}>
+                    <Text style={styles.buttonText}>Accept Request</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={() => {
+                    console.log('Request Rejected is pressed');
+                    setStdEmail(item.semail);
+                    setCourseId(item.cid);
+                    set_Rejection_Flag(true);
+                }}>
+                    <Text style={styles.buttonText}>Reject Request</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
 
     return (
-        <View>
-            {!notificationFlag && (
-                <View style={style.no_request_div}>
-                    <Text style={style.no_request_txt}>No New Requests Available</Text>
-                </View>
-            )}
-            {notificationFlag && (
+        <View style={styles.bodyContainer}>
+            {notificationList ? (
                 <View>
-                    <View style={style.heading}>
-                        <Text style={style.h_text}>Std Email</Text>
-                        <Text style={style.h_text}>Course Name</Text>
-                    </View>
-                    <View>
-                        <FlatList
-                            data={notificationList}
-                            renderItem={renderItem}
-                        />
-                    </View>
+                    <FlatList
+                        data={notificationList}
+                        renderItem={renderNotifications} />
+                </View>
+            ) : (
+                <View style={styles.noDataContainer}>
+                    <Text style={styles.noDataText}>
+                        No new request is available{'\n'}
+                        <SimpleLineIcons name={'emotsmile'} size={50} color="#000000" />
+                        <SimpleLineIcons name={'emotsmile'} size={50} color="#000000" />
+                        <SimpleLineIcons name={'emotsmile'} size={50} color="#000000" />
+                    </Text>
                 </View>
             )}
         </View>
     );
 }
-
-const style = StyleSheet.create({
-    no_request_div: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 250,
-    },
-    no_request_txt: {
-        fontWeight: '900',
-        fontStyle: 'italic',
-    },
-    modal: {
-        justifyContent: 'center',
-        backgroundColor: '#4C4B49',
-        marginHorizontal: 10,
-        paddingVertical: 15,
-        borderRadius: 5,
-        marginTop: 10,
-    },
-    heading: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        backgroundColor: '#ffffff',
-        marginHorizontal: 10,
-        paddingHorizontal: 15,
-        paddingVertical: 15,
-        marginTop: 10,
-    },
-    h_text: {
-        color: '#000000',
-        fontWeight: 'bold',
-        marginBottom: 5,
-        textAlign: 'center',
-    },
-    text: {
-        color: '#ffffff',
-        fontWeight: 'bold',
-        marginBottom: 5,
-        marginTop: 6,
-        textAlign: 'center',
-    },
-    btn: {
-        backgroundColor: '#FFB22F',
-        elevation: 10,
-        paddingHorizontal: 20,
-        paddingVertical: 7,
-        borderRadius: 5,
-        marginHorizontal: 20,
-    },
-    btn_text: {
-        color: '#000000',
-        fontWeight: '600',
-    },
-});

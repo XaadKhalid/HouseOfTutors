@@ -1,54 +1,32 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable prettier/prettier */
 import { Text, View, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { GetWithParams } from '../../Api/API_Types';
 import styles from '../../Assests/Styling';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getgmailFormAsync } from '../../AsyncStorage/GlobalData';
 
 export default function T_Teaching() {
   const [teachingCourses, SetteachingCourses] = useState([]);
-  const [stdEmail, setStdEmail] = useState('');
 
   useEffect(() => {
-    getgmail();
+    getteachingCourses();
   }, []);
 
-  useEffect(() => {
-    if (stdEmail !== '') {
-      getteachingCourses();
-    }
-  }, [stdEmail]);
-
-  const getgmail = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('std_email');
-      if (jsonValue != null) {
-        setStdEmail(jsonValue);
-        console.log('Getting the email address of student from Asyncstorage => ', jsonValue);
-        console.log('----------------------------------------------------------------------------');
-      } else {
-        console.log('No gmail found in Asyncstorage');
-        console.log('----------------------------------------------------------------------------');
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   const getteachingCourses = async () => {
-    const paramsObject = {
-      controller: 'Tutor',
-      action: 'Get_Ttr_Teaching',
-      params: { email: stdEmail },
-    };
-    let response = await GetWithParams(paramsObject);
-    if (response !== 'No Courses found in enrollement Table') {
-      SetteachingCourses(response);
-    }
-    else {
-      SetteachingCourses(null);
+    let gmail = await getgmailFormAsync();
+    if (gmail !== null) {
+      const paramsObject = {
+        controller: 'Tutor',
+        action: 'Get_Ttr_Teaching',
+        params: { email: gmail },
+      };
+      let response = await GetWithParams(paramsObject);
+      if (response !== 'No Courses found in enrollement Table') {
+        SetteachingCourses(response);
+      }
+      else {
+        SetteachingCourses(null);
+      }
     }
   };
 

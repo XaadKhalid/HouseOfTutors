@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
@@ -64,7 +65,8 @@ export default function EnlistedCourses({ navigation }) {
                 <View>
                     <FlatList
                         data={selectedCourse}
-                        renderItem={renderclasses} />
+                        renderItem={renderclasses}
+                        contentContainerStyle={{ paddingBottom: 45 }} />
                 </View>
             ) : (
                 <View style={styles.noDataContainer}>
