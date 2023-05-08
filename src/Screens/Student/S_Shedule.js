@@ -2,9 +2,11 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, Pressable, Alert } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import styles from '../../Assests/Styling';
+import { getgmailFormAsync } from '../../AsyncStorage/GlobalData';
+import { GetWithParams, PostWithParams } from '../../Api/API_Types';
 
 export default function S_Shedule() {
   const [selectedslot, setselectedslot] = useState(Array(112).fill(false));
@@ -13,7 +15,7 @@ export default function S_Shedule() {
   const [stdemail, setStdEmail] = useState('');
 
   const daysofweek = [
-    'Time Slots',
+    ' Time  Slots ',
     'Mon',
     'Tue',
     'Wed',
@@ -43,14 +45,8 @@ export default function S_Shedule() {
   ];
 
   useEffect(() => {
-    if (stdemail !== '') {
-      getSchedule(stdemail);
-    }
-  }, [stdemail]);
-
-  useEffect(() => {
     getCompleteIndexTable();
-    getgmail();
+    getSchedule();
   }, []);
 
   useEffect(() => {
@@ -77,52 +73,34 @@ export default function S_Shedule() {
     setCheckBoxIndex(rowsarray);
   };
 
-  const getgmail = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('std_email');
-      if (jsonValue != null) {
-        setStdEmail(jsonValue);
-      }
-      else {
-        console.log('No gmail found in Asyncstorage');
-        console.log('----------------------------------------------------------------------------');
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const getSchedule = async (email) => {
-    console.log('result to be fethed for ', email);
-    console.log('----------------------------------------------------------------------------');
-    try {
-      const response = await fetch(
-        `http://192.168.43.231/HouseOfTutors/api/Student/GetStudentSchedule?email=${email}`,
-      );
-      const data = await response.json();
-      console.log('Result from getschedule API: ', data);
-      console.log('----------------------------------------------------------------------------');
-      if (data !== null) {
-        const scheduleData = data.split('');
+  const getSchedule = async () => {
+    let asyncresponse = await getgmailFormAsync();
+    if (asyncresponse !== null) {
+      setStdEmail(asyncresponse);
+      const paramsObject = {
+        controller: 'Student',
+        action: 'GetStudentSchedule',
+        params: { email: asyncresponse },
+      };
+      let response = await GetWithParams(paramsObject);
+      if (response !== null) {
+        const scheduleData = response.split('');
         if (scheduleData.includes('1')) {
           setSchedulearray(scheduleData);
           console.log('converted api string to array', scheduleData);
-          console.log('----------------------------------------------------------------------------');
+          console.log();
         }
         else {
-          Alert.alert('No Schedule Set please update first');
+          Alert.alert('No Schedule set please update it first');
         }
-      } else {
+      }
+      else {
         Alert.alert('No Schedule Found!');
       }
-    } catch (error) {
-      console.log(error);
-      console.log('----------------------------------------------------------------------------');
     }
   };
 
   const setPreCheckedSlots = () => {
-    console.log('update schedulearry  is ', schedulearray);
     let temarray = [...selectedslot];
     for (let i = 0; i < schedulearray.length; i++) {
       if (schedulearray[i] === '1' || schedulearray[i] === '2') {
@@ -132,36 +110,29 @@ export default function S_Shedule() {
       }
     }
     setselectedslot(temarray);
-    console.log(temarray);
-    console.log('----------------------------------------------------------------------------');
   };
 
   const setSchedule = async (details, email) => {
-    try {
-      const response = await fetch(`http://192.168.43.231/HouseOfTutors/api/student/StudentSchedule?details=${details}&email=${email}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      });
-      const data = await response.json();
-      console.log(data);
-      console.log('----------------------------------------------------------------------------');
-      Alert.alert(data);
-    }
-    catch (error) {
-      console.log(error);
-      console.log('----------------------------------------------------------------------------');
+    const paramsObject = {
+      controller: 'student',
+      action: 'StudentSchedule',
+      params: { details: details, email: email },
+    };
+    let response = await PostWithParams(paramsObject);
+    if (response !== null) {
+      Alert.alert(response);
     }
   };
 
   const renderDaysOfWeek = ({ item }) => (
-    <View style={styles.headerbox}>
-      <Text style={styles.headertext}>{item}</Text>
+    <View style={{ marginHorizontal: 9 }}>
+      <Text style={styles.itemText}>{item}</Text>
     </View>
   );
 
   const renderTimeSlots = ({ item, index }) => (
-    <View style={styles.row}>
-      <Text style={styles.timetext}>{item}</Text>
+    <View style={{ flexDirection: 'row' }}>
+      <Text style={{ color: '#000', marginTop: 7 }}>{item}</Text>
       <FlatList
         data={checkBoxIndex[index]}
         renderItem={renderRowWiseCheckBox}
@@ -172,7 +143,7 @@ export default function S_Shedule() {
 
   const renderRowWiseCheckBox = ({ item }) => {
     return (
-      <View style={{ marginHorizontal: 5 }}>
+      <View style={{ marginHorizontal: 4 }}>
         {item.map(index => (
           <CheckBox
             key={index}
@@ -181,7 +152,6 @@ export default function S_Shedule() {
               const newSelectedSlot = [...selectedslot];
               newSelectedSlot[index] = value;
               setselectedslot(newSelectedSlot);
-              console.log(schedulearray[index]);
             }}
             tintColors={
               selectedslot[index] && schedulearray[index] === '2'
@@ -194,79 +164,44 @@ export default function S_Shedule() {
     );
   };
 
+  const updateSchedule = () => {
+    let str1 = '';
+    for (let i = 0; i < selectedslot.length; i++) {
+      if (selectedslot[i] === true) {
+        if (schedulearray[i] === '2') {
+          str1 = str1 + '2';
+        }
+        else {
+          str1 = str1 + '1';
+        }
+      } else {
+        str1 = str1 + '0';
+      }
+    }
+    setSchedule(str1, stdemail);
+  };
+
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={daysofweek}
-        renderItem={renderDaysOfWeek}
-        keyExtractor={day => day}
-        horizontal
-      />
+    <View style={styles.bodyContainer}>
+      <View style={styles.dayOfWeekWrapper}>
+        <FlatList
+          data={daysofweek}
+          renderItem={renderDaysOfWeek}
+          keyExtractor={day => day}
+          horizontal
+        />
+      </View>
       <FlatList
         data={timelsots}
         renderItem={renderTimeSlots}
         keyExtractor={time => time}
+        contentContainerStyle={{ marginLeft: 5 }}
       />
-      <Pressable
-        onPress={() => {
-          let str1 = '';
-          for (let i = 0; i < selectedslot.length; i++) {
-            if (selectedslot[i] === true) {
-              if (schedulearray[i] === '2') {
-                str1 = str1 + '2';
-              }
-              else {
-                str1 = str1 + '1';
-              }
-            } else {
-              str1 = str1 + '0';
-            }
-          }
-          setSchedule(str1, stdemail);
-        }}>
-        <Text style={styles.button}>Update Schedule</Text>
-      </Pressable>
+      <TouchableOpacity style={styles.button} onPress={() => {
+        updateSchedule();
+      }}>
+        <Text style={styles.buttonText}>Update Schedule</Text>
+      </TouchableOpacity>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#fff',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-  },
-  row: {
-    flexDirection: 'row',
-  },
-  headerbox: {
-    borderWidth: 2,
-    borderColor: '#000',
-    borderLeftWidth: 0,
-    borderRightWidth: 0,
-    borderTopWidth: 0,
-  },
-  headertext: {
-    fontSize: 14,
-    marginRight: 22,
-    color: '#000',
-  },
-  timetext: {
-    fontSize: 14,
-    color: '#000',
-    marginLeft: 0,
-    marginTop: 7,
-  },
-  button: {
-    backgroundColor: '#FFB22F',
-    paddingVertical: 5,
-    borderRadius: 5,
-    textAlign: 'center',
-    width: '40%',
-    color: '#282634',
-    elevation: 3,
-    marginLeft: 120,
-    marginBottom: 18,
-    fontWeight: 'bold',
-  },
-});
