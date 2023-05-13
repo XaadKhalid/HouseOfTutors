@@ -1,37 +1,90 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable prettier/prettier */
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import styles from '../../Assests/Styling';
 import { getgmailFormAsync } from '../../AsyncStorage/GlobalData';
-import { GetWithParams, PostWithParams } from '../../Api/API_Types';
+import { GetWithParams, PostWithObject, PostWithParams } from '../../Api/API_Types';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import CheckBox from '@react-native-community/checkbox';
 
 export default function T_TodayClass() {
 
   const [classesList, setClassesList] = useState([]);
+  const [reScheduleflag, setReScheduleflag] = useState(false);
+  const [slotsflag, setslotsflag] = useState(false);
+  const [availablityflag, setAvailablityflag] = useState(false);
+  const [availableslots, setAvailableslots] = useState([]);
+  const [checkedslots, setCheckedslots] = useState([]);
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedTime, setSelectedTime] = useState('');
+  const [requestflag, setRequestflag] = useState(false);
+  const [requestedObject, setRequestedObject] = useState({});
 
   useEffect(() => {
     getClasses();
   }, []);
 
+  useEffect(() => {
+    if (requestflag) {
+      sendRequest();
+      setReScheduleflag(false);
+    }
+  }, [requestflag]);
+
   const getClasses = async () => {
-    let gmail = '';
     let asyncresponse = await getgmailFormAsync();
     if (asyncresponse !== null) {
-      gmail = asyncresponse;
       const paramsObject = {
         controller: 'Tutor',
         action: 'Get_Today_Classes',
-        params: { temail: gmail },
+        params: { temail: asyncresponse },
       };
       let response = await GetWithParams(paramsObject);
       if (response !== 'No class are schedule for today' && response !== 'No Record Found in the Enrollment') {
-        let updatedresponse = response.map(item => ({ ...item, takenflag: false, resflag: false, btnflag: true }));
+        let updatedresponse = response.map(item => ({ ...item, takenflag: false, resflag: false, btnflag: true, rescbtnflag: false }));
         setClassesList(updatedresponse);
       }
       else {
         setClassesList(null);
       }
+    }
+  };
+
+  const getAvailableSlots = async (semail, temail) => {
+    const paramsObject = {
+      controller: 'Tutor',
+      action: 'Tutor_Rescheduledata',
+      params: { temail: temail, semail: semail },
+    };
+    let response = await GetWithParams(paramsObject);
+    if (response !== 'No schedule id found for tutor' && response !== 'No matching slot available') {
+      setAvailableslots(response);
+      setslotsflag(true);
+      setAvailablityflag(true);
+    }
+    else {
+      setAvailableslots(null);
+      setReScheduleflag(true);
+    }
+  };
+
+  const sendRequest = async () => {
+    console.log('resultant objct is ', requestedObject);
+    const paramsObject = {
+      controller: 'Tutor',
+      action: 'Send_Reschedule_Request',
+      params: requestedObject,
+    };
+    let response = await PostWithObject(paramsObject);
+    if (response !== 'No schedule id found for tutor' && response !== 'No matching slot available') {
+      console.log('Request send successfully');
+      console.log();
     }
   };
 
@@ -73,6 +126,89 @@ export default function T_TodayClass() {
     );
   };
 
+  const toggleReschedule = (index) => {
+    setClassesList((prev) =>
+      prev.map((item, i) => {
+        if (i === index) {
+          if (item.rescbtnflag) {
+            return { ...item, rescbtnflag: false, btnflag: true };
+          }
+          else {
+            return { ...item, rescbtnflag: true, btnflag: false };
+          }
+        }
+        return item;
+      })
+    );
+  };
+
+  const onChange = (event, value) => {
+    setShow(false);
+    setDate(value);
+    if (value) {
+      const day = value.getDate().toString().padStart(2, '0');
+      const month = (value.getMonth() + 1).toString().padStart(2, '0');
+      const year = value.getFullYear().toString();
+      const formattedDate = `${day}/${month}/${year}`;
+      setSelectedDate(formattedDate);
+      let hours = value.getHours();
+      let minutes = value.getMinutes();
+      let timeFormat = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12; // convert 0 to 12
+      const formattedTime = `${hours}:${minutes.toString().padStart(2, '0')} ${timeFormat}`;
+      setSelectedTime(formattedTime);
+    }
+  };
+
+  const showMode = currentMode => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
+
+  const showTimepicker = () => {
+    showMode('time');
+  };
+
+  const checkboxVerification = (flagsofslot) => {
+    flagsofslot[1] = !flagsofslot[1];
+    if (flagsofslot[1]) {
+      console.log('checked');
+      setCheckedslots(previous => {
+        let arr = [...previous];
+        arr = [...checkedslots, flagsofslot[0]];
+        return arr;
+      });
+    } else {
+      console.log('un-checked');
+      setCheckedslots(previous => {
+        let arr = [...previous];
+        arr = checkedslots.filter((checkedSlot) => checkedSlot !== flagsofslot[0]);
+        return arr;
+      });
+    }
+  };
+
+  const hideAll = (index) => {
+    let selectedFlag = 'Retake';
+    toggleFlag(index, selectedFlag);
+    setslotsflag(false);
+    setAvailablityflag(false);
+    setReScheduleflag(false);
+    setClassesList((prev) =>
+      prev.map((item1, i) => {
+        if (i === index) {
+          return { ...item1, rescbtnflag: false, btnflag: false };
+        }
+        return item1;
+      })
+    );
+    setRequestflag(true);
+  };
+
   const renderclasses = ({ item, index }) => (
     <View key={index} style={styles.containerbox}>
       <View style={styles.itembox}>
@@ -91,7 +227,38 @@ export default function T_TodayClass() {
         <Text style={styles.itemText}>Class is Already Taken</Text>
       )}
       {item.resflag && (
-        <Text style={styles.itemText}>Sorry your Class is ReSchedule</Text>
+        <Text style={styles.itemText}>Requested for class reScheduling</Text>
+      )}
+      {reScheduleflag && (
+        <Text style={styles.itemText}>No slots available for ReScheduling{'\n'}Choose date and time for manual Request</Text>
+      )}
+      {availablityflag && (
+        <View>
+          <Text style={styles.itemText}>Available slots for ReScheduleing</Text>
+        </View>
+      )}
+      {slotsflag && (
+        <View style={styles.checkboxContainer}>
+          {availableslots.map((slot, sIndex) => {
+            let flagsofslot = [slot, false];
+            if (checkedslots.includes(slot)) {
+              flagsofslot = [slot, true];
+            }
+            console.log('flagofslot is ', flagsofslot);
+            return (
+              <View key={sIndex} style={styles.checkboxitem}>
+                <CheckBox
+                  tintColors={{ true: 'gold', false: 'white' }}
+                  value={flagsofslot[1]}
+                  onValueChange={() => {
+                    checkboxVerification(flagsofslot);
+                  }}
+                />
+                <Text style={styles.checkboxtext}>{slot}</Text>
+              </View>
+            );
+          })}
+        </View>
       )}
       {item.btnflag && (
         <View style={styles.itembox}>
@@ -103,10 +270,52 @@ export default function T_TodayClass() {
             <Text style={styles.buttonText}>Take Class</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={() => {
-            let selectedFlag = 'ReScheduleClass';
-            toggleFlag(index, selectedFlag);
+            getAvailableSlots(item.sname, item.tname);
+            toggleReschedule(index);
           }}>
             <Text style={styles.buttonText}>ReSchedule Class</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+      {item.rescbtnflag && (
+        <View style={styles.itembox}>
+          <TouchableOpacity style={styles.button} onPressIn={() => {
+            if (checkedslots.length > 0) {
+              hideAll(index);
+              setRequestedObject({
+                ...requestedObject,
+                sname: item.sname,
+                tname: item.tname,
+                cname: item.cname,
+                requestedslots: checkedslots,
+                slot: item.slotindexes[0],
+              });
+            }
+            else if (selectedDate !== '' && selectedTime !== '') {
+              setRequestedObject({
+                ...requestedObject,
+                sname: item.sname,
+                tname: item.tname,
+                cname: item.cname,
+                date: selectedDate,
+                time: selectedTime,
+                slot: item.slotindexes[0],
+              });
+              hideAll(index);
+            }
+            else {
+              Alert.alert('Please confirm slot for rescheduling');
+            }
+          }}>
+            <Text style={styles.buttonText}>Confirm ReSchedule</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => {
+            toggleReschedule(index);
+            setslotsflag(false);
+            setReScheduleflag(false);
+            setAvailablityflag(false);
+          }}>
+            <Text style={styles.buttonText}>Discard ReSchedule</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -117,9 +326,41 @@ export default function T_TodayClass() {
     <View style={styles.bodyContainer}>
       {classesList ? (
         <View>
-          <FlatList
-            data={classesList}
-            renderItem={renderclasses} />
+          {reScheduleflag && (
+            <View style={styles.containerbox}>
+              <View style={styles.itembox}>
+                <TouchableOpacity onPress={showDatepicker}>
+                  <MaterialIcons name="date-range" size={30} color="#FFB22F" style={styles.ip_icon} />
+                </TouchableOpacity>
+                <View>
+                  <Text style={styles.itemText}>{selectedDate}</Text>
+                </View>
+                <View>
+                  <Text style={styles.itemText}>{selectedTime}</Text>
+                </View>
+                <TouchableOpacity onPress={showTimepicker}>
+                  <MaterialIcons name="update" size={30} color="#FFB22F" style={styles.ip_icon} />
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+          {show && (
+            <View>
+              <View>
+                <DateTimePicker
+                  value={date}
+                  mode={mode}
+                  display="default"
+                  onChange={onChange}
+                />
+              </View>
+            </View>
+          )}
+          <View>
+            <FlatList
+              data={classesList}
+              renderItem={renderclasses} />
+          </View>
         </View>
       ) : (
         <View style={styles.noDataContainer}>

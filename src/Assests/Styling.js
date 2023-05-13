@@ -14,7 +14,8 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginVertical: 5,
         elevation: 3,
-        borderBottomWidth: 3,
+        borderLeftWidth: 3,
+        borderRightWidth: 3,
         borderColor: 'gold',
     },
     itembox: {
@@ -129,6 +130,49 @@ const styles = StyleSheet.create({
         elevation: 3,
         borderBottomWidth: 3,
         borderColor: 'gold',
+    },
+    checkboxContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        marginVertical: 12,
+        // borderBottomWidth: 3,
+        // borderTopWidth: 3,
+        // borderColor: 'gold',
+    },
+    checkboxitem: {
+        flexDirection: 'row',
+    },
+    checkboxtext: {
+        color: '#ffffff',
+        marginTop: 4,
+    },
+    checkboxlable: {
+        marginTop: 5,
+        marginHorizontal: 85,
+        color: '#fff',
+    },
+    inputContainer: {
+        borderWidth: 1,
+        borderColor: '#000',
+        paddingHorizontal: 30,
+        flexDirection: 'row',
+        borderRadius: 4,
+        justifyContent: 'center',
+        marginVertical: 3,
+        width: '70%',
+    },
+    inputlabel: {
+        color: '#000',
+        marginTop: 12,
+        fontWeight: 900,
+    },
+    profilecontainer: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#fff',
     },
 });
 
