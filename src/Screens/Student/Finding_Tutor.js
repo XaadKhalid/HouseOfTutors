@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable prettier/prettier */
 import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
@@ -111,7 +110,7 @@ export default function Finding_Tutor({ route }) {
                 <Text style={styles.itemText}>Rating/Grade: </Text>
                 <Text style={styles.itemText}>{item.rating}/{item.grade}</Text>
             </View>
-            <View>
+            <View style={styles.checkboxContainer}>
                 {item.slots.slice(0, numOfSlots).map((slot, sIndex) => {
                     let flagsofslot = [slot, false];
                     if (item.checkedslots.includes(slot)) {
@@ -119,7 +118,7 @@ export default function Finding_Tutor({ route }) {
                     }
                     console.log('flagofslot is ', flagsofslot);
                     return (
-                        <View key={sIndex} style={{ flexDirection: 'row', marginTop: 5 }}>
+                        <View key={sIndex} style={styles.checkboxitem}>
                             <CheckBox
                                 tintColors={{ true: 'gold', false: 'white' }}
                                 value={flagsofslot[1]}
@@ -127,7 +126,7 @@ export default function Finding_Tutor({ route }) {
                                     checkboxVerification(flagsofslot, index, item);
                                 }}
                             />
-                            <Text style={{ fontStyle: 'italic', color: '#ffffff', marginTop: 5 }}>{slot}</Text>
+                            <Text style={styles.checkboxtext}>{slot}</Text>
                         </View>
                     );
                 })}
