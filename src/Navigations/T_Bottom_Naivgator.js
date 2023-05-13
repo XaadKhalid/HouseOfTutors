@@ -25,6 +25,7 @@ export default function T_Bottom_Navigator({ }) {
                 headerStyle: { backgroundColor: '#282634' },
                 tabBarLabelStyle: {
                     color: '#FFFFFF',
+                    fontSize: 12,
                 },
                 tabBarInactiveBackgroundColor: '#282634',
                 tabBarActiveBackgroundColor: '#677567',

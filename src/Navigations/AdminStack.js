@@ -20,7 +20,7 @@ export default function AdminStack() {
         <Stack.Navigator initialRouteName="Dashboard"
             screenOptions={{
                 headerTitleAlign: 'center',
-                headerTintColor: '#FFB22F',
+                headerTintColor: '#FFF',
                 headerStyle: {
                     backgroundColor: '#282634',
                 },
