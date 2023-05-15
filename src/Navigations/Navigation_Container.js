@@ -8,6 +8,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from '../Screens/Authentication/Login';
 import Signup from '../Screens/Authentication/Signup';
+import DrawerNavigator from './DrawerNavigator';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,7 @@ function Navigation_Container() {
         <Stack.Screen name="ParentStack" component={ParentStack} />
         <Stack.Screen name="S_Bottom_Navigator" component={S_Bottom_Navigator} />
         <Stack.Screen name="T_Bottom_Navigator" component={T_Bottom_Navigator} />
+        <Stack.Screen name="DrawerNavigator" component={DrawerNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -11,20 +11,17 @@ import S_Shedule from '../Screens/Student/S_Shedule';
 import S_Learning from '../Screens/Student/S_Learning';
 import S_Fee from '../Screens/Student/S_Fee';
 import S_TodayClass from '../Screens/Student/S_TodayClass';
-import S_Profile from '../Screens/Student/S_Profile';
 
 export default function S_Bottom_Navigator() {
   const Tab = createBottomTabNavigator();
   return (
     <Tab.Navigator
       screenOptions={{
-        headerTitleAlign: 'center',
-        headerTintColor: '#FFB22F',
+        headerShown: false,
         tabBarLabelStyle: {
           color: '#FFFFFF',
           fontSize: 12,
         },
-        headerStyle: { backgroundColor: '#282634' },
         tabBarInactiveBackgroundColor: '#282634',
         tabBarActiveBackgroundColor: '#677567',
       }}>
@@ -78,7 +75,7 @@ export default function S_Bottom_Navigator() {
           },
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Profile"
         component={S_Profile}
         options={{
@@ -86,7 +83,7 @@ export default function S_Bottom_Navigator() {
             return <Icon3 name={'user-graduate'} size={24} color="#FFB22F" />;
           },
         }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 }
