@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+import 'react-native-gesture-handler';
 import React from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { StatusBar } from 'react-native';
