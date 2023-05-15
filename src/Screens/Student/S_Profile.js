@@ -66,4 +66,3 @@ export default function S_Profile() {
     </View>
   );
 }
-
