@@ -12,7 +12,7 @@ import {
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { GetWithParams } from '../../Api/API_Types';
-import { storegmailToAsync } from '../../AsyncStorage/GlobalData';
+import { storeUserToAsync, storegmailToAsync } from '../../AsyncStorage/GlobalData';
 
 function Login({ navigation }) {
   const [userEmail, setUseremail] = useState('');
@@ -33,6 +33,7 @@ function Login({ navigation }) {
     };
     if (response !== 'User Not Found' && response !== 'Wrong CNIC Entered') {
       storegmailToAsync(userEmail);
+      storeUserToAsync(response.data);
       const screenName = roleToScreen[response.Role];
       navigation.navigate(screenName);
     }

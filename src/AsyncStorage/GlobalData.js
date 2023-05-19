@@ -27,4 +27,25 @@ const storegmailToAsync = async value => {
     }
 };
 
-export { getgmailFormAsync, storegmailToAsync };
+const storeUserToAsync = async value => {
+    try {
+        const jsonValue = JSON.stringify(value);
+        await AsyncStorage.setItem('userdata', jsonValue);
+        console.log('UserData saved to AsyncStorage');
+        console.log();
+    } catch (e) {
+        console.log(e);
+    }
+};
+
+
+const getUserFormAsync = async () => {
+    try {
+        const jsonValue = await AsyncStorage.getItem('userdata');
+        return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (e) {
+        console.log(e);
+    }
+};
+
+export { getgmailFormAsync, storegmailToAsync, storeUserToAsync, getUserFormAsync };
