@@ -1,11 +1,14 @@
 /* eslint-disable prettier/prettier */
-import { View, Text } from 'react-native';
 import React from 'react';
+import { View, Text } from 'react-native';
+import styles from '../../Assests/Styling';
 
-export default function ReScheduleNotification() {
+const ReScheduleNotification = () => {
     return (
-        <View>
-            <Text>ReScheduleNotification</Text>
+        <View style={styles.noDataContainer}>
+            <Text style={styles.noDataText}>Hello Brothers</Text>
         </View>
     );
-}
+};
+
+export default ReScheduleNotification;
