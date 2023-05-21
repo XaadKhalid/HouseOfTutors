@@ -6,9 +6,11 @@ import styles from '../../Assests/Styling';
 import { getgmailFormAsync } from '../../AsyncStorage/GlobalData';
 import { GetWithParams, PostWithObject, PostWithParams } from '../../Api/API_Types';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import DateTimePicker from '@react-native-community/datetimepicker';
+//import DateTimePicker from '@react-native-community/datetimepicker';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import CheckBox from '@react-native-community/checkbox';
+import { Picker } from '@react-native-picker/picker';
+import CalendarPicker from 'react-native-calendar-picker';
 
 export default function T_TodayClass() {
 
@@ -18,13 +20,24 @@ export default function T_TodayClass() {
   const [availablityflag, setAvailablityflag] = useState(false);
   const [availableslots, setAvailableslots] = useState([]);
   const [checkedslots, setCheckedslots] = useState([]);
-  const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(false);
+  // const [date, setDate] = useState(new Date());
+  // const [mode, setMode] = useState('date');
+  // const [show, setShow] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
-  const [selectedTime, setSelectedTime] = useState('');
+  // const [selectedTime, setSelectedTime] = useState('');
   const [requestflag, setRequestflag] = useState(false);
+  const [pcikerflag, setPcikerflag] = useState(false);
+  const [showdate, setShowdate] = useState(false);
   const [requestedObject, setRequestedObject] = useState({});
+  const time = [
+    '08-AM', '09-AM', '10-AM', '11-AM', '12-PM', '01-PM', '02-PM', '03-PM',
+    '04-PM', '05-PM', '06-PM', '07-PM', '08-PM', '09-PM', '10-PM', '11-PM',
+  ];
+  const [selectTime, setSelectTime] = useState(time[0]);
+  const minDate = new Date(); // Minimum selectable date (e.g., today)
+  const maxDate = new Date(); // Maximum selectable date
+  minDate.setDate(minDate.getDate() + 1); // Set start date as the day after tomorrow
+  maxDate.setDate(maxDate.getDate() + 7); // Set end date as 7 days from today
 
   useEffect(() => {
     getClasses();
@@ -142,36 +155,36 @@ export default function T_TodayClass() {
     );
   };
 
-  const onChange = (event, value) => {
-    setShow(false);
-    setDate(value);
-    if (value) {
-      const day = value.getDate().toString().padStart(2, '0');
-      const month = (value.getMonth() + 1).toString().padStart(2, '0');
-      const year = value.getFullYear().toString();
-      const formattedDate = `${day}/${month}/${year}`;
-      setSelectedDate(formattedDate);
-      let hours = value.getHours();
-      let minutes = value.getMinutes();
-      let timeFormat = hours >= 12 ? 'PM' : 'AM';
-      hours = hours % 12 || 12; // convert 0 to 12
-      const formattedTime = `${hours}:${minutes.toString().padStart(2, '0')} ${timeFormat}`;
-      setSelectedTime(formattedTime);
-    }
-  };
+  // const onChange = (event, value) => {
+  //   setShow(false);
+  //   setDate(value);
+  //   if (value) {
+  //     const day = value.getDate().toString().padStart(2, '0');
+  //     const month = (value.getMonth() + 1).toString().padStart(2, '0');
+  //     const year = value.getFullYear().toString();
+  //     const formattedDate = `${day}/${month}/${year}`;
+  //     setSelectedDate(formattedDate);
+  //     let hours = value.getHours();
+  //     let minutes = value.getMinutes();
+  //     let timeFormat = hours >= 12 ? 'PM' : 'AM';
+  //     hours = hours % 12 || 12; // convert 0 to 12
+  //     const formattedTime = `${hours}:${minutes.toString().padStart(2, '0')} ${timeFormat}`;
+  //     setSelectedTime(formattedTime);
+  //   }
+  // };
 
-  const showMode = currentMode => {
-    setShow(true);
-    setMode(currentMode);
-  };
+  // const showMode = currentMode => {
+  //   setShow(true);
+  //   setMode(currentMode);
+  // };
 
-  const showDatepicker = () => {
-    showMode('date');
-  };
+  // const showDatepicker = () => {
+  //   showMode('date');
+  // };
 
-  const showTimepicker = () => {
-    showMode('time');
-  };
+  // const showTimepicker = () => {
+  //   showMode('time');
+  // };
 
   const checkboxVerification = (flagsofslot) => {
     flagsofslot[1] = !flagsofslot[1];
@@ -291,14 +304,14 @@ export default function T_TodayClass() {
                 slot: item.slotindexes[0],
               });
             }
-            else if (selectedDate !== '' && selectedTime !== '') {
+            else if (selectedDate !== '' && selectTime !== '') {
               setRequestedObject({
                 ...requestedObject,
                 sname: item.sname,
                 tname: item.tname,
                 cname: item.cname,
                 date: selectedDate,
-                time: selectedTime,
+                time: selectTime,
                 slot: item.slotindexes[0],
               });
               hideAll(index);
@@ -322,6 +335,21 @@ export default function T_TodayClass() {
     </View>
   );
 
+  const handleDateChange = (dat) => {
+    const customDate = new Date(dat);
+    setShowdate(false);
+    if (!isNaN(customDate)) {
+      const day = customDate.getDate().toString().padStart(2, '0');
+      const month = (customDate.getMonth() + 1).toString().padStart(2, '0');
+      const year = customDate.getFullYear().toString();
+      const formattedDate = `${day}/${month}/${year}`;
+      setSelectedDate(formattedDate);
+      console.log(formattedDate);
+    } else {
+      console.log('Invalid date object');
+    }
+  };
+
   return (
     <View style={styles.bodyContainer}>
       {classesList ? (
@@ -329,22 +357,47 @@ export default function T_TodayClass() {
           {reScheduleflag && (
             <View style={styles.containerbox}>
               <View style={styles.itembox}>
-                <TouchableOpacity onPress={showDatepicker}>
+                <TouchableOpacity onPress={() => { setShowdate(!showdate); }}>
                   <MaterialIcons name="date-range" size={30} color="#FFB22F" style={styles.ip_icon} />
                 </TouchableOpacity>
                 <View>
                   <Text style={styles.itemText}>{selectedDate}</Text>
                 </View>
                 <View>
-                  <Text style={styles.itemText}>{selectedTime}</Text>
+                  <Text style={styles.itemText}>{selectTime}</Text>
                 </View>
-                <TouchableOpacity onPress={showTimepicker}>
+                <TouchableOpacity onPress={() => { setPcikerflag(!pcikerflag); }}>
                   <MaterialIcons name="update" size={30} color="#FFB22F" style={styles.ip_icon} />
                 </TouchableOpacity>
               </View>
             </View>
           )}
-          {show && (
+          {pcikerflag && (
+            <View>
+              <Picker
+                selectedValue={selectTime}
+                onValueChange={itemValue => {
+                  setSelectTime(itemValue);
+                  setPcikerflag(false);
+                }}
+              >
+                {time.map((item, index) => (
+                  <Picker.Item key={index} label={item} value={item} />
+                ))}
+              </Picker>
+            </View>
+          )}
+          {showdate && (
+            <View>
+              <CalendarPicker
+                startFromMonday={true}
+                minDate={minDate}
+                maxDate={maxDate}
+                onDateChange={handleDateChange}
+              />
+            </View>
+          )}
+          {/* {show && (
             <View>
               <View>
                 <DateTimePicker
@@ -355,7 +408,7 @@ export default function T_TodayClass() {
                 />
               </View>
             </View>
-          )}
+          )} */}
           <View>
             <FlatList
               data={classesList}
