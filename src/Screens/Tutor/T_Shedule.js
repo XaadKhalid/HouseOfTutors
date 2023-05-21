@@ -17,7 +17,7 @@ export default function T_Shedule() {
   const isFocused = useIsFocused();
 
   const daysofweek = [
-    'Time Slots',
+    ' Time Slots ',
     'Mon',
     'Tue',
     'Wed',
@@ -28,22 +28,22 @@ export default function T_Shedule() {
   ];
 
   const timelsots = [
-    '08:00-09:00AM',
-    '09:00-10:00AM',
-    '10:00-11:00AM',
-    '11:00-12:00PM',
-    '12:00-01:00PM',
-    '01:00-02:00PM',
-    '02:00-03:00PM',
-    '03:00-04:00PM',
-    '04:00-05:00PM',
-    '05:00-06:00PM',
-    '06:00-07:00PM',
-    '07:00-08:00PM',
-    '08:00-09:00PM',
-    '09:00-10:00PM',
-    '10:00-11:00PM',
-    '11:00-12:00AM',
+    '08:00 - 09:00',
+    '09:00 - 10:00',
+    '10:00 - 11:00',
+    '11:00 - 12:00',
+    '12:00 - 13:00',
+    '13:00 - 14:00',
+    '14:00 - 15:00',
+    '15:00 - 16:00',
+    '16:00 - 17:00',
+    '17:00 - 18:00',
+    '18:00 - 19:00',
+    '19:00 - 20:00',
+    '20:00 - 21:00',
+    '21:00 - 22:00',
+    '22:00 - 23:00',
+    '23:00 - 24:00',
   ];
 
   useEffect(() => {
@@ -150,7 +150,7 @@ export default function T_Shedule() {
 
   const renderRowWiseCheckBox = ({ item }) => {
     return (
-      <View style={{ marginHorizontal: 4 }}>
+      <View style={{ marginHorizontal: 6 }}>
         {item.map(index => (
           <CheckBox
             key={index}
