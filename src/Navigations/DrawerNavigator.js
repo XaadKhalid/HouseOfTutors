@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import S_Bottom_Navigator from './S_Bottom_Navigator';
-import ReScheduleNotification from '../Screens/Student/ReScheduleNotification';
 import S_Profile from '../Screens/Student/S_Profile';
 import { getUserFormAsync } from '../AsyncStorage/GlobalData';
+import ReScheduleNotification from '../Screens/Student/ReScheduleNotification';
 
 const Drawer = createDrawerNavigator();
 
@@ -33,7 +33,7 @@ export default function DrawerNavigator() {
             <Drawer.Screen name="Home" component={S_Bottom_Navigator} options={{
                 headerTitle: name,
             }} />
-            <Drawer.Screen name="Schedule Requests" component={ReScheduleNotification} />
+            <Drawer.Screen name="Testing Screen" component={ReScheduleNotification} />
             <Drawer.Screen name="Profile" component={S_Profile} />
         </Drawer.Navigator>
     );

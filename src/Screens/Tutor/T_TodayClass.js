@@ -16,8 +16,6 @@ export default function T_TodayClass() {
 
   const [classesList, setClassesList] = useState([]);
   const [reScheduleflag, setReScheduleflag] = useState(false);
-  const [slotsflag, setslotsflag] = useState(false);
-  const [availablityflag, setAvailablityflag] = useState(false);
   const [availableslots, setAvailableslots] = useState([]);
   const [checkedslots, setCheckedslots] = useState([]);
   // const [date, setDate] = useState(new Date());
@@ -60,7 +58,16 @@ export default function T_TodayClass() {
       };
       let response = await GetWithParams(paramsObject);
       if (response !== 'No class are schedule for today' && response !== 'No Record Found in the Enrollment') {
-        let updatedresponse = response.map(item => ({ ...item, takenflag: false, resflag: false, btnflag: true, rescbtnflag: false }));
+        let updatedresponse = response.map(item => ({
+          ...item,
+          takenflag: false,
+          resflag: false,
+          btnflag: true,
+          rescbtnflag: false,
+          reScheduleflag: false,
+          availablityflag: false,
+          slotsflag: false,
+        }));
         setClassesList(updatedresponse);
       }
       else {
@@ -69,7 +76,7 @@ export default function T_TodayClass() {
     }
   };
 
-  const getAvailableSlots = async (semail, temail) => {
+  const getAvailableSlots = async (semail, temail, index) => {
     const paramsObject = {
       controller: 'Tutor',
       action: 'Tutor_Rescheduledata',
@@ -78,12 +85,49 @@ export default function T_TodayClass() {
     let response = await GetWithParams(paramsObject);
     if (response !== 'No schedule id found for tutor' && response !== 'No matching slot available') {
       setAvailableslots(response);
-      setslotsflag(true);
-      setAvailablityflag(true);
+      setClassesList((prev) =>
+        prev.map((item, i) => {
+          if (i === index) {
+            return {
+              ...item,
+              availablityflag: true,
+              slotsflag: true,
+              rescbtnflag: true,
+              btnflag: false,
+            };
+          }
+          else {
+            if (item.resflag || item.takenflag) {
+              return {
+                ...item,
+                availablityflag: false,
+                slotsflag: false,
+                rescbtnflag: false,
+                btnflag: false,
+              };
+            } else {
+              return {
+                ...item,
+                availablityflag: false,
+                slotsflag: false,
+                rescbtnflag: false,
+                btnflag: true,
+              };
+            }
+          }
+        })
+      );
     }
     else {
       setAvailableslots(null);
-      setReScheduleflag(true);
+      setClassesList((prev) =>
+        prev.map((item, i) => {
+          if (i === index) {
+            return { ...item, reScheduleflag: true };
+          }
+          return item;
+        })
+      );
     }
   };
 
@@ -140,19 +184,19 @@ export default function T_TodayClass() {
   };
 
   const toggleReschedule = (index) => {
-    setClassesList((prev) =>
-      prev.map((item, i) => {
+    setClassesList((prev) => {
+      return prev.map((item, i) => {
         if (i === index) {
-          if (item.rescbtnflag) {
-            return { ...item, rescbtnflag: false, btnflag: true };
-          }
-          else {
-            return { ...item, rescbtnflag: true, btnflag: false };
-          }
+          return {
+            ...item,
+            rescbtnflag: !item.rescbtnflag,
+            btnflag: !item.btnflag,
+          };
+        } else {
+          return item;
         }
-        return item;
-      })
-    );
+      });
+    });
   };
 
   // const onChange = (event, value) => {
@@ -206,15 +250,18 @@ export default function T_TodayClass() {
   };
 
   const hideAll = (index) => {
-    let selectedFlag = 'Retake';
-    toggleFlag(index, selectedFlag);
-    setslotsflag(false);
-    setAvailablityflag(false);
-    setReScheduleflag(false);
     setClassesList((prev) =>
       prev.map((item1, i) => {
         if (i === index) {
-          return { ...item1, rescbtnflag: false, btnflag: false };
+          return {
+            ...item1,
+            slotsflag: false,
+            availablityflag: false,
+            reScheduleflag: false,
+            rescbtnflag: false,
+            btnflag: false,
+            resflag: true,
+          };
         }
         return item1;
       })
@@ -242,15 +289,15 @@ export default function T_TodayClass() {
       {item.resflag && (
         <Text style={styles.itemText}>Requested for class reScheduling</Text>
       )}
-      {reScheduleflag && (
+      {item.reScheduleflag && (
         <Text style={styles.itemText}>No slots available for ReScheduling{'\n'}Choose date and time for manual Request</Text>
       )}
-      {availablityflag && (
+      {item.availablityflag && (
         <View>
           <Text style={styles.itemText}>Available slots for ReScheduleing</Text>
         </View>
       )}
-      {slotsflag && (
+      {item.slotsflag && (
         <View style={styles.checkboxContainer}>
           {availableslots.map((slot, sIndex) => {
             let flagsofslot = [slot, false];
@@ -283,7 +330,7 @@ export default function T_TodayClass() {
             <Text style={styles.buttonText}>Take Class</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={() => {
-            getAvailableSlots(item.sname, item.tname);
+            getAvailableSlots(item.sname, item.tname, index);
             toggleReschedule(index);
           }}>
             <Text style={styles.buttonText}>ReSchedule Class</Text>
@@ -324,9 +371,22 @@ export default function T_TodayClass() {
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={() => {
             toggleReschedule(index);
-            setslotsflag(false);
-            setReScheduleflag(false);
-            setAvailablityflag(false);
+            // setslotsflag(false);
+            // setReScheduleflag(false);
+            // setAvailablityflag(false);
+            setClassesList((prev) =>
+              prev.map((item1, i) => {
+                if (i === index) {
+                  return {
+                    ...item1,
+                    slotsflag: false,
+                    availablityflag: false,
+                    reScheduleflag: false,
+                  };
+                }
+                return item1;
+              })
+            );
           }}>
             <Text style={styles.buttonText}>Discard ReSchedule</Text>
           </TouchableOpacity>
