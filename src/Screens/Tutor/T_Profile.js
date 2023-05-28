@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Image } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 import styles from '../../Assests/Styling';
 import { getgmailFormAsync } from '../../AsyncStorage/GlobalData';
 import { GetWithParams } from '../../Api/API_Types';
@@ -31,35 +31,43 @@ export default function T_Profile() {
   };
 
   return (
-    <View style={styles.profilecontainer}>
+    <View style={styles.bodyContainer}>
       <View>
-        <Image source={imagebg} resizeMode="center" style={{ height: 200, width: 200, marginBottom: 5 }} />
+        <View>
+          <TouchableOpacity onPress={() => { console.log('Image is pressed'); }}>
+            <Image source={imagebg} resizeMode="center" style={{ height: 150, width: 150 }} />
+          </TouchableOpacity>
+          <Text style={{ marginTop: -74, marginLeft: 160 }}>{studentObj.tname}</Text>
+          <Text style={{ marginTop: -4, marginLeft: 160, marginBottom: 35 }}>{studentObj.temail}</Text>
+        </View>
+        <View style={styles.containerbox}>
+          <Text style={{ color: '#fff', fontWeight: 'bold', fontStyle: 'italic' }}>About Me :</Text>
+          <Text style={styles.itemText}>Teaching is a dynamic profession that nurtures minds and shapes futures. It involves imparting knowledge, fostering critical thinking, and igniting curiosity.</Text>
+        </View>
       </View>
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputlabel}>Name :</Text>
-        <TextInput placeholder={studentObj.tname} placeholderTextColor={'#000'} />
-      </View>
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputlabel}>Email :</Text>
-        <TextInput placeholder={studentObj.temail} placeholderTextColor={'#000'} editable={false} />
-      </View>
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputlabel}>Password :</Text>
-        <TextInput placeholder={studentObj.tpassword} placeholderTextColor={'#000'} />
-      </View>
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputlabel}>Cgpa :</Text>
-        <TextInput placeholder="3.3" placeholderTextColor={'#000'} editable={false} />
-      </View>
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputlabel}>semester :</Text>
-        <TextInput placeholder="6" placeholderTextColor={'#000'} editable={false} />
-      </View>
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputlabel}>Contact :</Text>
-        <TextInput placeholder={studentObj.contact} placeholderTextColor={'#000'} />
+      <View style={styles.containerbox}>
+        <Text style={styles.itemText}>Portfolio</Text>
+        <View style={styles.itembox}>
+          <Text style={styles.itemText}>Profile Rating</Text>
+          <Text style={styles.itemText}>*****</Text>
+        </View>
+        <View style={styles.itembox}>
+          <Text style={styles.itemText}>Total Earning</Text>
+          <Text style={styles.itemText}>*****</Text>
+        </View>
+        <View style={styles.itembox}>
+          <Text style={styles.itemText}>No of Students</Text>
+          <Text style={styles.itemText}>*****</Text>
+        </View>
+        <View style={styles.itembox}>
+          <Text style={styles.itemText}>No of Courses Taught</Text>
+          <Text style={styles.itemText}>*****</Text>
+        </View>
+        <View style={styles.itembox}>
+          <Text style={styles.itemText}>No of Lectures Delivered</Text>
+          <Text style={styles.itemText}>*****</Text>
+        </View>
       </View>
     </View>
   );
 }
-
