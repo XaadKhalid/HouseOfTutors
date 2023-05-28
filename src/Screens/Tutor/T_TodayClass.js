@@ -6,36 +6,34 @@ import styles from '../../Assests/Styling';
 import { getgmailFormAsync } from '../../AsyncStorage/GlobalData';
 import { GetWithParams, PostWithObject, PostWithParams } from '../../Api/API_Types';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-//import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import CheckBox from '@react-native-community/checkbox';
 import { Picker } from '@react-native-picker/picker';
-import CalendarPicker from 'react-native-calendar-picker';
 
 export default function T_TodayClass() {
-
   const [classesList, setClassesList] = useState([]);
-  const [reScheduleflag, setReScheduleflag] = useState(false);
   const [availableslots, setAvailableslots] = useState([]);
   const [checkedslots, setCheckedslots] = useState([]);
-  // const [date, setDate] = useState(new Date());
-  // const [mode, setMode] = useState('date');
-  // const [show, setShow] = useState(false);
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, settoDate] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
-  // const [selectedTime, setSelectedTime] = useState('');
+  const [showDate1, setShowDate1] = useState(false);
+  const [saveFDate, setSaveFDate] = useState(false);
+  const [savetDate, setSaveTDate] = useState(false);
   const [requestflag, setRequestflag] = useState(false);
   const [pcikerflag, setPcikerflag] = useState(false);
-  const [showdate, setShowdate] = useState(false);
+  const [multiflag, setmMltiflag] = useState(false);
   const [requestedObject, setRequestedObject] = useState({});
   const time = [
     '08-AM', '09-AM', '10-AM', '11-AM', '12-PM', '01-PM', '02-PM', '03-PM',
     '04-PM', '05-PM', '06-PM', '07-PM', '08-PM', '09-PM', '10-PM', '11-PM',
   ];
   const [selectTime, setSelectTime] = useState(time[0]);
-  const minDate = new Date(); // Minimum selectable date (e.g., today)
-  const maxDate = new Date(); // Maximum selectable date
-  minDate.setDate(minDate.getDate() + 1); // Set start date as the day after tomorrow
-  maxDate.setDate(maxDate.getDate() + 7); // Set end date as 7 days from today
+  const minDate = new Date();
+  const maxDate = new Date();
+  minDate.setDate(minDate.getDate() + 1);
+  maxDate.setDate(maxDate.getDate() + 7);
 
   useEffect(() => {
     getClasses();
@@ -44,7 +42,7 @@ export default function T_TodayClass() {
   useEffect(() => {
     if (requestflag) {
       sendRequest();
-      setReScheduleflag(false);
+      //setReScheduleflag(false);
     }
   }, [requestflag]);
 
@@ -58,19 +56,44 @@ export default function T_TodayClass() {
       };
       let response = await GetWithParams(paramsObject);
       if (response !== 'No class are schedule for today' && response !== 'No Record Found in the Enrollment') {
-        let updatedresponse = response.map(item => ({
-          ...item,
-          takenflag: false,
-          resflag: false,
-          btnflag: true,
-          rescbtnflag: false,
-          reScheduleflag: false,
-          availablityflag: false,
-          slotsflag: false,
-        }));
+        let updatedresponse = response.map(item => {
+          if (item.istaken === 2) {
+            return {
+              ...item,
+              takenflag: false,
+              resflag: true,
+              btnflag: false,
+              rescbtnflag: false,
+              reScheduleflag: false,
+              availablityflag: false,
+              slotsflag: false,
+            };
+          } else if (item.istaken === 1) {
+            return {
+              ...item,
+              takenflag: true,
+              resflag: false,
+              btnflag: false,
+              rescbtnflag: false,
+              reScheduleflag: false,
+              availablityflag: false,
+              slotsflag: false,
+            };
+          } else {
+            return {
+              ...item,
+              takenflag: false,
+              resflag: false,
+              btnflag: true,
+              rescbtnflag: false,
+              reScheduleflag: false,
+              availablityflag: false,
+              slotsflag: false,
+            };
+          }
+        });
         setClassesList(updatedresponse);
-      }
-      else {
+      } else {
         setClassesList(null);
       }
     }
@@ -123,9 +146,28 @@ export default function T_TodayClass() {
       setClassesList((prev) =>
         prev.map((item, i) => {
           if (i === index) {
-            return { ...item, reScheduleflag: true };
+            return {
+              ...item,
+              reScheduleflag: true,
+              rescbtnflag: true,
+              btnflag: false,
+            };
+          } else {
+            if (item.istaken === 1 || item.istaken === 2) {
+              return {
+                ...item,
+                rescbtnflag: false,
+                btnflag: false,
+              };
+            } else {
+              return {
+                ...item,
+                reScheduleflag: false,
+                rescbtnflag: false,
+                btnflag: true,
+              };
+            }
           }
-          return item;
         })
       );
     }
@@ -183,51 +225,20 @@ export default function T_TodayClass() {
     );
   };
 
-  const toggleReschedule = (index) => {
-    setClassesList((prev) => {
-      return prev.map((item, i) => {
-        if (i === index) {
-          return {
-            ...item,
-            rescbtnflag: !item.rescbtnflag,
-            btnflag: !item.btnflag,
-          };
-        } else {
-          return item;
-        }
-      });
-    });
-  };
-
-  // const onChange = (event, value) => {
-  //   setShow(false);
-  //   setDate(value);
-  //   if (value) {
-  //     const day = value.getDate().toString().padStart(2, '0');
-  //     const month = (value.getMonth() + 1).toString().padStart(2, '0');
-  //     const year = value.getFullYear().toString();
-  //     const formattedDate = `${day}/${month}/${year}`;
-  //     setSelectedDate(formattedDate);
-  //     let hours = value.getHours();
-  //     let minutes = value.getMinutes();
-  //     let timeFormat = hours >= 12 ? 'PM' : 'AM';
-  //     hours = hours % 12 || 12; // convert 0 to 12
-  //     const formattedTime = `${hours}:${minutes.toString().padStart(2, '0')} ${timeFormat}`;
-  //     setSelectedTime(formattedTime);
-  //   }
-  // };
-
-  // const showMode = currentMode => {
-  //   setShow(true);
-  //   setMode(currentMode);
-  // };
-
-  // const showDatepicker = () => {
-  //   showMode('date');
-  // };
-
-  // const showTimepicker = () => {
-  //   showMode('time');
+  // const toggleReschedule = (index) => {
+  //   setClassesList((prev) => {
+  //     return prev.map((item, i) => {
+  //       if (i === index) {
+  //         return {
+  //           ...item,
+  //           rescbtnflag: !item.rescbtnflag,
+  //           btnflag: !item.btnflag,
+  //         };
+  //       } else {
+  //         return item;
+  //       }
+  //     });
+  //   });
   // };
 
   const checkboxVerification = (flagsofslot) => {
@@ -287,10 +298,29 @@ export default function T_TodayClass() {
         <Text style={styles.itemText}>Class is Already Taken</Text>
       )}
       {item.resflag && (
-        <Text style={styles.itemText}>Requested for class reScheduling</Text>
+        <Text style={styles.itemText}>This class is ReSchedule</Text>
       )}
       {item.reScheduleflag && (
-        <Text style={styles.itemText}>No slots available for ReScheduling{'\n'}Choose date and time for manual Request</Text>
+        <View>
+          <View style={styles.itembox}>
+            <TouchableOpacity onPress={() => { setShowDate1(!showDate1); }}>
+              <MaterialIcons name="date-range" size={30} color="#FFB22F" style={styles.ip_icon} />
+            </TouchableOpacity>
+            <View>
+              <Text style={styles.itemText}>{selectedDate}</Text>
+            </View>
+            <View>
+              <Text style={styles.itemText}>{selectTime}</Text>
+            </View>
+            <TouchableOpacity onPress={() => { setPcikerflag(!pcikerflag); }}>
+              <MaterialIcons name="update" size={30} color="#FFB22F" style={styles.ip_icon} />
+            </TouchableOpacity>
+          </View>
+          <View>
+            <Text style={styles.itemText}>No slots available for ReScheduling{'\n'}Choose date and time for manual Request</Text>
+          </View>
+        </View>
+
       )}
       {item.availablityflag && (
         <View>
@@ -331,7 +361,7 @@ export default function T_TodayClass() {
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={() => {
             getAvailableSlots(item.sname, item.tname, index);
-            toggleReschedule(index);
+            //toggleReschedule(index);
           }}>
             <Text style={styles.buttonText}>ReSchedule Class</Text>
           </TouchableOpacity>
@@ -370,7 +400,7 @@ export default function T_TodayClass() {
             <Text style={styles.buttonText}>Confirm ReSchedule</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={() => {
-            toggleReschedule(index);
+            //toggleReschedule(index);
             // setslotsflag(false);
             // setReScheduleflag(false);
             // setAvailablityflag(false);
@@ -382,6 +412,8 @@ export default function T_TodayClass() {
                     slotsflag: false,
                     availablityflag: false,
                     reScheduleflag: false,
+                    btnflag: true,
+                    rescbtnflag: false,
                   };
                 }
                 return item1;
@@ -395,16 +427,25 @@ export default function T_TodayClass() {
     </View>
   );
 
-  const handleDateChange = (dat) => {
-    const customDate = new Date(dat);
-    setShowdate(false);
+  const handleDateSelect = (event, selDate) => {
+    const customDate = new Date(selDate);
+    setShowDate1(false);
     if (!isNaN(customDate)) {
       const day = customDate.getDate().toString().padStart(2, '0');
       const month = (customDate.getMonth() + 1).toString().padStart(2, '0');
       const year = customDate.getFullYear().toString();
       const formattedDate = `${day}/${month}/${year}`;
-      setSelectedDate(formattedDate);
-      console.log(formattedDate);
+      if (saveFDate) {
+        setFromDate(formattedDate);
+        console.log('i m here for fromdate');
+        setSaveFDate(false);
+      } else if (savetDate) {
+        settoDate(formattedDate);
+        console.log('i m here for todate');
+        setSaveTDate(false);
+      } else {
+        setSelectedDate(formattedDate);
+      } console.log(formattedDate);
     } else {
       console.log('Invalid date object');
     }
@@ -414,24 +455,6 @@ export default function T_TodayClass() {
     <View style={styles.bodyContainer}>
       {classesList ? (
         <View>
-          {reScheduleflag && (
-            <View style={styles.containerbox}>
-              <View style={styles.itembox}>
-                <TouchableOpacity onPress={() => { setShowdate(!showdate); }}>
-                  <MaterialIcons name="date-range" size={30} color="#FFB22F" style={styles.ip_icon} />
-                </TouchableOpacity>
-                <View>
-                  <Text style={styles.itemText}>{selectedDate}</Text>
-                </View>
-                <View>
-                  <Text style={styles.itemText}>{selectTime}</Text>
-                </View>
-                <TouchableOpacity onPress={() => { setPcikerflag(!pcikerflag); }}>
-                  <MaterialIcons name="update" size={30} color="#FFB22F" style={styles.ip_icon} />
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
           {pcikerflag && (
             <View>
               <Picker
@@ -447,32 +470,62 @@ export default function T_TodayClass() {
               </Picker>
             </View>
           )}
-          {showdate && (
+          {showDate1 && (
             <View>
-              <CalendarPicker
-                startFromMonday={true}
-                minDate={minDate}
-                maxDate={maxDate}
-                onDateChange={handleDateChange}
+              <DateTimePicker
+                value={new Date()}
+                mode="date"
+                display="default"
+                minimumDate={minDate}
+                maximumDate={maxDate}
+                onChange={handleDateSelect}
               />
             </View>
           )}
-          {/* {show && (
-            <View>
-              <View>
-                <DateTimePicker
-                  value={date}
-                  mode={mode}
-                  display="default"
-                  onChange={onChange}
-                />
-              </View>
-            </View>
-          )} */}
           <View>
             <FlatList
               data={classesList}
               renderItem={renderclasses} />
+          </View>
+          <View style={styles.containerbox}>
+            {multiflag && (
+              <View style={styles.itembox}>
+                <TouchableOpacity onPress={() => {
+                  setShowDate1(!showDate1);
+                  setSaveFDate(true);
+                }}>
+                  <MaterialIcons name="date-range" size={30} color="#FFB22F" style={styles.ip_icon} />
+                </TouchableOpacity>
+                <View>
+                  <Text style={styles.itemText}>From: {fromDate}</Text>
+                </View>
+                <View>
+                  <Text style={styles.itemText}>To: {toDate}</Text>
+                </View>
+                <TouchableOpacity onPress={() => {
+                  setShowDate1(!showDate1);
+                  setSaveTDate(true);
+                }}>
+                  <MaterialIcons name="date-range" size={30} color="#FFB22F" style={styles.ip_icon} />
+                </TouchableOpacity>
+              </View>
+            )}
+            <View style={styles.itembox}>
+              <View>
+                <TouchableOpacity style={styles.button} onPressIn={() => {
+                  console.log('I m pressed');
+                }}>
+                  <Text style={styles.buttonText}>PreSchedule</Text>
+                </TouchableOpacity>
+              </View>
+              <View>
+                <TouchableOpacity style={styles.button} onPressIn={() => {
+                  setmMltiflag(!multiflag);
+                }}>
+                  <Text style={styles.buttonText}>Multiple ReSchedule</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
         </View>
       ) : (
