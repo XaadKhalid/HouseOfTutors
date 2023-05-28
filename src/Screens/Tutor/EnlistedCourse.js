@@ -41,15 +41,15 @@ export default function EnlistedCourses({ navigation }) {
         <View key={index} style={styles.containerbox}>
             <View style={styles.itembox}>
                 <Text style={styles.itemText}>Course ID: </Text>
-                <Text style={styles.itemText}>{item.cid}</Text>
+                <Text style={styles.itemText}>{item.courseid}</Text>
             </View>
             <View style={styles.itembox}>
                 <Text style={styles.itemText}>Course Grade: </Text>
-                <Text style={styles.itemText}>{item.grade}</Text>
+                <Text style={styles.itemText}>{item.coursegrade}</Text>
             </View>
             <View style={styles.itembox}>
                 <Text style={styles.itemText}>Course Name: </Text>
-                <Text style={styles.itemText}>{item.cname}</Text>
+                <Text style={styles.itemText}>{item.coursename}</Text>
             </View>
         </View>
     );
