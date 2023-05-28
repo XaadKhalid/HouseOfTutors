@@ -4,7 +4,7 @@ import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import styles from '../../Assests/Styling';
 import { getgmailFormAsync } from '../../AsyncStorage/GlobalData';
-import { GetWithoutParams } from '../../Api/API_Types';
+import { GetWithParams, GetWithoutParams } from '../../Api/API_Types';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
 export default function EnlistCourses({ route, navigation }) {
@@ -33,14 +33,15 @@ export default function EnlistCourses({ route, navigation }) {
         let asyncresponse = await getgmailFormAsync();
         if (asyncresponse !== null) {
             const paramsObject = {
-                controller: 'Student',
-                action: 'GetCourses',
+                controller: 'Tutor',
+                action: 'GetTutorCourses',
+                params: { temail: asyncresponse },
             };
-            let response = await GetWithoutParams(paramsObject);
+            let response = await GetWithParams(paramsObject);
             if (response !== null) {
                 if (selectedCourse !== null) {
                     const temparray = response.filter(
-                        (course) => !selectedCourse.find((c) => c.cname === course.cname)
+                        (course) => !selectedCourse.find((c) => c.cname === course.coursename)
                     );
                     setcompleteCourseList(temparray);
                     console.log('updated length of total courses is ', temparray.length);
@@ -61,15 +62,15 @@ export default function EnlistCourses({ route, navigation }) {
         <View key={index} style={styles.containerbox}>
             <View style={styles.itembox}>
                 <Text style={styles.itemText}>Course Id: </Text>
-                <Text style={styles.itemText}>{item.cid}</Text>
+                <Text style={styles.itemText}>{item.courseid}</Text>
             </View>
             <View style={styles.itembox}>
                 <Text style={styles.itemText}>Course Name: </Text>
-                <Text style={styles.itemText}>{item.cname}</Text>
+                <Text style={styles.itemText}>{item.coursename}</Text>
             </View>
             <View style={styles.itembox}>
-                <Text style={styles.itemText}>Course Code: </Text>
-                <Text style={styles.itemText}>{item.ccode}</Text>
+                <Text style={styles.itemText}>Course Grade: </Text>
+                <Text style={styles.itemText}>{item.coursegrade}</Text>
             </View>
             <TouchableOpacity style={styles.button} onPress={() => {
                 console.log('Add Course is Pressed and ', item.cname, 'is passing to add');
