@@ -148,67 +148,74 @@ export default function S_Shedule() {
     </View>
   );
 
-  const renderRowWiseCheckBox = ({ item }) => {
-    return (
-      <View style={{ marginHorizontal: 6 }}>
-        {item.map(index => (
-          <CheckBox
-            key={index}
-            value={selectedslot[index]}
-            onValueChange={value => {
-              const newSelectedSlot = [...selectedslot];
-              newSelectedSlot[index] = value;
-              setselectedslot(newSelectedSlot);
-            }}
-            tintColors={
-              selectedslot[index] && schedulearray[index] === '2'
-                ? { true: 'red', false: 'gray' }
-                : { true: 'green', false: 'gray' }
-            }
-          />
-        ))}
-      </View>
-    );
-  };
-
   // const renderRowWiseCheckBox = ({ item }) => {
   //   return (
-  //     <View style={{ marginVertical: 7, marginHorizontal: 10 }}>
-  //       {item.map(index => {
-  //         const isChecked = selectedslot[index];
-  //         const scheduleValue = schedulearray[index];
-
-  //         let checkboxStyle = null;
-  //         let checkboxInnerStyle = null;
-
-  //         if (isChecked && scheduleValue === '1') {
-  //           checkboxStyle = styles.checked1;
-  //           checkboxInnerStyle = styles.checkboxInner1;
-  //         } else if (isChecked && scheduleValue === '2') {
-  //           checkboxStyle = styles.checked2;
-  //           checkboxInnerStyle = styles.checkboxInner2;
-  //         } else if (isChecked && scheduleValue === '3') {
-  //           checkboxStyle = styles.checked3;
-  //           checkboxInnerStyle = styles.checkboxInner3;
-  //         }
-
-  //         return (
-  //           <View key={index}>
-  //             <TouchableOpacity
-  //               onPress={() => {
-  //                 const newSelectedSlot = [...selectedslot];
-  //                 newSelectedSlot[index] = !isChecked;
-  //                 setselectedslot(newSelectedSlot);
-  //               }}
-  //               style={[styles.checkbox, isChecked && checkboxStyle]}>
-  //               {isChecked && <View style={checkboxInnerStyle} />}
-  //             </TouchableOpacity>
-  //           </View>
-  //         );
-  //       })}
+  //     <View style={{ marginHorizontal: 6 }}>
+  //       {item.map(index => (
+  //         <CheckBox
+  //           key={index}
+  //           value={selectedslot[index]}
+  //           onValueChange={value => {
+  //             const newSelectedSlot = [...selectedslot];
+  //             newSelectedSlot[index] = value;
+  //             setselectedslot(newSelectedSlot);
+  //           }}
+  //           tintColors={
+  //             selectedslot[index] && schedulearray[index] === '2'
+  //               ? { true: 'red', false: 'gray' }
+  //               : { true: 'green', false: 'gray' }
+  //           }
+  //         />
+  //       ))}
   //     </View>
   //   );
   // };
+
+  const renderRowWiseCheckBox = ({ item }) => {
+    return (
+      <View style={{ marginVertical: 7, marginHorizontal: 13 }}>
+        {item.map(index => {
+          let isChecked = selectedslot[index];
+          const scheduleValue = schedulearray[index];
+          let disableflag = false;
+          let checkboxInnerStyle = null;
+
+          if (isChecked && scheduleValue === '1') {
+            checkboxInnerStyle = styles.checkboxInner1;
+          } else if (isChecked && scheduleValue === '2') {
+            checkboxInnerStyle = styles.checkboxInner2;
+            disableflag = true;
+          } else if (isChecked && scheduleValue === '3') {
+            checkboxInnerStyle = styles.checkboxInner3;
+            disableflag = true;
+          } else if (!isChecked && scheduleValue === '0') {
+            checkboxInnerStyle = styles.checkboxInner0;
+          }
+
+          return (
+            <View key={index}>
+              <TouchableOpacity
+                onPress={() => {
+                  console.log('before updating flag is ', isChecked);
+                  console.log();
+                  const newSelectedSlot = [...selectedslot];
+                  newSelectedSlot[index] = !isChecked;
+                  isChecked = !isChecked;
+                  console.log('after updating flag is ', newSelectedSlot[index]);
+                  console.log();
+                  setselectedslot(newSelectedSlot);
+                }}
+                disabled={disableflag}
+                style={[styles.checkbox, isChecked ? styles.checkboxInner1 : styles.checkboxInner0]}>
+                {isChecked && <View style={checkboxInnerStyle} />}
+                {!isChecked && <View style={checkboxInnerStyle} />}
+              </TouchableOpacity>
+            </View>
+          );
+        })}
+      </View>
+    );
+  };
 
   const updateSchedule = () => {
     let str1 = '';

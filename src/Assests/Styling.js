@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     profilecontainer: {
         flex: 1,
         flexDirection: 'column',
-        justifyContent: 'center',
+        //justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#fff',
     },
@@ -178,37 +178,34 @@ const styles = StyleSheet.create({
         width: 20,
         height: 20,
         borderRadius: 3,
-        borderWidth: 1,
-        borderColor: 'gray',
-        justifyContent: 'center',
-        alignItems: 'center',
+        //borderWidth: 1,
+        // borderColor: 'gray',
+        // justifyContent: 'center',
+        // alignItems: 'center',
+    },
+    checkboxInner0: {
+        width: 20,
+        height: 20,
+        borderRadius: 2,
+        backgroundColor: 'gray',
     },
     checkboxInner1: {
-        width: 12,
-        height: 12,
+        width: 20,
+        height: 20,
         borderRadius: 2,
         backgroundColor: 'green',
     },
-    checked1: {
-        borderColor: 'green',
-    },
     checkboxInner2: {
-        width: 12,
-        height: 12,
+        width: 20,
+        height: 20,
         borderRadius: 2,
         backgroundColor: 'red',
     },
-    checked2: {
-        borderColor: 'red',
-    },
     checkboxInner3: {
-        width: 12,
-        height: 12,
+        width: 20,
+        height: 20,
         borderRadius: 2,
         backgroundColor: 'blue',
-    },
-    checked3: {
-        borderColor: 'blue',
     },
 });
 
