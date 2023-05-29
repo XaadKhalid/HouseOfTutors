@@ -110,7 +110,7 @@ export default function T_Shedule() {
   const setPreCheckedSlots = () => {
     let temarray = [...selectedslot];
     for (let i = 0; i < schedulearray.length; i++) {
-      if (schedulearray[i] === '1' || schedulearray[i] === '2') {
+      if (schedulearray[i] === '1' || schedulearray[i] === '2' || schedulearray[i] === '3') {
         temarray[i] = true;
       } else {
         temarray[i] = false;
@@ -185,6 +185,7 @@ export default function T_Shedule() {
             checkboxInnerStyle = styles.checkboxInner2;
             disableflag = true;
           } else if (isChecked && scheduleValue === '3') {
+            console.log('i m 3');
             checkboxInnerStyle = styles.checkboxInner3;
             disableflag = true;
           } else if (!isChecked && scheduleValue === '0') {

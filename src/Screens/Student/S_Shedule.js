@@ -110,7 +110,7 @@ export default function S_Shedule() {
   const setPreCheckedSlots = () => {
     let temarray = [...selectedslot];
     for (let i = 0; i < schedulearray.length; i++) {
-      if (schedulearray[i] === '1' || schedulearray[i] === '2') {
+      if (schedulearray[i] === '1' || schedulearray[i] === '2' || schedulearray[i] === '3') {
         temarray[i] = true;
       } else {
         temarray[i] = false;
