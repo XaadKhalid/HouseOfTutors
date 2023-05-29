@@ -26,7 +26,7 @@ function Login({ navigation }) {
     };
     let response = await GetWithParams(paramsObject);
     const roleToScreen = {
-      Student: 'DrawerNavigator',
+      Student: 'S_Bottom_Navigator',
       Tutor: 'T_Bottom_Navigator',
       Admin: 'AdminStack',
       Parent: 'ParentStack',

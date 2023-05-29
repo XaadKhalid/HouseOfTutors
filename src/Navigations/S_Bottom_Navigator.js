@@ -2,88 +2,81 @@
 /* eslint-disable prettier/prettier */
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
-import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Icon2 from 'react-native-vector-icons/Foundation';
-import Icon3 from 'react-native-vector-icons/FontAwesome5';
+import Foundation from 'react-native-vector-icons/Foundation';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import S_NestsedStack from './S_NestsedStack';
 import S_Shedule from '../Screens/Student/S_Shedule';
 import S_Learning from '../Screens/Student/S_Learning';
 import S_Fee from '../Screens/Student/S_Fee';
 import S_TodayClass from '../Screens/Student/S_TodayClass';
+import Profile_Icon from '../Screens/Student/Profile_Icon';
+import Notification_Icon from '../Screens/Student/Notification_Icon';
 
-export default function S_Bottom_Navigator() {
+export default function S_Bottom_Navigator({ navigation }) {
   const Tab = createBottomTabNavigator();
   return (
     <Tab.Navigator
       screenOptions={{
-        headerShown: false,
+        headerRight: () => <Notification_Icon navigation={navigation} />,
+        headerLeft: () => <Profile_Icon navigation={navigation} />,
+        headerTitleAlign: 'center',
+        headerTintColor: '#FFF',
+        headerTitle: 'Student',
+        tabBarActiveTintColor: '#FFB22F',
+        tabBarInactiveTintColor: '#FFF',
+        tabBarStyle: { backgroundColor: '#282634' },
+        headerStyle: { backgroundColor: '#282634' },
         tabBarLabelStyle: {
-          color: '#FFFFFF',
           fontSize: 12,
         },
-        tabBarInactiveBackgroundColor: '#282634',
-        tabBarActiveBackgroundColor: '#677567',
       }}>
       <Tab.Screen
         name="Schedule"
         component={S_Shedule}
         options={{
-          headerTitle: 'Student Schedule',
-          tabBarIcon: () => {
-            return <Icons name={'calendar-clock'} size={24} color="#FFB22F" />;
-          },
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="calendar-clock" color={color} size={size} />
+          ),
         }}
       />
       <Tab.Screen
         name="Find Tutor"
         component={S_NestsedStack}
         options={{
-          headerShown: false,
-          tabBarIcon: () => {
-            return <MaterialIcons name={'person-search'} size={32} color="#FFB22F" />;
-          },
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="person-search" color={color} size={size} />
+          ),
         }}
       />
       <Tab.Screen
         name="Learning"
         component={S_Learning}
         options={{
-          headerTitle: 'Courses Learning',
-          tabBarIcon: () => {
-            return <Icon2 name={'clipboard-pencil'} size={24} color="#FFB22F" />;
-          },
+          tabBarIcon: ({ color, size }) => (
+            <Foundation name="clipboard-pencil" color={color} size={size} />
+          ),
         }}
       />
       <Tab.Screen
         name="Fees"
         component={S_Fee}
         options={{
-          headerTitle: 'Courses Fee',
-          tabBarIcon: () => {
-            return <Icon3 name={'credit-card'} size={24} color="#FFB22F" />;
-          },
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome5 name="credit-card" color={color} size={size} />
+          ),
         }}
       />
       <Tab.Screen
         name="Today Class"
         component={S_TodayClass}
         options={{
-          headerTitle: 'Today Classes',
-          tabBarIcon: () => {
-            return <Icon3 name={'chalkboard-teacher'} size={24} color="#FFB22F" />;
-          },
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome5 name="chalkboard-teacher" color={color} size={size} />
+          ),
         }}
       />
-      {/* <Tab.Screen
-        name="Profile"
-        component={S_Profile}
-        options={{
-          tabBarIcon: () => {
-            return <Icon3 name={'user-graduate'} size={24} color="#FFB22F" />;
-          },
-        }}
-      /> */}
     </Tab.Navigator>
   );
 }

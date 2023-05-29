@@ -4,15 +4,17 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import T_Fee from '../Screens/Tutor/T_Fee';
 import T_Teaching from '../Screens/Tutor/T_Teaching';
-import T_Profile from '../Screens/Tutor/T_Profile';
 import T_TodayClass from '../Screens/Tutor/T_TodayClass';
 import Notification_Icon from '../Screens/Tutor/Notification_Icon';
 import Notification_Stack from './Notification_Stack';
 import T_NestsedStack from './T_NestsedStack';
-import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon from 'react-native-vector-icons/Feather';
-import Icon2 from 'react-native-vector-icons/Foundation';
-import Icon3 from 'react-native-vector-icons/FontAwesome5';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Feather from 'react-native-vector-icons/Feather';
+import Foundation from 'react-native-vector-icons/Foundation';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Entypo from 'react-native-vector-icons/Entypo';
+import Profile_Icon from '../Screens/Tutor/Profile_Icon';
+import Rescheduling from '../Screens/Tutor/Rescheduling';
 
 export default function T_Bottom_Navigator({ }) {
     const Tab = createBottomTabNavigator();
@@ -20,76 +22,70 @@ export default function T_Bottom_Navigator({ }) {
         <Tab.Navigator
             screenOptions={({ navigation }) => ({
                 headerRight: () => <Notification_Icon navigation={navigation} />,
+                headerLeft: () => <Profile_Icon navigation={navigation} />,
                 headerTitleAlign: 'center',
-                headerTintColor: '#FFB22F',
+                headerTintColor: '#FFF',
+                headerTitle: 'Tutors',
+                tabBarActiveTintColor: '#FFB22F',
+                tabBarInactiveTintColor: '#FFF',
+                tabBarStyle: { backgroundColor: '#282634' },
                 headerStyle: { backgroundColor: '#282634' },
                 tabBarLabelStyle: {
-                    color: '#FFFFFF',
                     fontSize: 12,
                 },
-                tabBarInactiveBackgroundColor: '#282634',
-                tabBarActiveBackgroundColor: '#677567',
             })}>
             <Tab.Screen
                 name="Schedule"
                 component={Notification_Stack}
                 options={{
-                    headerTitle: 'Tutor Schedule',
-                    tabBarIcon: () => {
-                        return <Icons name={'calendar-clock'} size={24} color="#FFB22F" />;
-                    },
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialCommunityIcons name="calendar-clock" color={color} size={size} />
+                    ),
                 }}
             />
             <Tab.Screen
                 name="Courses"
                 component={T_NestsedStack}
                 options={{
-                    headerShown: false,
-                    tabBarIcon: () => {
-                        return <Icon name={'book-open'} size={24} color="#FFB22F" />;
-                    },
+                    tabBarIcon: ({ color, size }) => (
+                        <Feather name="book-open" color={color} size={size} />
+                    ),
                 }}
             />
             <Tab.Screen
                 name="Teaching"
                 component={T_Teaching}
                 options={{
-                    headerTitle: 'Courses Teaching',
-                    tabBarIcon: () => {
-                        return (
-                            <Icon2 name={'clipboard-pencil'} size={24} color="#FFB22F" />
-                        );
-                    },
+                    tabBarIcon: ({ color, size }) => (
+                        <Foundation name="clipboard-pencil" color={color} size={size} />
+                    ),
                 }}
             />
             <Tab.Screen
                 name="Fee"
                 component={T_Fee}
                 options={{
-                    headerTitle: 'Courses Fee',
-                    tabBarIcon: () => {
-                        return <Icon3 name={'credit-card'} size={24} color="#FFB22F" />;
-                    },
+                    tabBarIcon: ({ color, size }) => (
+                        <FontAwesome5 name="credit-card" color={color} size={size} />
+                    ),
                 }}
             />
             <Tab.Screen
-                name="Today"
+                name="Today Class"
                 component={T_TodayClass}
                 options={{
-                    headerTitle: 'Today Classes',
-                    tabBarIcon: () => {
-                        return <Icon3 name={'chalkboard-teacher'} size={24} color="#FFB22F" />;
-                    },
+                    tabBarIcon: ({ color, size }) => (
+                        <FontAwesome5 name="chalkboard-teacher" color={color} size={size} />
+                    ),
                 }}
             />
             <Tab.Screen
-                name="Profile"
-                component={T_Profile}
+                name="Reschedule"
+                component={Rescheduling}
                 options={{
-                    headerTitle: 'Profile',
-                    tabBarIcon: () => {
-                        return <Icon3 name={'user-graduate'} size={24} color="#FFB22F" />;
-                    },
+                    tabBarIcon: ({ color, size }) => (
+                        <Entypo name="back-in-time" color={color} size={size} />
+                    ),
                 }}
             />
         </Tab.Navigator>
