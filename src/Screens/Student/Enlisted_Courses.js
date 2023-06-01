@@ -73,21 +73,21 @@ export default function Enlisted_Courses({ navigation }) {
                 <Text style={styles.itemText}>Course Fee: </Text>
                 <Text style={styles.itemText}>{item.cfee}</Text>
             </View>
+            <TouchableOpacity style={styles.button} onPressIn={() => {
+                console.log('Find Tutor is Pressed');
+                console.log();
+                showDialog();
+                setCourseId(item.cid);
+            }}>
+                <Text style={styles.buttonText}>Find Tutor</Text>
+            </TouchableOpacity>
             <View style={styles.itembox}>
-                <TouchableOpacity style={styles.button} onPressIn={() => {
-                    console.log('Find Tutor is Pressed');
-                    console.log();
-                    showDialog();
-                    setCourseId(item.cid);
-                }}>
-                    <Text style={styles.buttonText}>Find Tutor</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={() => {
+                {/* <TouchableOpacity style={styles.button} onPress={() => {
                     console.log('Find Best Tutor is Pressed');
                     console.log();
                 }}>
                     <Text style={styles.buttonText}>Best Tutor</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
         </View>
     );

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Text, View, FlatList } from 'react-native';
+import { Text, View, FlatList, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { GetWithParams } from '../../Api/API_Types';
 import styles from '../../Assests/Styling';
@@ -49,6 +49,20 @@ export default function S_Learning() {
           {item.timeslots.map((slot) => (
             <Text key={slot} style={styles.itemText}>{slot}</Text>
           ))}
+        </View>
+        <View style={styles.itembox}>
+          <TouchableOpacity style={styles.button} onPress={() => {
+            console.log('Finish Course is Pressed');
+            console.log();
+          }}>
+            <Text style={styles.buttonText}>Finish Course</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => {
+            console.log('Rate Tutor is Pressed');
+            console.log();
+          }}>
+            <Text style={styles.buttonText}>Rate Tutor</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
