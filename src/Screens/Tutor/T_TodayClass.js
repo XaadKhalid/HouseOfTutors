@@ -15,6 +15,8 @@ export default function T_TodayClass() {
   const [classesList, setClassesList] = useState([]);
   const [availableslots, setAvailableslots] = useState([]);
   const [checkedslots, setCheckedslots] = useState([]);
+  const [MultiRescheduleData, setMultiRescheduleData] = useState([]);
+  const [checkedMulti, setcheckedMulti] = useState([]);
   const [fromDate, setFromDate] = useState('');
   const [toDate, settoDate] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
@@ -24,6 +26,8 @@ export default function T_TodayClass() {
   const [requestflag, setRequestflag] = useState(false);
   const [pcikerflag, setPcikerflag] = useState(false);
   const [multiflag, setmMltiflag] = useState(false);
+  //const [isMinDateEnabled, setisMinDateEnabled] = useState(true);
+  const [isMaxDateEnabled, setisMaxDateEnabled] = useState(false);
   const [requestedObject, setRequestedObject] = useState({});
   const time = [
     '08-AM', '09-AM', '10-AM', '11-AM', '12-PM', '01-PM', '02-PM', '03-PM',
@@ -173,6 +177,24 @@ export default function T_TodayClass() {
     }
   };
 
+  const getMultiRescheduleData = async () => {
+    let asyncresponse = await getgmailFormAsync();
+    if (asyncresponse !== null) {
+      const paramsObject = {
+        controller: 'Tutor',
+        action: 'GetMultiRescheduleData',
+        params: { temail: asyncresponse },
+      };
+      let response = await GetWithParams(paramsObject);
+      if (response !== 'No schedule id found for tutor' && response !== 'No record found in enrollement table') {
+        setMultiRescheduleData(response);
+      }
+      else {
+        setMultiRescheduleData(null);
+      }
+    }
+  };
+
   const sendRequest = async () => {
     console.log('resultant objct is ', requestedObject);
     const paramsObject = {
@@ -255,6 +277,25 @@ export default function T_TodayClass() {
       setCheckedslots(previous => {
         let arr = [...previous];
         arr = checkedslots.filter((checkedSlot) => checkedSlot !== flagsofslot[0]);
+        return arr;
+      });
+    }
+  };
+
+  const checkboxVerification2 = (flagsofslot) => {
+    flagsofslot[1] = !flagsofslot[1];
+    if (flagsofslot[1]) {
+      console.log('checked');
+      setcheckedMulti(previous => {
+        let arr = [...previous];
+        arr = [...checkedMulti, flagsofslot[0]];
+        return arr;
+      });
+    } else {
+      console.log('un-checked');
+      setcheckedMulti(previous => {
+        let arr = [...previous];
+        arr = checkedMulti.filter((checkedSlot) => checkedSlot !== flagsofslot[0]);
         return arr;
       });
     }
@@ -476,8 +517,9 @@ export default function T_TodayClass() {
                 value={new Date()}
                 mode="date"
                 display="default"
+                //minimumDate={isMinDateEnabled ? minDate : undefined}
                 minimumDate={minDate}
-                maximumDate={maxDate}
+                maximumDate={isMaxDateEnabled ? maxDate : undefined}
                 onChange={handleDateSelect}
               />
             </View>
@@ -487,12 +529,14 @@ export default function T_TodayClass() {
               data={classesList}
               renderItem={renderclasses} />
           </View>
-          <View style={styles.containerbox}>
+          {/* <View style={styles.containerbox}>
             {multiflag && (
               <View style={styles.itembox}>
                 <TouchableOpacity onPress={() => {
                   setShowDate1(!showDate1);
                   setSaveFDate(true);
+                  setisMaxDateEnabled(false);
+                  //setisMinDateEnabled(false);
                 }}>
                   <MaterialIcons name="date-range" size={30} color="#FFB22F" style={styles.ip_icon} />
                 </TouchableOpacity>
@@ -505,6 +549,8 @@ export default function T_TodayClass() {
                 <TouchableOpacity onPress={() => {
                   setShowDate1(!showDate1);
                   setSaveTDate(true);
+                  setisMaxDateEnabled(false);
+                  //setisMinDateEnabled(false);
                 }}>
                   <MaterialIcons name="date-range" size={30} color="#FFB22F" style={styles.ip_icon} />
                 </TouchableOpacity>
@@ -521,12 +567,46 @@ export default function T_TodayClass() {
               <View>
                 <TouchableOpacity style={styles.button} onPressIn={() => {
                   setmMltiflag(!multiflag);
+                  getMultiRescheduleData();
                 }}>
                   <Text style={styles.buttonText}>Multiple ReSchedule</Text>
                 </TouchableOpacity>
               </View>
             </View>
           </View>
+          {multiflag && (
+            <View style={styles.containerbox}>
+              <View style={styles.checkboxContainer}>
+                {MultiRescheduleData.map((slot, sIndex) => {
+                  let flagsofslot = [slot, false];
+                  if (checkedMulti.includes(slot)) {
+                    flagsofslot = [slot, true];
+                  }
+                  console.log('flagofslot is ', flagsofslot);
+                  return (
+                    <View key={sIndex} style={styles.checkboxitem}>
+                      <CheckBox
+                        tintColors={{ true: 'gold', false: 'white' }}
+                        value={flagsofslot[1]}
+                        onValueChange={() => {
+                          checkboxVerification2(flagsofslot);
+                        }}
+                      />
+                      <Text style={styles.checkboxtext}>{slot}</Text>
+                    </View>
+                  );
+                })}
+              </View>
+              <View>
+                <TouchableOpacity style={styles.button} onPressIn={() => {
+                  setmMltiflag(!multiflag);
+                  console.log('its Done');
+                }}>
+                  <Text style={styles.buttonText}>Confirm ReSchedule</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )} */}
         </View>
       ) : (
         <View style={styles.noDataContainer}>
