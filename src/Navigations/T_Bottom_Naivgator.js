@@ -14,7 +14,7 @@ import Foundation from 'react-native-vector-icons/Foundation';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Profile_Icon from '../Screens/Tutor/Profile_Icon';
-import Rescheduling from '../Screens/Tutor/Rescheduling';
+import T_Rescheduling_Stack from './T_Rescheduling_Stack';
 
 export default function T_Bottom_Navigator({ }) {
     const Tab = createBottomTabNavigator();
@@ -81,7 +81,7 @@ export default function T_Bottom_Navigator({ }) {
             />
             <Tab.Screen
                 name="Reschedule"
-                component={Rescheduling}
+                component={T_Rescheduling_Stack}
                 options={{
                     tabBarIcon: ({ color, size }) => (
                         <Entypo name="back-in-time" color={color} size={size} />
