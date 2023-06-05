@@ -1,12 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, ToastAndroid } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from '../../Assests/Styling';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-export default function Rescheduling() {
+export default function Rescheduling({ navigation }) {
     const [selectedDate, setSelectedDate] = useState('');
     const [showDatebox, setShowDatebox] = useState(false);
     const [fromDate, setFromDate] = useState('');
@@ -27,33 +27,31 @@ export default function Rescheduling() {
         const customDate = new Date(selDate);
         setShowDatebox(false);
         if (!isNaN(customDate)) {
-            console.log('after closing dialouge box state is ', showDatebox);
             const day = customDate.getDate().toString().padStart(2, '0');
             const month = (customDate.getMonth() + 1).toString().padStart(2, '0');
             const year = customDate.getFullYear().toString();
-            const formattedDate = `${day}/${month}/${year}`;
+            const formattedDate = `${month}/${day}/${year}`;
             if (saveFDate) {
                 setFromDate(formattedDate);
-                console.log('i m here for fromdate');
                 setSaveFDate(false);
             } else if (savetDate) {
                 settoDate(formattedDate);
-                console.log('i m here for todate');
                 setSaveTDate(false);
             } else if (savePDate) {
                 setPreDate(formattedDate);
-                console.log('i m here for predate');
                 setSavePDate(false);
             } else {
                 setSelectedDate(formattedDate);
-            } console.log(formattedDate);
+            }
+            console.log(formattedDate);
+            console.log();
         } else {
             console.log('Invalid date object');
         }
     };
 
     return (
-        <View style={[styles.bodyContainer, { flexDirection: 'column', alignContent: 'center' }]}>
+        <View style={[styles.bodyContainer, { flexDirection: 'column', justifyContent: 'center' }]}>
             {showDatebox && (
                 <View>
                     <DateTimePicker
@@ -105,7 +103,12 @@ export default function Rescheduling() {
                 <TouchableOpacity style={[styles.button, { marginBottom: 4 }]} onPressIn={() => {
                     setMinDate(new Date()); // Reset minDate to current date
                     setMaxDate(new Date()); // Reset maxDate to current date
+                    setMinDate((prevDate) => {
+                        prevDate.setDate(prevDate.getDate() + 1);
+                        return new Date(prevDate);
+                    });
                     setisMinDateEnabled(true);
+                    setisMaxDateEnabled(false);
                     setisMulitDate(true);
                     setisSingleDate(false);
                     setisPreSchedule(false);
@@ -120,12 +123,20 @@ export default function Rescheduling() {
                         <Text style={[styles.itemText, { marginTop: 5 }]}>Selected Date : {selectedDate}</Text>
                         <TouchableOpacity onPress={() => {
                             setShowDatebox(true);
+                            setFromDate('');
+                            settoDate('');
+                            setPreDate('');
                         }}>
                             <MaterialIcons name="date-range" size={30} color="#FFB22F" style={styles.ip_icon} />
                         </TouchableOpacity>
                     </View>
                     <TouchableOpacity style={styles.button} onPressIn={() => {
-                        console.log();
+                        if (selectedDate !== '') {
+                            navigation.navigate('Classes_List', { selectedDate });
+                        }
+                        else {
+                            ToastAndroid.show('Please select Date first', ToastAndroid.SHORT);
+                        }
                     }}>
                         <Text style={styles.buttonText}>Search Classes</Text>
                     </TouchableOpacity>
@@ -137,6 +148,9 @@ export default function Rescheduling() {
                     <View style={styles.itembox}>
                         <Text style={[styles.itemText, { marginTop: 5 }]}>Selected Date : {preDate}</Text>
                         <TouchableOpacity onPress={() => {
+                            setFromDate('');
+                            settoDate('');
+                            setSelectedDate('');
                             setShowDatebox(true);
                             setSavePDate(true);
                         }}>
@@ -144,7 +158,12 @@ export default function Rescheduling() {
                         </TouchableOpacity>
                     </View>
                     <TouchableOpacity style={styles.button} onPressIn={() => {
-                        console.log();
+                        if (preDate !== '') {
+                            navigation.navigate('Classes_List', { preDate });
+                        }
+                        else {
+                            ToastAndroid.show('Please select Date first', ToastAndroid.SHORT);
+                        }
                     }}>
                         <Text style={styles.buttonText}>Search Classes</Text>
                     </TouchableOpacity>
@@ -157,6 +176,8 @@ export default function Rescheduling() {
                         <TouchableOpacity onPress={() => {
                             setShowDatebox(true);
                             setSaveFDate(true);
+                            setSelectedDate('');
+                            setPreDate('');
                         }}>
                             <MaterialIcons name="date-range" size={30} color="#FFB22F" style={styles.ip_icon} />
                         </TouchableOpacity>
@@ -167,19 +188,26 @@ export default function Rescheduling() {
                             <Text style={styles.itemText}>To: {toDate}</Text>
                         </View>
                         <TouchableOpacity onPress={() => {
-                            setSaveTDate(true);
                             setShowDatebox(true);
+                            setSaveTDate(true);
+                            setSelectedDate('');
+                            setPreDate('');
                         }}>
                             <MaterialIcons name="date-range" size={30} color="#FFB22F" style={styles.ip_icon} />
                         </TouchableOpacity>
                     </View>
                     <TouchableOpacity style={styles.button} onPressIn={() => {
-                        console.log();
+                        if (fromDate !== '' && toDate !== '' && toDate > fromDate) {
+                            navigation.navigate('MultiClasses_List', { fromDate, toDate });
+                        }
+                        else {
+                            ToastAndroid.show('Please select a Valid Date first', ToastAndroid.SHORT);
+                        }
                     }}>
                         <Text style={styles.buttonText}>Search Classes</Text>
                     </TouchableOpacity>
                 </View>
             )}
-        </View>
+        </View >
     );
 }
