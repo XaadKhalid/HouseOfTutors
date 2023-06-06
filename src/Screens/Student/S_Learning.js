@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { Text, View, FlatList, TouchableOpacity } from 'react-native';
+import { Text, View, FlatList, TouchableOpacity, ToastAndroid } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { GetWithParams } from '../../Api/API_Types';
+import { GetWithParams, PostWithParams } from '../../Api/API_Types';
 import styles from '../../Assests/Styling';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { getgmailFormAsync } from '../../AsyncStorage/GlobalData';
@@ -51,9 +51,20 @@ export default function S_Learning() {
           ))}
         </View>
         <View style={styles.itembox}>
-          <TouchableOpacity style={styles.button} onPress={() => {
-            console.log('Finish Course is Pressed');
-            console.log();
+          <TouchableOpacity style={styles.button} onPress={async () => {
+            const paramsObject = {
+              controller: 'Student',
+              action: 'FinishCourse',
+              params: {
+                sname: item.sname,
+                tname: item.tname,
+                cname: item.cname,
+              },
+            };
+            let response = await PostWithParams(paramsObject);
+            if (response !== 'No Course Enrolled To Finish') {
+              ToastAndroid.show('Course Finished Successfully Please Rate Tutor', ToastAndroid.SHORT);
+            }
           }}>
             <Text style={styles.buttonText}>Finish Course</Text>
           </TouchableOpacity>
@@ -65,7 +76,7 @@ export default function S_Learning() {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </View >
   );
 
   return (
