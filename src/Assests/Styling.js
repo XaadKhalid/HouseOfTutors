@@ -114,6 +114,13 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginTop: 5,
     },
+    disablebutton: {
+        backgroundColor: '#CCCCCC',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+        marginTop: 5,
+    },
     buttonText: {
         color: '#000000',
         fontStyle: 'italic',
