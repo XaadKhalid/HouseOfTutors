@@ -7,12 +7,11 @@ import styles from '../../Assests/Styling';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { getgmailFormAsync } from '../../AsyncStorage/GlobalData';
 import StarRating from './Rating';
+import StarRated from './Rated';
 
 export default function S_Learning() {
   const [learningCourses, SetLearningCourses] = useState([]);
-  const [isFinised, setIsFinished] = useState(true);
   const [rating, setRating] = useState(0);
-  const [isRatingVisible, setisRatingVisible] = useState(false);
 
   useEffect(() => {
     getlearningCourses();
@@ -30,11 +29,60 @@ export default function S_Learning() {
       SetLearningCourses(null);
     }
     else {
-      SetLearningCourses(response);
+      const updatedList = response.map((item, index) => {
+        if (item.status === 'In Progress') {
+          item = {
+            ...item,
+            isFinised: true,
+            isRatingVisible: false,
+            isButtonVisible: true,
+            isAlreadyRated: false,
+          };
+          return item;
+        } else {
+          item = {
+            ...item,
+            isFinised: false,
+            isRatingVisible: false,
+            isButtonVisible: false,
+            isAlreadyRated: true,
+          };
+          return item;
+        }
+      });
+      SetLearningCourses(updatedList);
     }
   };
 
-  const handleFinishCourse = async (sname, tname, cname) => {
+  const toggleFinish = (index) => {
+    const updated = learningCourses.map((item, index1) => {
+      if (index === index1) {
+        return {
+          ...item,
+          isFinised: !item.isFinised,
+        };
+      }
+      return item;
+    });
+    SetLearningCourses(updated);
+    ToastAndroid.show('Course Finished Successfully. Please Rate Tutor.', ToastAndroid.SHORT);
+  };
+
+  const toggleRate = (index) => {
+    const updated = learningCourses.map((item, index1) => {
+      if (index === index1) {
+        return {
+          ...item,
+          isRatingVisible: !item.isRatingVisible,
+          isButtonVisible: !item.isButtonVisible,
+        };
+      }
+      return item;
+    });
+    SetLearningCourses(updated);
+  };
+
+  const handleFinishCourse = async (sname, tname, cname, index) => {
     const paramsObject = {
       controller: 'Student',
       action: 'FinishCourse',
@@ -46,12 +94,12 @@ export default function S_Learning() {
     };
     let response = await PostWithParams(paramsObject);
     if (response !== 'No Course Enrolled To Finish') {
-      setIsFinished(true);
+      toggleFinish(index);
       ToastAndroid.show('Course Finished Successfully Please Rate Tutor', ToastAndroid.SHORT);
     }
   };
 
-  const handleRateTutor = async (sname, tname, cname) => {
+  const handleRateTutor = async (sname, tname, cname, value) => {
     const paramsObject = {
       controller: 'Student',
       action: 'RateTutor',
@@ -62,22 +110,16 @@ export default function S_Learning() {
         rating: rating,
       },
     };
-    if (isFinised) {
-      let response = await PostWithParams(paramsObject);
-      if (response !== 'Course Not Found') {
-        ToastAndroid.show('Tutor Rated Successfully', ToastAndroid.SHORT);
-        getlearningCourses();
-      }
-    }
-    else {
-      ToastAndroid.show('Cannot Rate Tutor before Finishing Course', ToastAndroid.SHORT);
+    let response = await PostWithParams(paramsObject);
+    if (response !== 'Course Not Found') {
+      ToastAndroid.show('Tutor Rated Successfully', ToastAndroid.SHORT);
+      getlearningCourses();
     }
   };
 
-  const handleStarPress = (selectedRating) => {
-    setRating(selectedRating);
-    console.log('rating updated and going to again loading');
-    getlearningCourses();
+  const handleStars = (sname, tname, cname, value) => {
+    setRating(value);
+    handleRateTutor(sname, tname, cname, value);
   };
 
   const renderlearningCourses = ({ item, index }) => (
@@ -95,29 +137,38 @@ export default function S_Learning() {
           <Text style={styles.itemText}>Status :</Text>
           <Text style={styles.itemText}>{item.status}</Text>
         </View>
-        <View style={styles.itembox}>
-          <Text style={styles.itemText}>Class Time :</Text>
-          {item.timeslots.map((slot) => (
-            <Text key={slot} style={styles.itemText}>{slot}</Text>
-          ))}
-        </View>
-        <View style={styles.itembox}>
-          <TouchableOpacity style={isFinised ? styles.button : styles.disablebutton} disabled={!isFinised} onPress={async () => {
-            //handleFinishCourse(item.sname, item.tname, item.cname);
-            setIsFinished(false);
-          }}>
-            <Text style={styles.buttonText}>Finish Course</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={isFinised ? styles.disablebutton : styles.button} disabled={isFinised} onPress={async () => {
-            //handleRateTutor(item.sname, item.tname, item.cname);
-            setisRatingVisible(true);
-          }}>
-            <Text style={styles.buttonText}>Rate Tutor</Text>
-          </TouchableOpacity>
-        </View>
-        {isRatingVisible && (
+        {item.isAlreadyRated ? (
+          <View style={styles.itembox}>
+            <Text style={styles.itemText}>Rating :</Text>
+            <StarRated rating={item.rating} />
+          </View>
+        ) : (
+          <View style={styles.itembox}>
+            <Text style={styles.itemText}>Class Time :</Text>
+            {item.timeslots.map((slot) => (
+              <Text key={slot} style={styles.itemText}>{slot}</Text>
+            ))}
+          </View>
+        )}
+        {item.isButtonVisible && (
+          <View style={styles.itembox}>
+            <TouchableOpacity style={item.isFinised ? styles.button : styles.disablebutton} disabled={!item.isFinised} onPress={async () => {
+              handleFinishCourse(item.sname, item.tname, item.cname, index);
+            }}>
+              <Text style={styles.buttonText}>Finish Course</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={item.isFinised ? styles.disablebutton : styles.button} disabled={item.isFinised} onPress={async () => {
+              toggleRate(index);
+            }}>
+              <Text style={styles.buttonText}>Rate Tutor</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+        {item.isRatingVisible && (
           <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-            <StarRating rating={rating} onStarPress={handleStarPress} />
+            <StarRating rating={rating} onStarPress={(value) => {
+              handleStars(item.sname, item.tname, item.cname, value);
+            }} />
           </View>
         )}
       </View>
