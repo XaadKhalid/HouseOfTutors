@@ -11,7 +11,7 @@ import StarRated from './Rated';
 
 export default function S_Learning() {
   const [learningCourses, SetLearningCourses] = useState([]);
-  const [rating, setRating] = useState(0);
+  //const [rating, setRating] = useState(0);
 
   useEffect(() => {
     getlearningCourses();
@@ -65,7 +65,6 @@ export default function S_Learning() {
       return item;
     });
     SetLearningCourses(updated);
-    ToastAndroid.show('Course Finished Successfully. Please Rate Tutor.', ToastAndroid.SHORT);
   };
 
   const toggleRate = (index) => {
@@ -107,7 +106,7 @@ export default function S_Learning() {
         sname: sname,
         tname: tname,
         cname: cname,
-        rating: rating,
+        rating: value,
       },
     };
     let response = await PostWithParams(paramsObject);
@@ -118,7 +117,7 @@ export default function S_Learning() {
   };
 
   const handleStars = (sname, tname, cname, value) => {
-    setRating(value);
+    //setRating(value);
     handleRateTutor(sname, tname, cname, value);
   };
 
@@ -166,7 +165,7 @@ export default function S_Learning() {
         )}
         {item.isRatingVisible && (
           <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-            <StarRating rating={rating} onStarPress={(value) => {
+            <StarRating rating={0} onStarPress={(value) => {
               handleStars(item.sname, item.tname, item.cname, value);
             }} />
           </View>
