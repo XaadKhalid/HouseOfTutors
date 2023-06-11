@@ -6,6 +6,7 @@ import styles from '../../Assests/Styling';
 import { GetWithParams, PostWithObject } from '../../Api/API_Types';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import CheckBox from '@react-native-community/checkbox';
+import StarRated from './Rated';
 
 export default function Finding_Tutor({ route }) {
 
@@ -107,8 +108,13 @@ export default function Finding_Tutor({ route }) {
                 <Text style={styles.itemText}>{item.name}</Text>
             </View>
             <View style={styles.itembox}>
-                <Text style={styles.itemText}>Rating/Grade: </Text>
-                <Text style={styles.itemText}>{item.rating}/{item.grade}</Text>
+                <Text style={styles.itemText}>Rating </Text>
+                {/* <Text style={styles.itemText}>{item.rating}</Text> */}
+                <StarRated rating={item.rating} />
+            </View>
+            <View style={styles.itembox}>
+                <Text style={styles.itemText}>Grade: </Text>
+                <Text style={styles.itemText}>{item.grade}</Text>
             </View>
             <View style={styles.checkboxContainer}>
                 {item.slots.slice(0, numOfSlots).map((slot, sIndex) => {
