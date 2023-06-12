@@ -3,14 +3,14 @@ import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import styles from '../../Assests/Styling';
 import { getgmailFormAsync } from '../../AsyncStorage/GlobalData';
-import { GetWithoutParams, PostWithParams } from '../../Api/API_Types';
+import { GetWithParams, PostWithParams } from '../../Api/API_Types';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
 export default function Enlist_Courses({ route, navigation }) {
 
     const [completeCourseList, setcompleteCourseList] = useState([]);
     const [stdEmail, setStdEmail] = useState('');
-    const { selectedCourse } = route.params;
+    //const { selectedCourse } = route.params;
 
     useEffect(() => {
         getcourses();
@@ -22,21 +22,24 @@ export default function Enlist_Courses({ route, navigation }) {
             setStdEmail(asyncresponse);
             const paramsObject = {
                 controller: 'Student',
-                action: 'GetCourses',
+                action: 'GetStudentCourses',
+                params: { semail: asyncresponse },
             };
-            let response = await GetWithoutParams(paramsObject);
+            let response = await GetWithParams(paramsObject);
             if (response !== null) {
-                if (selectedCourse !== null) {
-                    const temparray = response.filter(
-                        (course) => !selectedCourse.find((c) => c.cname === course.cname)
-                    );
-                    setcompleteCourseList(temparray);
-                    console.log('updated length of total courses is ', temparray.length);
-                }
-                else {
-                    setcompleteCourseList(response);
-                    console.log('updated length of total courses is ', response.length);
-                }
+                setcompleteCourseList(response);
+                console.log('length of total courses is ', response.length);
+                // if (selectedCourse !== null) {
+                //     const temparray = response.filter(
+                //         (course) => !selectedCourse.find((c) => c.cname === course.cname)
+                //     );
+                //     setcompleteCourseList(temparray);
+                //     console.log('updated length of total courses is ', temparray.length);
+                // }
+                // else {
+                //     setcompleteCourseList(response);
+                //     console.log('updated length of total courses is ', response.length);
+                // }
             } else {
                 Alert.alert('No Course Found!');
             }
@@ -63,20 +66,20 @@ export default function Enlist_Courses({ route, navigation }) {
         <View key={index} style={styles.containerbox}>
             <View style={styles.itembox}>
                 <Text style={styles.itemText}>Course ID: </Text>
-                <Text style={styles.itemText}>{item.cid}</Text>
+                <Text style={styles.itemText}>{item.courseid}</Text>
             </View>
             <View style={styles.itembox}>
                 <Text style={styles.itemText}>Course Name: </Text>
-                <Text style={styles.itemText}>{item.cname}</Text>
+                <Text style={styles.itemText}>{item.coursename}</Text>
             </View>
             <View style={styles.itembox}>
                 <Text style={styles.itemText}>Course Code: </Text>
-                <Text style={styles.itemText}>{item.ccode}</Text>
+                <Text style={styles.itemText}>{item.coursecode}</Text>
             </View>
             <TouchableOpacity style={styles.button} onPress={() => {
                 console.log('Add Course is Pressed');
                 console.log();
-                CourseEnlist(item.cid);
+                CourseEnlist(item.courseid);
             }}>
                 <Text style={styles.buttonText}>Add Course</Text>
             </TouchableOpacity>

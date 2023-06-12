@@ -37,7 +37,8 @@ export default function Enlisted_Courses({ navigation }) {
                 params: { semail: asyncresponse },
             };
             let response = await GetWithParams(paramsObject);
-            if (response.length > 0) {
+            if (response !== 'No Course Enlisted' && response !== 'No User found on requested email') {
+                response.sort((a, b) => a.IsEnrolled - b.IsEnrolled);
                 setselectedCourse(response);
             }
             else {
@@ -59,35 +60,24 @@ export default function Enlisted_Courses({ navigation }) {
         navigation.navigate('Finding_Tutor', { numOfSlots, courseId, gmail });
     };
 
-    const renderclasses = ({ item, index }) => (
-        <View key={index} style={styles.containerbox}>
+    const rendercourses = ({ item, index }) => (
+        <View key={index} style={[styles.containerbox, { padding: 8 }]}>
             <View style={styles.itembox}>
-                <Text style={styles.itemText}>Course ID: </Text>
-                <Text style={styles.itemText}>{item.cid}</Text>
-            </View>
-            <View style={styles.itembox}>
-                <Text style={styles.itemText}>Course Name: </Text>
-                <Text style={styles.itemText}>{item.cname}</Text>
-            </View>
-            <View style={styles.itembox}>
-                <Text style={styles.itemText}>Course Fee: </Text>
-                <Text style={styles.itemText}>{item.cfee}</Text>
-            </View>
-            <TouchableOpacity style={styles.button} onPressIn={() => {
-                console.log('Find Tutor is Pressed');
-                console.log();
-                showDialog();
-                setCourseId(item.cid);
-            }}>
-                <Text style={styles.buttonText}>Find Tutor</Text>
-            </TouchableOpacity>
-            <View style={styles.itembox}>
-                {/* <TouchableOpacity style={styles.button} onPress={() => {
-                    console.log('Find Best Tutor is Pressed');
-                    console.log();
-                }}>
-                    <Text style={styles.buttonText}>Best Tutor</Text>
-                </TouchableOpacity> */}
+                <Text style={[styles.itemText, { marginTop: 14 }]}>{item.CCode}</Text>
+                <Text style={[styles.itemText, { marginTop: 14 }]}>{item.CName}</Text>
+                {item.IsEnrolled === 0 ? (
+                    <TouchableOpacity style={styles.button} onPressIn={() => {
+                        console.log('Find Tutor is Pressed');
+                        console.log();
+                        showDialog();
+                        setCourseId(item.CId);
+                    }}>
+                        <Text style={styles.buttonText}>Find Tutor</Text>
+                    </TouchableOpacity>
+                ) : (
+                    <TouchableOpacity style={styles.disablebutton} disabled={true}>
+                        <Text style={styles.buttonText}>Already Enrolled</Text>
+                    </TouchableOpacity>)}
             </View>
         </View>
     );
@@ -95,7 +85,8 @@ export default function Enlisted_Courses({ navigation }) {
     return (
         <View style={styles.bodyContainer}>
             <TouchableOpacity style={styles.addRounded} onPress={() => {
-                navigation.navigate('Enlist_Courses', { selectedCourse });
+                // navigation.navigate('Enlist_Courses', { selectedCourse });
+                navigation.navigate('Enlist_Courses');
             }}>
                 <Ionicons name="add-outline" size={45} color="#fff" />
             </TouchableOpacity>
@@ -103,7 +94,7 @@ export default function Enlisted_Courses({ navigation }) {
                 <View>
                     <FlatList
                         data={selectedCourse}
-                        renderItem={renderclasses}
+                        renderItem={rendercourses}
                         contentContainerStyle={{ paddingBottom: 45 }} />
                 </View>
             ) : (
