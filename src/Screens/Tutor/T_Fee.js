@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import { View, Text, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
@@ -9,6 +10,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 export default function T_Fee() {
 
   const [coursesList, setcoursesList] = useState([]);
+  const [totalFee, setTotalFee] = useState(0);
 
   useEffect(() => {
     getClasses();
@@ -26,6 +28,11 @@ export default function T_Fee() {
       };
       let response = await GetWithParams(paramsObject);
       if (response !== 'No Courses found in enrollement Table' && response !== 'You have not taken any class yet') {
+        let total = 0;
+        response.forEach(element => {
+          total += element.fee;
+        });
+        setTotalFee(total);
         setcoursesList(response);
       }
       else {
@@ -58,10 +65,16 @@ export default function T_Fee() {
   return (
     <View style={styles.bodyContainer}>
       {coursesList ? (
-        <View>
+        <View style={{ flex: 1 }}>
           <FlatList
             data={coursesList}
             renderItem={renderclasses} />
+          <View style={styles.containerbox}>
+            <View style={styles.itembox}>
+              <Text style={styles.itemText}>Total Fee</Text>
+              <Text style={styles.itemText}>{totalFee}</Text>
+            </View>
+          </View>
         </View>
       ) : (
         <View style={styles.noDataContainer}>
