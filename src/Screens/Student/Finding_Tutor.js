@@ -73,6 +73,7 @@ export default function Finding_Tutor({ route }) {
             };
             let response = await PostWithObject(paramsObject);
             Alert.alert(response);
+            get_tutors();
         } catch (error) {
             console.log(error);
         }
@@ -109,8 +110,12 @@ export default function Finding_Tutor({ route }) {
             </View>
             <View style={styles.itembox}>
                 <Text style={styles.itemText}>Rating </Text>
-                {/* <Text style={styles.itemText}>{item.rating}</Text> */}
-                <StarRated rating={item.rating} />
+                {/* <StarRated rating={item.rating} /> */}
+                {item.rating === 'NA' ? (
+                    <Text style={styles.itemText}>N/A</Text>
+                ) : (
+                    <StarRated rating={item.rating} />
+                )}
             </View>
             <View style={styles.itembox}>
                 <Text style={styles.itemText}>Grade: </Text>
