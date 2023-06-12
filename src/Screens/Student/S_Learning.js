@@ -29,6 +29,15 @@ export default function S_Learning() {
       SetLearningCourses(null);
     }
     else {
+      response.sort((a, b) => {
+        if (a.status === 'In Progress' && b.status === 'Completed') {
+          return -1; // "In Progress" comes before "Completed"
+        } else if (a.status === 'Completed' && b.status === 'In Progress') {
+          return 1; // "Completed" comes after "In Progress"
+        } else {
+          return 0; // Maintain the original order
+        }
+      });
       const updatedList = response.map((item, index) => {
         if (item.status === 'In Progress') {
           item = {
