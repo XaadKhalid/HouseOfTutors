@@ -37,7 +37,7 @@ export default function Notification_Icon({ navigation }) {
     return (
         <View>
             <View style={style.main_container}>
-                <TouchableOpacity onPress={() => navigation.navigate('Notification_Details')}>
+                <TouchableOpacity onPress={() => navigation.navigate('ReScheduleNotification')}>
                     <Ionicons name="notifications" size={30} color="white" />
                 </TouchableOpacity>
                 {counter > 0 && (

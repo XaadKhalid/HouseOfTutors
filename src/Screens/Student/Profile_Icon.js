@@ -7,7 +7,7 @@ export default function Profile_Icon({ navigation }) {
 
     return (
         <View style={style.main_container}>
-            <TouchableOpacity onPress={() => navigation.navigate('T_Profile')}>
+            <TouchableOpacity onPress={() => navigation.navigate('S_Profile')}>
                 <FontAwesome5 name="user-graduate" size={30} color="white" />
             </TouchableOpacity>
         </View>
