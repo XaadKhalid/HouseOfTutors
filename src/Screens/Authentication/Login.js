@@ -53,7 +53,7 @@ function Login({ navigation }) {
           <MaterialCommunityIcons name="email" size={30} color="#FFB22F" style={Styles.ip_icon} />
           <TextInput
             style={Styles.ip_txt}
-            placeholder="ali@gmail.com"
+            placeholder="ali@gmail.com.PK"
             onChangeText={value => {
               setUseremail(value);
             }}
